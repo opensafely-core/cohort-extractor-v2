@@ -5,7 +5,7 @@ import hypothesis.strategies as st
 import pytest
 from hypothesis import given
 
-from ehrql import quiz, weeks
+from ehrql import quiz, sandbox, weeks
 from ehrql.query_engines.sandbox import SandboxQueryEngine
 from ehrql.query_language import Dataset
 from ehrql.tables.core import (
@@ -61,6 +61,9 @@ def filtered_medications(
     return filtered
 
 
+# Tests for check_answer
+
+
 @pytest.mark.parametrize(
     "answer, expected, message",
     [
@@ -71,12 +74,12 @@ def filtered_medications(
         (patients, patients.date_of_birth, "Expected Series, got Table instead."),
     ],
 )
-def test_wrong_type_before_evaluation(answer, expected, message):
+def test_check_answer_wrong_type_before_evaluation(answer, expected, message):
     msg = quiz.check_answer(engine=None, answer=answer, expected=expected)
     assert msg == message
 
 
-def test_event_frame_not_converted_to_patient_frame(engine):
+def test_check_answer_event_frame_not_converted_to_patient_frame(engine):
     # Wrong type after evaluation
     msg = quiz.check_answer(
         engine=engine,
@@ -97,12 +100,12 @@ def test_event_frame_not_converted_to_patient_frame(engine):
         (medications.dmd_code, medications.dmd_code),
     ],
 )
-def test_same_syntax_correct(engine, answer, expected):
+def test_check_answer_same_syntax_correct(engine, answer, expected):
     msg = quiz.check_answer(engine=engine, answer=answer, expected=expected)
     assert msg == "Correct!"
 
 
-def test_empty_dataset(engine):
+def test_check_answer_empty_dataset(engine):
     msg = quiz.check_answer(
         engine=engine, answer=Dataset(), expected=dataset_smoketest()
     )
@@ -116,14 +119,14 @@ def test_empty_dataset(engine):
         ([1, 0], "Found extra column(s): year_of_birth."),
     ],
 )
-def test_dataset_has_missing_or_extra_column(engine, order, message):
+def test_check_answer_dataset_has_missing_or_extra_column(engine, order, message):
     datasets = [dataset_smoketest(), dataset_smoketest(year_of_birth_column=True)]
     answer, expected = (datasets[i] for i in order)
     msg = quiz.check_answer(engine=engine, answer=answer, expected=expected)
     assert msg == message
 
 
-def test_dataset_typo_in_column_name(engine):
+def test_check_answer_dataset_typo_in_column_name(engine):
     answer = dataset_smoketest(year_of_birth_column=False)
     answer.yeah_of_birth = patients.date_of_birth.year
     expected = dataset_smoketest(year_of_birth_column=True)
@@ -141,14 +144,14 @@ def test_dataset_typo_in_column_name(engine):
         ([1, 0], "Found extra patient(s): 4, 5, 9."),
     ],
 )
-def test_dataset_has_missing_or_extra_patients(engine, order, message):
+def test_check_answer_dataset_has_missing_or_extra_patients(engine, order, message):
     datasets = [dataset_smoketest(), dataset_smoketest(min_age=0, max_age=100)]
     answer, expected = (datasets[i] for i in order)
     msg = quiz.check_answer(engine=engine, answer=answer, expected=expected)
     assert msg == message
 
 
-def test_dataset_column_has_missing_patients(engine):
+def test_check_answer_dataset_column_has_missing_patients(engine):
     answer = dataset_smoketest()
     expected = dataset_smoketest()
     answer.num_medications = filtered_medications().count_for_patient()
@@ -157,7 +160,7 @@ def test_dataset_column_has_missing_patients(engine):
     assert msg == "Column `num_medications`:\nMissing patient(s): 1."
 
 
-def test_dataset_has_incorrect_value(engine):
+def test_check_answer_dataset_has_incorrect_value(engine):
     msg = quiz.check_answer(
         engine=engine,
         answer=dataset_smoketest(index_year=2023),
@@ -173,7 +176,9 @@ def test_dataset_has_incorrect_value(engine):
         ([1, 0], "Found extra patient(s): 7."),
     ],
 )
-def test_patient_series_has_missing_or_extra_patients(engine, order, message):
+def test_check_answer_patient_series_has_missing_or_extra_patients(
+    engine, order, message
+):
     series = [
         practice_registrations.for_patient_on("2013-12-01").practice_pseudo_id,
         practice_registrations.for_patient_on("2014-01-01").practice_pseudo_id,
@@ -183,7 +188,7 @@ def test_patient_series_has_missing_or_extra_patients(engine, order, message):
     assert msg == message
 
 
-def test_patient_series_has_incorrect_value(engine):
+def test_check_answer_patient_series_has_incorrect_value(engine):
     msg = quiz.check_answer(
         engine=engine,
         answer=patients.age_on("2023-12-31"),
@@ -199,7 +204,7 @@ def test_patient_series_has_incorrect_value(engine):
         ([0, 1], "Found extra row(s): 1, 3, 6, 9, 10, 13, 15, 17, 19, 20."),
     ],
 )
-def test_event_table_has_missing_or_extra_rows(engine, order, message):
+def test_check_answer_event_table_has_missing_or_extra_rows(engine, order, message):
     tables = [
         clinical_events,
         clinical_events.where(clinical_events.snomedct_code.is_in(["60621009"])),
@@ -216,7 +221,7 @@ def test_event_table_has_missing_or_extra_rows(engine, order, message):
         ([0, 1], "Found extra row(s): 5, 9."),
     ],
 )
-def test_event_series_has_missing_or_extra_rows(engine, order, message):
+def test_check_answer_event_series_has_missing_or_extra_rows(engine, order, message):
     series = [
         medications.dmd_code,
         medications.where(medications.date.is_on_or_before("2020-12-01")).dmd_code,
@@ -226,7 +231,7 @@ def test_event_series_has_missing_or_extra_rows(engine, order, message):
     assert msg == message
 
 
-def test_event_series_has_incorrect_value(engine):
+def test_check_answer_event_series_has_incorrect_value(engine):
     answer = medications.date
     expected = medications.dmd_code
     msg = quiz.check_answer(engine=engine, answer=answer, expected=expected)
@@ -236,7 +241,7 @@ def test_event_series_has_incorrect_value(engine):
     )
 
 
-def test_incorrect_event_selection_for_patient(engine):
+def test_check_answer_incorrect_event_selection_for_patient(engine):
     events = clinical_events.where(
         clinical_events.snomedct_code.is_in(["60621009"])
     ).sort_by(clinical_events.date)
@@ -249,7 +254,7 @@ def test_incorrect_event_selection_for_patient(engine):
     )
 
 
-def test_unidentified_error_shows_fallback_message(engine):
+def test_check_answer_unidentified_error_shows_fallback_message(engine):
     with patch("ehrql.quiz.check_patient_table_values", return_value=None):
         msg = quiz.check_answer(
             engine, dataset_smoketest(index_year=2024), dataset_smoketest()
@@ -271,7 +276,7 @@ def test_unidentified_error_shows_fallback_message(engine):
         year_of_birth_column=...,
     )
 )
-def test_dataset_is_either_correct_or_has_informative_error(dataset):
+def test_check_answer_dataset_is_either_correct_or_has_informative_error(dataset):
     engine = get_engine()
     msg = quiz.check_answer(engine, dataset, dataset_smoketest())
     assert not msg.startswith("Incorrect answer.\nExpected:")
@@ -286,7 +291,9 @@ def test_dataset_is_either_correct_or_has_informative_error(dataset):
         filter_dates=...,
     )
 )
-def test_filtered_medications_is_either_correct_or_has_informative_error(answer):
+def test_check_answer_filtered_medications_is_either_correct_or_has_informative_error(
+    answer,
+):
     engine = get_engine()
     msg = quiz.check_answer(
         engine,
@@ -294,3 +301,42 @@ def test_filtered_medications_is_either_correct_or_has_informative_error(answer)
         filtered_medications(),
     )
     assert not msg.startswith("Incorrect answer.\nExpected:")
+
+
+# Tests for functions running the quiz
+def test_get_questions():
+    questions = quiz.get_questions()
+    assert len(questions) == 2
+    assert questions[1].engine == questions[2].engine
+
+
+def test_get_questions_without_creating_engine():
+    questions = quiz.get_questions(create_engine=False)
+    assert len(questions) == 2
+    assert questions[1].engine is None
+
+
+def test_check():
+    question = quiz.Question("Create an Empty Dataset.")
+    question.expected = Dataset()
+    msg = question.check(Dataset())
+    assert msg == "Correct!"
+
+
+def test_write_quiz_file(tmpdir):
+    path = tmpdir / "quiz_answers.py"
+    quiz.write_quiz_file(path)
+    with open(path) as f:
+        contents = f.read()
+    assert contents.startswith("# Welcome to the ehrQL Quiz!")
+
+
+def test_run_quiz_with_default_file(capfd, tmpdir):
+    path = tmpdir / "quiz_answers.py"
+    quiz.write_quiz_file(path)
+
+    sandbox.run_quiz(path)
+    captured = capfd.readouterr()
+
+    assert "Expected Dataset, got ellipsis instead." in captured.out
+    assert "Expected Table, got ellipsis instead." in captured.out

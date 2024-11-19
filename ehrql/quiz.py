@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Any
 
+from ehrql import create_dataset
 from ehrql.query_engines.in_memory_database import (
     EventColumn,
     EventTable,
@@ -9,6 +10,7 @@ from ehrql.query_engines.in_memory_database import (
 )
 from ehrql.query_engines.sandbox import EmptyDataset, SandboxQueryEngine
 from ehrql.query_language import BaseFrame, BaseSeries, Dataset
+from ehrql.tables.core import clinical_events, patients
 
 
 def check_answer(
@@ -269,11 +271,81 @@ def _check_table_then_columns_one_by_one(
     )
 
 
+class Question:
+    def __init__(self, prompt: str, engine: SandboxQueryEngine | None = None):
+        self.prompt = prompt
+        self.expected = None
+        self.engine = engine
+
+    def check(self, answer: Any = ...) -> str:
+        engine = self.engine or self.get_engine()
+        message = check_answer(engine, answer, self.expected)
+        print(message)
+        return message
+
+    @staticmethod
+    def get_engine() -> SandboxQueryEngine:
+        path = Path(__file__).parent / "example-data"
+        return SandboxQueryEngine(str(path))
+
+
 def get_quiz_file_contents() -> str:
-    return "# Welcome to the ehrQL Quiz!"
+    def get_block_for_question(index: int, question: Question) -> str:
+        return "\n".join(
+            [
+                f"# Question {index}: {question.prompt}",
+                "answer = ...",
+                f"questions[{index}].check(answer)",
+            ]
+        )
+
+    questions = get_questions(create_engine=False)
+    return "\n\n".join(
+        [
+            "# Welcome to the ehrQL Quiz! \n\n",
+            "from ehrql import quiz",
+            "from ehrql import create_dataset",
+            "from ehrql.query_engines.sandbox import SandboxQueryEngine",
+            "questions = quiz.get_questions()",
+            *[get_block_for_question(i, qn) for i, qn in questions.items()],
+        ]
+    )
 
 
 def write_quiz_file(file_path: str | Path) -> None:
     contents = get_quiz_file_contents()
     with open(file_path, "w") as f:
         f.write(contents)
+
+
+def get_questions(create_engine: bool = True) -> dict[int, Question]:
+    if create_engine:
+        engine = Question.get_engine()
+    else:
+        engine = None
+
+    questions = dict()
+
+    add_question_1(questions, engine)
+    add_question_2(questions, engine)
+    return questions
+
+
+# Question contents
+def add_question_1(questions: dict, engine: SandboxQueryEngine):
+    questions[1] = Question(
+        "Add column `age` to the dataset corresponding to the patient's age on January 1, 2024.",
+        engine,
+    )
+    questions[1].expected = create_dataset()
+    questions[1].expected.age = patients.age_on("2024-01-01")
+
+
+def add_question_2(questions: dict, engine: SandboxQueryEngine):
+    questions[2] = Question(
+        "Filter the clinical events table to only include records with SNOMED code `60621009`.",
+        engine,
+    )
+    questions[2].expected = clinical_events.where(
+        clinical_events.snomedct_code.is_in(["60621009"])
+    )
