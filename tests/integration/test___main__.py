@@ -49,6 +49,24 @@ def test_dump_example_data(tmpdir):
     assert "patients.csv" in filenames
 
 
+def test_dump_quiz_file(tmpdir):
+    with contextlib.chdir(tmpdir):
+        main(["dump-quiz-file"])
+    filepath = tmpdir / "quiz_answers.py"
+    assert filepath.exists()
+    with open(filepath) as f:
+        content = f.read()
+        assert content.startswith("# Welcome to the ehrQL Quiz!")
+
+
+def test_run_quiz_with_default_file(mocker, tmpdir):
+    patched = mocker.patch("ehrql.sandbox.run_quiz")
+    with contextlib.chdir(tmpdir):
+        main(["dump-quiz-file"])
+        main(["quiz"])
+        patched.assert_called_once_with(Path("quiz_answers.py"))
+
+
 @pytest.mark.parametrize(
     "definition_type,definition_file",
     [

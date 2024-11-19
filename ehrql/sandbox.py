@@ -1,6 +1,7 @@
 import code
 import readline
 import rlcompleter
+import subprocess
 import sys
 
 from ehrql.query_engines.sandbox import SandboxQueryEngine
@@ -35,3 +36,7 @@ def run(dummy_tables_path):
 def excepthook(type_, exc, tb):
     traceback = get_trimmed_traceback(exc, "<console>")
     sys.stderr.write(traceback)
+
+
+def run_quiz(quiz_file_path):  # pragma: no cover
+    subprocess.call(["python", str(quiz_file_path)])

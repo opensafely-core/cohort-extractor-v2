@@ -139,7 +139,27 @@ def test_run_sandbox(mocker, tmp_path):
         str(dummy_data_path),
     ]
     main(argv)
-    patched.assert_called_once()
+    patched.assert_called_once_with(dummy_data_path)
+
+
+def test_run_quiz_with_file_path(mocker, tmp_path):
+    patched = mocker.patch("ehrql.sandbox.run_quiz")
+    file_path = tmp_path / "quiz_answers.py"
+    open(file_path, "w").close()
+    argv = [
+        "quiz",
+        str(file_path),
+    ]
+    main(argv)
+    patched.assert_called_once_with(file_path)
+
+
+def test_run_quiz_with_missing_file():
+    argv = [
+        "quiz",
+    ]
+    with pytest.raises(SystemExit):
+        main(argv)
 
 
 def test_existing_python_file_missing_file(capsys, tmp_path):

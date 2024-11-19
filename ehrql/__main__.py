@@ -24,10 +24,12 @@ from .main import (
     debug_dataset_definition,
     dump_dataset_sql,
     dump_example_data,
+    dump_quiz_file,
     generate_dataset,
     generate_measures,
     graph_query,
     run_isolation_report,
+    run_quiz,
     run_sandbox,
     serialize_definition,
     test_connection,
@@ -155,6 +157,8 @@ def create_parser(user_args, environ):
     add_generate_dataset(subparsers, environ, user_args)
     add_generate_measures(subparsers, environ, user_args)
     add_run_sandbox(subparsers, environ, user_args)
+    add_run_quiz(subparsers, environ, user_args)
+    add_dump_quiz_file(subparsers, environ, user_args)
     add_dump_example_data(subparsers, environ, user_args)
     add_dump_dataset_sql(subparsers, environ, user_args)
     add_create_dummy_tables(subparsers, environ, user_args)
@@ -413,6 +417,35 @@ def add_debug_dataset_definition(subparsers, environ, user_args):
     )
 
     add_display_renderer_argument(parser, environ)
+
+
+def add_run_quiz(subparsers, environ, user_args):
+    parser = subparsers.add_parser(
+        "quiz",
+        help="Start the ehrQL quiz.",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.set_defaults(function=run_quiz)
+    parser.add_argument(
+        "quiz_file_path",
+        nargs="?",
+        default="quiz_answers.py",
+        help=strip_indent(
+            """
+            Path to the quiz file. Default is `quiz_answers.py`.
+            """
+        ),
+        type=existing_python_file,
+    )
+
+
+def add_dump_quiz_file(subparsers, environ, user_args):
+    parser = subparsers.add_parser(
+        "dump-quiz-file",
+        help="Dump the file for answering the quiz to the current directory.",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.set_defaults(function=dump_quiz_file)
 
 
 def add_assure(subparsers, environ, user_args):

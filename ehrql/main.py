@@ -7,7 +7,7 @@ from contextlib import nullcontext
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
-from ehrql import assurance, sandbox
+from ehrql import assurance, quiz, sandbox
 from ehrql.dummy_data import DummyDataGenerator
 from ehrql.dummy_data_nextgen import DummyDataGenerator as NextGenDummyDataGenerator
 from ehrql.dummy_data_nextgen import (
@@ -355,6 +355,15 @@ def get_dummy_measures_data_class(dummy_data_config):
 
 def run_sandbox(dummy_tables_path, environ):
     sandbox.run(dummy_tables_path)
+
+
+def run_quiz(quiz_file_path):
+    sandbox.run_quiz(quiz_file_path)
+
+
+def dump_quiz_file():
+    dst_path = Path(os.getcwd()) / "quiz_answers.py"
+    quiz.write_quiz_file(dst_path)
 
 
 def assure(test_data_file, environ, user_args):

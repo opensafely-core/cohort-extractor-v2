@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any
 
 from ehrql.query_engines.in_memory_database import (
@@ -266,3 +267,13 @@ def _check_table_then_columns_one_by_one(
         check_column,
         column_names=column_names,
     )
+
+
+def get_quiz_file_contents() -> str:
+    return "# Welcome to the ehrQL Quiz!"
+
+
+def write_quiz_file(file_path: str | Path) -> None:
+    contents = get_quiz_file_contents()
+    with open(file_path, "w") as f:
+        f.write(contents)

@@ -32,6 +32,20 @@ Start the ehrQL sandbox environment.
 </p>
 
 <div class="attr-heading">
+  <a href="#quiz"><tt>quiz</tt></a>
+</div>
+<p class="indent">
+Start the ehrQL quiz.
+</p>
+
+<div class="attr-heading">
+  <a href="#dump-quiz-file"><tt>dump-quiz-file</tt></a>
+</div>
+<p class="indent">
+Dump the file for answering the quiz to the current directory.
+</p>
+
+<div class="attr-heading">
   <a href="#dump-example-data"><tt>dump-example-data</tt></a>
 </div>
 <p class="indent">
@@ -397,6 +411,51 @@ Path to directory of data files (one per table), supported formats are:
 <div class="attr-heading" id="sandbox.help">
   <tt>-h, --help</tt>
   <a class="headerlink" href="#sandbox.help" title="Permanent link">🔗</a>
+</div>
+<div markdown="block" class="indent">
+show this help message and exit
+
+</div>
+
+
+<h2 id="quiz" data-toc-label="quiz" markdown>
+  quiz
+</h2>
+```
+ehrql quiz [QUIZ_FILE_PATH] [--help]
+```
+Start the ehrQL quiz.
+
+<div class="attr-heading" id="quiz.quiz_file_path">
+  <tt>QUIZ_FILE_PATH</tt>
+  <a class="headerlink" href="#quiz.quiz_file_path" title="Permanent link">🔗</a>
+</div>
+<div markdown="block" class="indent">
+Path to the quiz file. Default is `quiz_answers.py`.
+
+</div>
+
+<div class="attr-heading" id="quiz.help">
+  <tt>-h, --help</tt>
+  <a class="headerlink" href="#quiz.help" title="Permanent link">🔗</a>
+</div>
+<div markdown="block" class="indent">
+show this help message and exit
+
+</div>
+
+
+<h2 id="dump-quiz-file" data-toc-label="dump-quiz-file" markdown>
+  dump-quiz-file
+</h2>
+```
+ehrql dump-quiz-file [--help]
+```
+Dump the file for answering the quiz to the current directory.
+
+<div class="attr-heading" id="dump-quiz-file.help">
+  <tt>-h, --help</tt>
+  <a class="headerlink" href="#dump-quiz-file.help" title="Permanent link">🔗</a>
 </div>
 <div markdown="block" class="indent">
 show this help message and exit
