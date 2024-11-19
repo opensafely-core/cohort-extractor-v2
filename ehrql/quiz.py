@@ -272,16 +272,26 @@ def _check_table_then_columns_one_by_one(
 
 
 class Question:
-    def __init__(self, prompt: str, engine: SandboxQueryEngine | None = None):
+    def __init__(
+        self, prompt: str, index: int, engine: SandboxQueryEngine | None = None
+    ):
         self.prompt = prompt
+        self.index = index
         self.expected = None
         self.engine = engine
+        self.attempted = False
+        self.correct = False
 
     def check(self, answer: Any = ...) -> str:
-        engine = self.engine or self.get_engine()
-        message = check_answer(engine, answer, self.expected)
+        if answer is not ...:
+            self.attempted = True
+            engine = self.engine or self.get_engine()
+            message = check_answer(engine, answer, self.expected)
+            self.correct = message == "Correct!"
+        else:
+            message = "Skipped."
+        message = f"\033[4mQuestion {self.index}\033[24m\n{message}\n"
         print(message)
-        return message
 
     @staticmethod
     def get_engine() -> SandboxQueryEngine:
@@ -299,15 +309,19 @@ def get_quiz_file_contents() -> str:
             ]
         )
 
+    imports = [
+        "from ehrql import quiz",
+        "from ehrql import create_dataset",
+        "from ehrql.query_engines.sandbox import SandboxQueryEngine",
+    ]
     questions = get_questions(create_engine=False)
     return "\n\n".join(
         [
-            "# Welcome to the ehrQL Quiz! \n\n",
-            "from ehrql import quiz",
-            "from ehrql import create_dataset",
-            "from ehrql.query_engines.sandbox import SandboxQueryEngine",
+            "# Welcome to the ehrQL Quiz!",
+            *imports,
             "questions = quiz.get_questions()",
             *[get_block_for_question(i, qn) for i, qn in questions.items()],
+            "quiz.summarise(questions)",
         ]
     )
 
@@ -331,10 +345,27 @@ def get_questions(create_engine: bool = True) -> dict[int, Question]:
     return questions
 
 
+def summarise(questions: dict[int, Question]) -> None:
+    correct = sum(q.attempted and q.correct for q in questions.values())
+    incorrect = sum(q.attempted and not q.correct for q in questions.values())
+    unanswered = sum(not q.attempted for q in questions.values())
+
+    message = "\n".join(
+        [
+            "\n\n\033[4mSummary of your results\033[24m",
+            f"Correct: {correct}",
+            f"Incorrect: {incorrect}",
+            f"Unanswered: {unanswered}",
+        ]
+    )
+    print(message)
+
+
 # Question contents
 def add_question_1(questions: dict, engine: SandboxQueryEngine):
     questions[1] = Question(
         "Add column `age` to the dataset corresponding to the patient's age on January 1, 2024.",
+        1,
         engine,
     )
     questions[1].expected = create_dataset()
@@ -344,6 +375,7 @@ def add_question_1(questions: dict, engine: SandboxQueryEngine):
 def add_question_2(questions: dict, engine: SandboxQueryEngine):
     questions[2] = Question(
         "Filter the clinical events table to only include records with SNOMED code `60621009`.",
+        2,
         engine,
     )
     questions[2].expected = clinical_events.where(

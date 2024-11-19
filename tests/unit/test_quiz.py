@@ -5,7 +5,7 @@ import hypothesis.strategies as st
 import pytest
 from hypothesis import given
 
-from ehrql import quiz, sandbox, weeks
+from ehrql import quiz, weeks
 from ehrql.query_engines.sandbox import SandboxQueryEngine
 from ehrql.query_language import Dataset
 from ehrql.tables.core import (
@@ -316,11 +316,34 @@ def test_get_questions_without_creating_engine():
     assert questions[1].engine is None
 
 
-def test_check():
-    question = quiz.Question("Create an Empty Dataset.")
+@pytest.mark.parametrize(
+    "answer,message",
+    [
+        (Dataset(), "Correct!"),
+        (..., "Skipped."),
+    ],
+)
+def test_check(capfd, answer, message):
+    question = quiz.Question("Create an Empty Dataset.", 0)
     question.expected = Dataset()
-    msg = question.check(Dataset())
-    assert msg == "Correct!"
+    question.check(answer)
+    assert capfd.readouterr().out.rstrip() == f"\033[4mQuestion 0\033[24m\n{message}"
+
+
+def test_summarise(capfd):
+    questions = {
+        1: quiz.Question("Q1", 1),
+        2: quiz.Question("Q2", 2),
+    }
+    quiz.summarise(questions)
+    assert capfd.readouterr().out.rstrip() == "\n".join(
+        [
+            "\n\n\033[4mSummary of your results\033[24m",
+            "Correct: 0",
+            "Incorrect: 0",
+            "Unanswered: 2",
+        ]
+    )
 
 
 def test_write_quiz_file(tmpdir):
@@ -329,14 +352,3 @@ def test_write_quiz_file(tmpdir):
     with open(path) as f:
         contents = f.read()
     assert contents.startswith("# Welcome to the ehrQL Quiz!")
-
-
-def test_run_quiz_with_default_file(capfd, tmpdir):
-    path = tmpdir / "quiz_answers.py"
-    quiz.write_quiz_file(path)
-
-    sandbox.run_quiz(path)
-    captured = capfd.readouterr()
-
-    assert "Expected Dataset, got ellipsis instead." in captured.out
-    assert "Expected Table, got ellipsis instead." in captured.out
