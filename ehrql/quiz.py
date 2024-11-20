@@ -372,7 +372,10 @@ def write_docs(path: str | Path) -> None:
                 f"### {question.prompt}",
                 '??? tip "Render correct answer"',
                 textwrap.indent(
-                    evaluate(engine, question.expected)._repr_markdown_(), " " * 4
+                    "```pycon\n"
+                    + evaluate(engine, question.expected).__repr__()
+                    + "\n```",
+                    " " * 4,
                 ),
             ]
         )
