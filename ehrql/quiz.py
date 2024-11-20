@@ -1,3 +1,4 @@
+import textwrap
 from pathlib import Path
 from typing import Any
 
@@ -312,7 +313,6 @@ def get_quiz_file_contents() -> str:
     imports = [
         "from ehrql import quiz",
         "from ehrql import create_dataset",
-        "from ehrql.query_engines.sandbox import SandboxQueryEngine",
     ]
     questions = get_questions(create_engine=False)
     return "\n\n".join(
@@ -359,6 +359,30 @@ def summarise(questions: dict[int, Question]) -> None:
         ]
     )
     print(message)
+
+
+# Docs page
+def write_docs(path: str | Path) -> None:
+    engine = Question.get_engine()
+
+    def get_section_for_question(question: Question) -> str:
+        return "\n".join(
+            [
+                f"## Question {question.index}",
+                f"### {question.prompt}",
+                '??? tip "Render correct answer"',
+                textwrap.indent(
+                    evaluate(engine, question.expected)._repr_markdown_(), " " * 4
+                ),
+            ]
+        )
+
+    questions = get_questions(create_engine=False)
+    contents = "\n\n".join(
+        [get_section_for_question(qn) for qn in questions.values()],
+    )
+    with open(path, "w") as f:
+        f.write(contents)
 
 
 # Question contents

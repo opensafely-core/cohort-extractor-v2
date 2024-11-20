@@ -352,3 +352,15 @@ def test_write_quiz_file(tmpdir):
     with open(path) as f:
         contents = f.read()
     assert contents.startswith("# Welcome to the ehrQL Quiz!")
+
+
+def test_write_docs(tmpdir):
+    path = tmpdir / "index.md"
+    quiz.write_docs(path)
+    with open(path) as f:
+        contents = f.read()
+    assert "    | patient_id | age |\n    | --- | --- |\n    | 1 | 50 |" in contents
+    assert (
+        "    | patient_id | row_id | date | snomedct_code | numeric_value |\n    | --- | --- | --- | --- | --- |\n    | 1 | 2 | 2014-04-10 | 60621009 | 25.8 |"
+        in contents
+    )
