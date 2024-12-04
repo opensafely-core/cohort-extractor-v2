@@ -280,62 +280,65 @@ class Questions:
             ehrql.debugger.DEBUG_QUERY_ENGINE.dsn = path
 
     def __setitem__(self, index, question):
-        question.index = index
         question.engine = self.engine
-        self.questions[index] = question
+        self.questions.setdefault(index, {})
+        self.questions[index]["question"] = question
 
     def __getitem__(self, index):
-        return self.questions[index]
+        return self.questions[index]["question"]
 
     def get_all(self):
         return self.questions.values()
 
+    def check(self, index, answer) -> None:
+        question = self.questions[index]["question"]
+        message = question.check(answer)
+        self.questions[index]["message"] = message
+
     def summarise(self):
-        summarise(self.questions)
+        questions = self.questions
+
+        correct = sum(
+            q.get("message", "Skipped.") == "Correct!" for q in questions.values()
+        )
+        unanswered = sum(
+            q.get("message", "Skipped.") == "Skipped." for q in questions.values()
+        )
+        incorrect = len(questions) - correct - unanswered
+
+        message = "\n".join(
+            [
+                *[
+                    f"Question {i}\n{q['message']}\n"
+                    for i, q in questions.items()
+                    if q.get("message", False)  #  if `check` was called
+                ],
+                "\n\nSummary of your results",
+                f"Correct: {correct}",
+                f"Incorrect: {incorrect}",
+                f"Unanswered: {unanswered}",
+            ]
+        )
+        print(message, file=sys.stderr)
 
 
 class Question:
     def __init__(
         self,
         prompt: str,
-        index: int | None = None,
         engine: SandboxQueryEngine | None = None,
     ):
         self.prompt = prompt
-        self.index = index
         self.expected = None
         self.engine = engine
-        self.attempted = False
-        self.correct = False
 
     def check(self, answer: Any = ...) -> str:
         if answer is not ...:
-            self.attempted = True
             engine = self.engine or self.get_engine()
-            message = check_answer(engine, answer, self.expected)
-            self.correct = message == "Correct!"
-        else:
-            message = "Skipped."
-        message = f"Question {self.index}\n{message}\n"
-        print(message, file=sys.stderr)
+            return check_answer(engine, answer, self.expected)
+        return "Skipped."
 
     @staticmethod
     def get_engine() -> SandboxQueryEngine:
         path = Path(__file__).parent / "example-data"
         return SandboxQueryEngine(str(path))
-
-
-def summarise(questions: dict[int, Question]) -> None:
-    correct = sum(q.attempted and q.correct for q in questions.values())
-    incorrect = sum(q.attempted and not q.correct for q in questions.values())
-    unanswered = sum(not q.attempted for q in questions.values())
-
-    message = "\n".join(
-        [
-            "\n\nSummary of your results",
-            f"Correct: {correct}",
-            f"Incorrect: {incorrect}",
-            f"Unanswered: {unanswered}",
-        ]
-    )
-    print(message, file=sys.stderr)

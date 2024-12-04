@@ -26,6 +26,19 @@ def engine():
     return get_engine()
 
 
+@pytest.fixture
+def mock_questions():
+    questions = quiz.Questions()
+    questions.engine = get_engine()
+    questions[1] = quiz.Question("Create an Empty Dataset.")
+    questions[1].expected = Dataset()
+    questions[2] = quiz.Question(
+        "Get the `sex` column of the `patients` table as a series."
+    )
+    questions[2].expected = patients.sex
+    return questions
+
+
 def dataset_smoketest(
     index_year: int = 2022,
     min_age: int = 18,
@@ -301,18 +314,51 @@ def test_check_answer_filtered_medications_is_either_correct_or_has_informative_
         (..., "Skipped."),
     ],
 )
-def test_check(capfd, answer, message):
+def test_check(answer, message):
     question = quiz.Question("Create an Empty Dataset.", 0)
     question.expected = Dataset()
-    question.check(answer)
-    assert capfd.readouterr().err.rstrip() == f"Question 0\n{message}"
+    assert question.check(answer) == message
 
 
-def test_summarise(capfd):
-    questions = quiz.Questions()
-    questions[1] = quiz.Question("Q1")
-    questions[2] = quiz.Question("Q2")
-    questions.summarise()
+def test_summarise_skipped(mock_questions, capfd):
+    # This should be the default state if the user did not modify the quiz file
+    mock_questions.check(1, ...)
+    mock_questions.check(2, ...)
+    mock_questions.summarise()
+    assert capfd.readouterr().err.rstrip() == "\n".join(
+        [
+            "Question 1\nSkipped.\n",
+            "Question 2\nSkipped.\n",
+            "\n\nSummary of your results",
+            "Correct: 0",
+            "Incorrect: 0",
+            "Unanswered: 2",
+        ]
+    )
+
+
+def test_summarise_attempted(mock_questions, capfd):
+    mock_questions.check(1, Dataset())
+    mock_questions.check(2, patients.date_of_birth)
+    mock_questions.summarise()
+
+    assert capfd.readouterr().err.rstrip() == (
+        "\n".join(
+            [
+                "Question 1\nCorrect!\n",
+                "Question 2\nIncorrect value for patient 1: expected female, got 1973-07-01 instead.\n",
+                "\n\nSummary of your results",
+                "Correct: 1",
+                "Incorrect: 1",
+                "Unanswered: 0",
+            ]
+        )
+    )
+
+
+def test_summarise_blank(mock_questions, capfd):
+    # This mocks the case where the user has removed the provided check statements
+    mock_questions.summarise()
     assert capfd.readouterr().err.rstrip() == "\n".join(
         [
             "\n\nSummary of your results",
@@ -329,7 +375,8 @@ def test_questions():
     questions[1] = quiz.Question("Q1")
     questions[2] = quiz.Question("Q2")
     assert len(list(questions.get_all())) == 2
-    assert questions[1].index == 1
+    assert questions.questions.keys() == {1, 2}
+    assert questions[1].prompt == "Q1"
     assert questions[2].engine.dsn.name == "test_dummy_path"
 
 
