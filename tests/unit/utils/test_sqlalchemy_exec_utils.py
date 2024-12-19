@@ -44,15 +44,15 @@ sql_table = sqlalchemy.table(
 
 
 @pytest.mark.parametrize(
-    "table_size,batch_size,expected_query_count",
+    "table_size,batch_size",
     [
-        (20, 5, 5),  # 4 batches of results, plus one to confirm there are no more
-        (20, 6, 4),  # 4th batch will be part empty so we know it's the final one
-        (0, 10, 1),  # 1 query to confirm there are no results
-        (9, 1, 10),  # a batch size of 1 is obviously silly but it ought to work
+        (20, 5),
+        (20, 6),
+        (0, 10),
+        (9, 1),
     ],
 )
-def test_fetch_table_in_batches(table_size, batch_size, expected_query_count):
+def test_fetch_table_in_batches(table_size, batch_size):
     table_data = [(i, f"foo{i}") for i in range(table_size)]
 
     connection = FakeConnection(table_data)
@@ -60,7 +60,14 @@ def test_fetch_table_in_batches(table_size, batch_size, expected_query_count):
     results = fetch_table_in_batches(
         connection.execute, sql_table, sql_table.c.key, batch_size=batch_size
     )
+
     assert list(results) == table_data
+
+    # If the batch size doesn't exactly divide the table size then we need an extra
+    # query to fetch the remaining results. If it _does_ exactly divide it then we need
+    # an extra query to confirm that there are no more results. Hence in either case we
+    # expect one more query than `table_size // batch_size`.
+    expected_query_count = (table_size // batch_size) + 1
     assert connection.call_count == expected_query_count
 
 
