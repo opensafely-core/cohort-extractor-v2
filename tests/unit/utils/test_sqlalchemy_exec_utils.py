@@ -10,6 +10,39 @@ from ehrql.utils.sqlalchemy_exec_utils import (
 )
 
 
+# Pretend to be a SQL connection that understands just two forms of query
+class FakeConnection:
+    call_count = 0
+
+    def __init__(self, table_data):
+        self.table_data = table_data
+
+    def execute(self, query):
+        self.call_count += 1
+        compiled = query.compile()
+        sql = str(compiled).replace("\n", "").strip()
+        params = compiled.params
+
+        if sql == "SELECT t.key, t.value FROM t ORDER BY t.key LIMIT :param_1":
+            limit = params["param_1"]
+            return self.table_data[:limit]
+        elif sql == (
+            "SELECT t.key, t.value FROM t WHERE t.key > :key_1 "
+            "ORDER BY t.key LIMIT :param_1"
+        ):
+            limit, min_key = params["param_1"], params["key_1"]
+            return [row for row in self.table_data if row[0] > min_key][:limit]
+        else:
+            assert False, f"Unexpected SQL: {sql}"
+
+
+sql_table = sqlalchemy.table(
+    "t",
+    sqlalchemy.Column("key"),
+    sqlalchemy.Column("value"),
+)
+
+
 @pytest.mark.parametrize(
     "table_size,batch_size,expected_query_count",
     [
@@ -22,38 +55,10 @@ from ehrql.utils.sqlalchemy_exec_utils import (
 def test_fetch_table_in_batches(table_size, batch_size, expected_query_count):
     table_data = [(i, f"foo{i}") for i in range(table_size)]
 
-    # Pretend to be a SQL connection that understands just two forms of query
-    class FakeConnection:
-        call_count = 0
-
-        def execute(self, query):
-            self.call_count += 1
-            compiled = query.compile()
-            sql = str(compiled).replace("\n", "").strip()
-            params = compiled.params
-
-            if sql == "SELECT t.pk, t.foo FROM t ORDER BY t.pk LIMIT :param_1":
-                limit = params["param_1"]
-                return table_data[:limit]
-            elif sql == (
-                "SELECT t.pk, t.foo FROM t WHERE t.pk > :pk_1 "
-                "ORDER BY t.pk LIMIT :param_1"
-            ):
-                limit, min_pk = params["param_1"], params["pk_1"]
-                return [row for row in table_data if row[0] > min_pk][:limit]
-            else:
-                assert False, f"Unexpected SQL: {sql}"
-
-    table = sqlalchemy.table(
-        "t",
-        sqlalchemy.Column("pk"),
-        sqlalchemy.Column("foo"),
-    )
-
-    connection = FakeConnection()
+    connection = FakeConnection(table_data)
 
     results = fetch_table_in_batches(
-        connection.execute, table, table.c.pk, batch_size=batch_size
+        connection.execute, sql_table, sql_table.c.key, batch_size=batch_size
     )
     assert list(results) == table_data
     assert connection.call_count == expected_query_count
