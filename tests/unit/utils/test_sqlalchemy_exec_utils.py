@@ -1,6 +1,8 @@
 import random
 from unittest import mock
 
+import hypothesis as hyp
+import hypothesis.strategies as st
 import pytest
 import sqlalchemy
 from sqlalchemy.exc import OperationalError
@@ -51,18 +53,15 @@ sql_table = sqlalchemy.table(
 )
 
 
-@pytest.mark.parametrize(
-    "table_size,batch_size",
-    [
-        (20, 5),
-        (20, 6),
-        (0, 10),
-        (9, 1),
-    ],
+@hyp.given(
+    table_data=st.lists(
+        st.tuples(st.integers(), st.integers()),
+        unique_by=lambda i: i[0],
+        max_size=100,
+    ),
+    batch_size=st.integers(min_value=1, max_value=10),
 )
-def test_fetch_table_in_batches(table_size, batch_size):
-    table_data = [(i, f"foo{i}") for i in range(table_size)]
-
+def test_fetch_table_in_batches(table_data, batch_size):
     connection = FakeConnection(table_data)
 
     results = fetch_table_in_batches(
@@ -75,7 +74,7 @@ def test_fetch_table_in_batches(table_size, batch_size):
     # query to fetch the remaining results. If it _does_ exactly divide it then we need
     # an extra query to confirm that there are no more results. Hence in either case we
     # expect one more query than `table_size // batch_size`.
-    expected_query_count = (table_size // batch_size) + 1
+    expected_query_count = (len(table_data) // batch_size) + 1
     assert connection.call_count == expected_query_count
 
 
