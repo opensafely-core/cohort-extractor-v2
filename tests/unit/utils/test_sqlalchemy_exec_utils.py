@@ -1,3 +1,4 @@
+import random
 from unittest import mock
 
 import pytest
@@ -15,7 +16,8 @@ class FakeConnection:
     call_count = 0
 
     def __init__(self, table_data):
-        self.table_data = table_data
+        self.table_data = list(table_data)
+        self.random = random.Random(202412190902)
 
     def execute(self, query):
         self.call_count += 1
@@ -25,15 +27,21 @@ class FakeConnection:
 
         if sql == "SELECT t.key, t.value FROM t ORDER BY t.key LIMIT :param_1":
             limit = params["param_1"]
-            return self.table_data[:limit]
+            return self.sorted_data()[:limit]
         elif sql == (
             "SELECT t.key, t.value FROM t WHERE t.key > :key_1 "
             "ORDER BY t.key LIMIT :param_1"
         ):
             limit, min_key = params["param_1"], params["key_1"]
-            return [row for row in self.table_data if row[0] > min_key][:limit]
+            return [row for row in self.sorted_data() if row[0] > min_key][:limit]
         else:
             assert False, f"Unexpected SQL: {sql}"
+
+    def sorted_data(self):
+        # For the column we're not explicitly sorting by we want to return the rows in
+        # an arbitrary order each time to simulate the behaviour of MSSQL
+        self.random.shuffle(self.table_data)
+        return sorted(self.table_data, key=lambda i: i[0])
 
 
 sql_table = sqlalchemy.table(
@@ -61,7 +69,7 @@ def test_fetch_table_in_batches(table_size, batch_size):
         connection.execute, sql_table, sql_table.c.key, batch_size=batch_size
     )
 
-    assert list(results) == table_data
+    assert sorted(results) == sorted(table_data)
 
     # If the batch size doesn't exactly divide the table size then we need an extra
     # query to fetch the remaining results. If it _does_ exactly divide it then we need
