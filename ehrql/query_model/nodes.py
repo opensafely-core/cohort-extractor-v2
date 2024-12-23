@@ -125,15 +125,27 @@ class OneRowPerPatientSeries(Series): ...
 class ManyRowsPerPatientSeries(Series): ...
 
 
+class CombinedSeriesFrame(ManyRowsPerPatientFrame):
+    series: Mapping[str, Series[Any]]
+
+    def __hash__(self):
+        # `series` is a dict and so not naturally hashable, but we treat it as
+        # immutable. The specfic hash used below is based on a recommendation by Raymond
+        # Hettinger. See:
+        # https://stackoverflow.com/a/16162138
+        return hash((frozenset(self.series), frozenset(self.series.values())))
+
+
 # Combines a collection of OneRowPerPatientSeries with a "population" predicate which
 # defines membership
 class Dataset(OneRowPerPatientFrame):
     population: Series[bool]
     variables: Mapping[str, Series[Any]]
+    events: Mapping[str, CombinedSeriesFrame]
 
     def __hash__(self):
-        # `variables` is a dict and so not naturally hashable, but we treat it as
-        # immutable. The specfic hash used below is based on a recommendation by
+        # `variables` and `events` are dicts and so not naturally hashable, but we treat
+        # it as immutable. The specfic hash used below is based on a recommendation by
         # Raymond Hettinger. See:
         # https://stackoverflow.com/a/16162138
         return hash(
@@ -141,6 +153,8 @@ class Dataset(OneRowPerPatientFrame):
                 self.population,
                 frozenset(self.variables),
                 frozenset(self.variables.values()),
+                frozenset(self.events),
+                frozenset(self.events.values()),
             )
         )
 
@@ -581,7 +595,12 @@ def validate_input_domains(node):
                 f"\nWith frame with domain:\n{frame_domain}"
             )
     elif isinstance(node, Dataset):
-        if get_input_domains(node) != {Domain.PATIENT}:
+        # We deliberately ignore the `events` property here as that's expected to
+        # contain multiple, divergent many-rows-per-patient series
+        domains = {
+            get_domain(arg) for arg in [node.population, *node.variables.values()]
+        }
+        if domains != {Domain.PATIENT}:
             raise DomainMismatchError(
                 "Dataset can only contain one-row-per-patient series"
             )
@@ -593,6 +612,8 @@ def validate_input_domains(node):
             )
         if isinstance(node, AggregatedSeries) and len(non_patient_domains) == 0:
             raise DomainMismatchError("Attempt to aggregate one-row-per-patient series")
+        if isinstance(node, CombinedSeriesFrame) and len(non_patient_domains) == 0:
+            raise DomainMismatchError("Cannot combine only one-row-per-patient series")
 
 
 @dataclasses.dataclass(frozen=True)
@@ -679,7 +700,12 @@ def get_input_nodes_for_case(node):
 
 @get_input_nodes.register(Dataset)
 def get_input_nodes_for_dataset(node):
-    return [node.population, *node.variables.values()]
+    return [node.population, *node.variables.values(), *node.events.values()]
+
+
+@get_input_nodes.register(CombinedSeriesFrame)
+def get_input_nodes_for_combined_series_frame(node):
+    return list(node.series.values())
 
 
 # Minimum/Maximum of functions contain their inputs inside a tuple
