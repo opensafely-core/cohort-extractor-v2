@@ -397,7 +397,7 @@ def filter_values(query, values):
 
     rows = list(
         engine.get_results(
-            Dataset(population=rewriter.rewrite(query), variables={}),
+            Dataset(population=rewriter.rewrite(query), variables={}, events={}),
         )
     )
 

@@ -25,7 +25,7 @@ class DebugQueryEngine(LocalFileQueryEngine):
             table_nodes = get_table_nodes(population_qm, *variables_qm.values())
         self.populate_database(table_nodes)
         return self.get_results_as_table(
-            DatasetQM(population=population_qm, variables=variables_qm)
+            DatasetQM(population=population_qm, variables=variables_qm, events={})
         )
 
     def evaluate(self, element):

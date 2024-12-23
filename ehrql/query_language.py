@@ -200,6 +200,7 @@ class Dataset:
         return qm.Dataset(
             population=self.population._qm_node,
             variables={k: v._qm_node for k, v in self.variables.items()},
+            events={},
         )
 
 

@@ -34,7 +34,7 @@ def test_handles_degenerate_population(engine):
     # Specifying a population of "False" is obviously silly, but it's more work to
     # identify and reject just this kind of silliness than it is to handle it gracefully
     engine.setup(metadata=sqlalchemy.MetaData())
-    dataset = Dataset(
+    dataset = build_dataset(
         population=Value(False),
         variables={"v": Value(1)},
     )
@@ -196,7 +196,7 @@ def test_minimum_maximum_of_single_series(engine, operation):
         }
     )
 
-    dataset = Dataset(
+    dataset = build_dataset(
         population=as_query_model(patients.exists_for_patient()),
         variables={
             "v": operation(
@@ -332,7 +332,7 @@ def test_population_which_uses_combine_as_set_and_no_patient_frame(engine):
     # so it's possible to use it to create a population SQL expression which references
     # just a single event-level SQL table. This falsifies a previous assumption we made
     # and so we need to test that we handle it correctly.
-    dataset = Dataset(
+    dataset = build_dataset(
         population=Function.In(
             Value(1),
             AggregateByPatient.CombineAsSet(as_query_model(events.i)),
@@ -372,3 +372,8 @@ def test_picking_row_doesnt_cause_filtered_rows_to_reappear(engine):
     assert engine.extract(dataset) == [
         {"patient_id": 1, "has_row": False, "row_count": 0},
     ]
+
+
+# Yeah, yeah mutable defaults – but nothing mutates them
+def build_dataset(*, population, variables={}, events={}):
+    return Dataset(population=population, variables=variables, events=events)

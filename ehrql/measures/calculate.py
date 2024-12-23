@@ -103,7 +103,7 @@ class MeasureCalculator:
         for measure in measures:
             self.add_measure(measure)
         self.placeholder_dataset = Dataset(
-            population=self.population, variables=self.variables
+            population=self.population, variables=self.variables, events={}
         )
 
     def get_results(self, query_engine):

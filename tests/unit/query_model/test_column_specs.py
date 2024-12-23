@@ -45,6 +45,7 @@ def test_get_column_specs():
             code=SelectColumn(patients, "code"),
             category=SelectColumn(patients, "category"),
         ),
+        events={},
     )
     column_specs = get_column_specs(dataset)
     assert column_specs == {

@@ -75,6 +75,7 @@ def test_some_nonsense():
                     name="i1",
                 ),
             },
+            events={},
         )
     )
 

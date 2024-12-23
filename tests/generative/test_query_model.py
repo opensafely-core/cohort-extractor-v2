@@ -225,10 +225,7 @@ def run_test(query_engines, data, population, variable, recorder):
 
 def setup_test(data, population, variable):
     instances = instantiate(data)
-    dataset = Dataset(
-        population=population,
-        variables={"v": variable},
-    )
+    dataset = Dataset(population=population, variables={"v": variable}, events={})
     return instances, dataset
 
 
@@ -281,7 +278,7 @@ def run_dummy_data_test_without_error_handling(population, variable, next_gen=Fa
     dummy = dummy_data_nextgen if next_gen else dummy_data
 
     dummy_data_generator = dummy.DummyDataGenerator(
-        Dataset(population=population, variables={"v": variable}),
+        Dataset(population=population, variables={"v": variable}, events={}),
         population_size=1,
         # We need a batch size bigger than one otherwise by chance (or, more strictly,
         # by deterministic combination of query and fixed random seed) we can end up
@@ -301,7 +298,7 @@ def run_dummy_data_test_without_error_handling(population, variable, next_gen=Fa
     # Using a simplified population definition which should always have matching patients
     # we can confirm that we generate at least some data
     dummy_data_generator = dummy.DummyDataGenerator(
-        Dataset(population=all_patients_query, variables={"v": variable}),
+        Dataset(population=all_patients_query, variables={"v": variable}, events={}),
         population_size=1,
         batch_size=1,
         timeout=-1,

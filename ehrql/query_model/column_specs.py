@@ -52,6 +52,7 @@ def get_column_specs_from_schema(schema):
             column_name: SelectColumn(source=table, name=column_name)
             for column_name in schema.column_names
         },
+        events={},
     )
     return get_column_specs(dataset)
 
