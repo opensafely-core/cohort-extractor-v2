@@ -15,6 +15,7 @@ from ehrql.query_model.introspection import all_unique_nodes
 from ehrql.query_model.nodes import (
     AggregateByPatient,
     Column,
+    CombinedSeriesFrame,
     Dataset,
     Function,
     Parameter,
@@ -376,6 +377,8 @@ def test_variable_strategy_is_comprehensive():
         # This is a structure which we put the generated operations into, but don't
         # expect to generate itself
         Dataset,
+        # We don't yet generate examples of these
+        CombinedSeriesFrame,
     }
     all_operations = set(get_all_operations())
     unexpected_missing = all_operations - known_missing_operations - operations_seen
