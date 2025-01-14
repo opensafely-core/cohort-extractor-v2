@@ -1,12 +1,21 @@
+import re
 from enum import Enum
+from pathlib import Path
 
 import pytest
 
-from ehrql.query_language import get_tables_from_namespace
+from ehrql import tables
+from ehrql.query_language import (
+    BaseSeries,
+    get_tables_from_namespace,
+)
+from ehrql.query_model.nodes import SelectColumn
 from ehrql.tables import core
+from ehrql.utils.module_utils import get_submodules
 
 from .language_server import (
     get_completion_results,
+    get_element_type,
     initialize,
 )
 
@@ -144,3 +153,122 @@ def test_core_table_tests_are_exhaustive():
     ]
 
     assert not missing, f"No tests for core tables: {', '.join(missing)}"
+
+
+@pytest.mark.parametrize(
+    "module, name, column_name, expected_series_type",
+    [
+        (
+            module,
+            name,
+            column_name,
+            type(getattr(table, column_name)).__name__,
+        )
+        for module in get_submodules(tables)
+        for name, table in get_tables_from_namespace(module)
+        for column_name in dir(table)
+        if isinstance(getattr(table, column_name), BaseSeries)
+        and isinstance(getattr(table, column_name)._qm_node, SelectColumn)
+    ],
+)
+def test_types(module, name, column_name, expected_series_type):
+    # For each Series on each table in each submodule of ehrql.tables we check
+    # that the inferred series type on hovering matches the expected series
+    content = f"import {module.__name__}; {module.__name__}.{name}.{column_name}"
+    result = get_element_type(content, len(content) - 1)
+    assert expected_series_type == result, (
+        f"In {module.__name__}.{name}, the series `{column_name}` should be of type `{expected_series_type}` but the language server thinks it's `{result}`"
+    )
+
+
+def get_lines_and_expected_types_from_autocomplete_def_file():
+    autocomplete_filepath = Path(__file__).with_name("autocomplete_definition.py")
+    with autocomplete_filepath.open("r") as f:
+        autocomplete_file = f.read()
+    lines = autocomplete_file.split("\n")
+    import_statements = []
+    lines_with_expected_type = []
+    multiline_variable_name = None
+    multiline_optional_method = None
+    multiline_statement_lines = []
+    is_multiline_statement = False
+    for idx, line in enumerate(lines):
+        line_number = idx + 1
+        statement_with_expected_type = re.search(
+            "^(?P<statement>.+)  ## type:(?P<expected_type>.+)$", line
+        )
+        start_of_multiline_statement = re.search(
+            "^(?P<var_name>[A-Za-z0-0_]+) = (?P<optional_method>.*)\\($", line
+        )
+        end_of_multiline_statement = re.search(
+            "^\\)  ## type:(?P<expected_type>.+)$", line
+        )
+        if line.startswith("from") or line.startswith("import"):
+            # capture all the import statements
+            import_statements.append(line)
+        elif (
+            line.strip() == ""
+            or line.strip().startswith("#")
+            or line.strip().startswith("date_str = ")
+        ):
+            # empty line or comment so ignore
+            # also ignore the helper var date_str
+            ...
+        elif end_of_multiline_statement:
+            is_multiline_statement = False
+            assert len(multiline_statement_lines) > 0, (
+                f"I couldn't parse the multiline variable assigment for variable: {multiline_variable_name}"
+            )
+            statement = f"{multiline_variable_name}={multiline_optional_method}({''.join(multiline_statement_lines)});{multiline_variable_name}"
+            multiline_optional_method = False
+            expected_type = end_of_multiline_statement.group("expected_type").strip()
+            import_statements_str = ";".join(import_statements)
+            statement_with_imports = f"{import_statements_str};{statement}"
+            lines_with_expected_type.append(
+                (statement_with_imports, statement, line_number, expected_type)
+            )
+        elif is_multiline_statement:
+            multiline_statement_lines.append(line.split("#")[0].strip())
+        elif statement_with_expected_type:
+            statement = statement_with_expected_type.group("statement").strip()
+            expected_type = statement_with_expected_type.group("expected_type").strip()
+            import_statements_str = ";".join(import_statements)
+            statement_with_imports = (
+                f"{import_statements_str};variable={statement};variable"
+            )
+            lines_with_expected_type.append(
+                (statement_with_imports, statement, line_number, expected_type)
+            )
+        elif start_of_multiline_statement:
+            multiline_variable_name = start_of_multiline_statement.group("var_name")
+            is_multiline_statement = True
+            multiline_statement_lines = []
+            multiline_optional_method = start_of_multiline_statement.group(
+                "optional_method"
+            )
+        else:
+            assert 0, (
+                f"The autocomplete_definition.py file contains an unexpected line: [{line}]\n\n"
+                "All lines must either be:\n"
+                " - An import statement\n"
+                " - A comment\n"
+                " - of the format: <expression_to_evaluate> ## type:<expected_type>\n"
+            )
+    assert not is_multiline_statement, (
+        f"There is a multiline variable assignment for {multiline_variable_name}"
+    )
+    ", which doesn't end. Multiline variable assigments"
+    return lines_with_expected_type
+
+
+@pytest.mark.parametrize(
+    "statement, line, line_number, expected_type",
+    get_lines_and_expected_types_from_autocomplete_def_file(),
+)
+def test_things_in_autocomplete_definition_file(
+    statement, line, line_number, expected_type
+):
+    actual_type = get_element_type(statement)
+    assert actual_type == expected_type, (
+        f"\n\nautocomplete_definition.py, line {line_number}: Expecting {expected_type} (but got {actual_type}) for the statement\n{line}\n"
+    )

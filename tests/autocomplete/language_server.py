@@ -14,6 +14,7 @@ __all__ = ["get_completion", "initialize"]
 
 import json
 import os
+import re
 from pathlib import Path
 from subprocess import PIPE, Popen
 
@@ -118,6 +119,19 @@ def get_completion(line_number, character):
     )
 
 
+def get_hover_text(line_number, character):
+    """
+    Get the inferred type
+    """
+    return send_message(
+        "textDocument/hover",
+        {
+            "textDocument": text_document,
+            "position": {"line": line_number, "character": character},
+        },
+    )
+
+
 def initialize(temp_file_path: Path):
     """
     Initialize the language server
@@ -180,7 +194,9 @@ def initialize(temp_file_path: Path):
     # The server is now ready for completion and hover requests
 
 
-def get_completion_results(text_for_completion, cursor_position=None):
+def get_completion_results(
+    text_for_completion, cursor_position=None
+):  # pragma: no cover
     """
     For a given string of text provide the list of potential completion
     results. If cursor_position is omitted, then it looks for completion
@@ -201,3 +217,38 @@ def get_completion_results(text_for_completion, cursor_position=None):
     results = completion_response.get("result")
     items = results.get("items")
     return items
+
+
+def get_element_type(text, cursor_position=None):  # pragma: no cover
+    """
+    For a given string of text provide the inferred type of the item at the
+    current cursor_position. If cursor_position is omitted, it assumes the
+    thing to check is the last thing typed and so looks at the cursor position
+    just before the end of the string.
+
+    To use, you should provide the entire file contents up to the point
+    that you want to get the type. It should all be on a single
+    line, with ';' separators.
+    """
+    notify_document_change(0, f"{text}\n")
+
+    if cursor_position is None:
+        cursor_position = len(text) - 1
+
+    hover_response = get_hover_text(0, cursor_position)
+    value = hover_response.get("result").get("contents").get("value")
+    first_line = value.split("\n")[0]
+
+    # First line contains the signature like `(kind) name: type`
+    type_signature = re.search(
+        "^\\((?P<kind>[^)]+)\\) (?P<var_name>[^:]+): (?P<type>.+)$", first_line
+    )
+
+    if type_signature:
+        thing_type = type_signature.group("type")
+    else:
+        assert 0, (
+            f"The type signature `{value}` could not be parsed by language_server.py."
+        )
+
+    return thing_type
