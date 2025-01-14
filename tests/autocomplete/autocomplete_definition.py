@@ -1,4 +1,3 @@
-# noqa: INP001
 from ehrql import days, maximum_of, minimum_of, weeks
 from ehrql.tables.core import clinical_events, patients
 from ehrql.tables.tpp import addresses, apcs, ons_deaths

@@ -8,6 +8,7 @@ docker
 hypothesis
 pip-tools
 pre-commit
+pyright[nodejs]
 pytest
 pytest-cov
 pytest-mock
