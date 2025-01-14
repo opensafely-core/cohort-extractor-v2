@@ -58,7 +58,3 @@ Users can write queries against this table structure using ehrQL.
 The table structure in an EHR provider's database.
 We do not present this table structure to the user.
 Instead, the user interacts with ehrQL Tables; their queries are translated into queries against this table structure by a Backend.
-
-**`variable_definitions`.**
-Found throughout the ehrQL codebase, the Query Model equivalent of a Dataset Definition.
-Specifically, a dictionary that maps column names to Query Model objects (plus a `population` key that defines the population).

@@ -30,10 +30,10 @@ def test_local_file_query_engine():
     ).count_for_patient()
 
     dataset.define_population(patients.exists_for_patient())
-    variable_definitions = dataset._compile()
+    dataset_qm = dataset._compile()
 
     query_engine = LocalFileQueryEngine(FIXTURES)
-    results = query_engine.get_results(variable_definitions)
+    results = query_engine.get_results(dataset_qm)
 
     assert list(results) == [
         (1, "M", 9, 3),

@@ -18,10 +18,9 @@ class BaseQueryEngine:
         self.backend = backend
         self.config = config or {}
 
-    def get_results(self, variable_definitions):
+    def get_results(self, dataset):
         """
-        `variable_definitions` is a dictionary mapping output column names to
-        query model graphs which specify the queries used to populate them
+        `dataset` is a query model `Dataset` instance
 
         Override this method to do the things necessary to generate query code and execute
         it against a particular backend
