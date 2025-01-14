@@ -40,7 +40,6 @@ from ehrql.query_model.column_specs import (
 )
 from ehrql.query_model.graphs import graph_to_svg
 from ehrql.serializer import serialize
-from ehrql.utils.itertools_utils import eager_iterator
 from ehrql.utils.sqlalchemy_query_utils import (
     clause_as_str,
     get_setup_and_cleanup_queries,
@@ -105,11 +104,6 @@ def generate_dataset_with_dsn(
         default_query_engine_class=LocalFileQueryEngine,
     )
     results = query_engine.get_results(dataset)
-    # Because `results` is a generator we won't actually execute any queries until we
-    # start consuming it. But we want to make sure we trigger any errors (or relevant
-    # log output) before we create the output file. Wrapping the generator in
-    # `eager_iterator` ensures this happens by consuming the first item upfront.
-    results = eager_iterator(results)
     write_rows(output_file, results, column_specs)
 
 
@@ -137,7 +131,6 @@ def generate_dataset_with_dummy_data(
         results = generator.get_results()
 
     log.info("Building dataset and writing results")
-    results = eager_iterator(results)
     write_rows(output_file, results, column_specs)
 
 
@@ -305,7 +298,6 @@ def generate_measures_with_dsn(
     results = get_measure_results(query_engine, measure_definitions)
     if disclosure_control_config.enabled:
         results = apply_sdc_to_measure_results(results)
-    results = eager_iterator(results)
     write_rows(output_file, results, column_specs)
 
 
@@ -337,7 +329,6 @@ def generate_measures_with_dummy_data(
     log.info("Calculating measures and writing results")
     if disclosure_control_config.enabled:
         results = apply_sdc_to_measure_results(results)
-    results = eager_iterator(results)
     write_rows(output_file, results, column_specs)
 
 
