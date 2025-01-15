@@ -248,7 +248,7 @@ def test_import_string_no_such_attribute():
 
 
 class DummyQueryEngine:
-    def get_results(self):
+    def get_results_tables(self):
         raise NotImplementedError()
 
 

@@ -701,7 +701,7 @@ def query_engine_from_id(str_id):
                 f"(or a full dotted path to a query engine class)"
             )
     query_engine = import_string(str_id)
-    assert_duck_type(query_engine, "query engine", "get_results")
+    assert_duck_type(query_engine, "query engine", "get_results_tables")
     return query_engine
 
 

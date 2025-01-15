@@ -245,10 +245,16 @@ class DummyDataGenerator:
             if i not in inline_patient_ids:
                 yield i
 
-    def get_results(self):
+    def get_results_tables(self):
         database = InMemoryDatabase(self.get_data())
         engine = InMemoryQueryEngine(database)
-        return engine.get_results(self.dataset)
+        return engine.get_results_tables(self.dataset)
+
+    def get_results(self):
+        tables = self.get_results_tables()
+        yield from next(tables)
+        for remaining in tables:
+            assert False, "Expected only one results table"
 
 
 class DummyPatientGenerator:

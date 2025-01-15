@@ -28,9 +28,10 @@ class InMemoryQueryEngine(BaseQueryEngine):
     tests, and a to provide a reference implementation for other engines.
     """
 
-    def get_results(self, dataset):
+    def get_results_stream(self, dataset):
         table = self.get_results_as_patient_table(dataset)
         Row = namedtuple("Row", table.name_to_col.keys())
+        yield self.RESULTS_START
         for record in table.to_records():
             yield Row(**record)
 
