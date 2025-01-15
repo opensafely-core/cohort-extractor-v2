@@ -828,7 +828,7 @@ class BaseSQLQueryEngine(BaseQueryEngine):
 
     def get_results(self, dataset):
         results_query = self.get_query(dataset)
-        setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_query)
+        setup_queries, cleanup_queries = get_setup_and_cleanup_queries([results_query])
         with self.engine.connect() as connection:
             for i, setup_query in enumerate(setup_queries, start=1):
                 log.info(f"Running setup query {i:03} / {len(setup_queries):03}")

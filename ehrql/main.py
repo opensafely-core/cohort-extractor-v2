@@ -176,7 +176,7 @@ def dump_dataset_sql(
 
 def get_sql_strings(query_engine, dataset):
     results_query = query_engine.get_query(dataset)
-    setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_query)
+    setup_queries, cleanup_queries = get_setup_and_cleanup_queries([results_query])
     dialect = query_engine.sqlalchemy_dialect()
     sql_strings = []
 

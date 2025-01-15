@@ -170,7 +170,7 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
         results_table = results_query.get_final_froms()[0]
         assert str(results_query) == str(sqlalchemy.select(results_table))
 
-        setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_query)
+        setup_queries, cleanup_queries = get_setup_and_cleanup_queries([results_query])
 
         with self.engine.connect() as connection:
             # All our queries are either (a) read-only queries against static data, or

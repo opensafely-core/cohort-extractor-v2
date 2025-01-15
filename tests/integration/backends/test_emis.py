@@ -591,7 +591,7 @@ def test_inline_table_includes_organisation_hash(trino_database):
     ]
     assert len(set(inline_tables)) == 1
     inline_table = inline_tables[0]
-    setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_query)
+    setup_queries, cleanup_queries = get_setup_and_cleanup_queries([results_query])
 
     with query_engine.engine.connect() as connection:
         for setup_query in setup_queries:
@@ -646,7 +646,7 @@ def test_temp_table_includes_organisation_hash(trino_database):
     ]
     assert len(set(temp_tables)) == 1
     temp_table = temp_tables[0]
-    setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_query)
+    setup_queries, cleanup_queries = get_setup_and_cleanup_queries([results_query])
 
     with query_engine.engine.connect() as connection:
         for setup_query in setup_queries:
