@@ -246,7 +246,7 @@ def get_lines_and_expected_types_from_autocomplete_def_file():
             multiline_optional_method = start_of_multiline_statement.group(
                 "optional_method"
             )
-        else:
+        else:  # pragma: no cover
             assert 0, (
                 f"The autocomplete_definition.py file contains an unexpected line: [{line}]\n\n"
                 "All lines must either be:\n"
