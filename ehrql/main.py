@@ -175,8 +175,8 @@ def dump_dataset_sql(
 
 
 def get_sql_strings(query_engine, dataset):
-    results_query = query_engine.get_query(dataset)
-    setup_queries, cleanup_queries = get_setup_and_cleanup_queries([results_query])
+    results_queries = query_engine.get_queries(dataset)
+    setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_queries)
     dialect = query_engine.sqlalchemy_dialect()
     sql_strings = []
 
@@ -184,8 +184,11 @@ def get_sql_strings(query_engine, dataset):
         sql = clause_as_str(query, dialect)
         sql_strings.append(f"-- Setup query {i:03} / {len(setup_queries):03}\n{sql}")
 
-    sql = clause_as_str(results_query, dialect)
-    sql_strings.append(f"-- Results query\n{sql}")
+    for i, query in enumerate(results_queries, start=1):
+        sql = clause_as_str(query, dialect)
+        sql_strings.append(
+            f"-- Results query {i:03} / {len(results_queries):03}\n{sql}"
+        )
 
     for i, query in enumerate(cleanup_queries, start=1):
         sql = clause_as_str(query, dialect)

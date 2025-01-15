@@ -83,9 +83,9 @@ class BaseSQLQueryEngine(BaseQueryEngine):
         self.counter += 1
         return self.counter
 
-    def get_query(self, dataset):
+    def get_queries(self, dataset):
         """
-        Return the SQL query to fetch the results for `dataset`
+        Return the SQL queries to fetch the results for `dataset`
 
         Note that this query might make use of intermediate tables. The SQL queries
         needed to create these tables and clean them up can be retrieved by calling
@@ -126,7 +126,9 @@ class BaseSQLQueryEngine(BaseQueryEngine):
         self.get_sql.cache_clear()
         self.get_table.cache_clear()
 
-        return query
+        # At the moment we only support a single results table and so we'll only ever
+        # have a single query
+        return [query]
 
     def select_patient_id_for_population(self, population_expression):
         """
@@ -827,8 +829,12 @@ class BaseSQLQueryEngine(BaseQueryEngine):
         return query
 
     def get_results(self, dataset):
-        results_query = self.get_query(dataset)
-        setup_queries, cleanup_queries = get_setup_and_cleanup_queries([results_query])
+        results_queries = self.get_queries(dataset)
+        setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_queries)
+
+        assert len(results_queries) == 1
+        results_query = results_queries[0]
+
         with self.engine.connect() as connection:
             for i, setup_query in enumerate(setup_queries, start=1):
                 log.info(f"Running setup query {i:03} / {len(setup_queries):03}")

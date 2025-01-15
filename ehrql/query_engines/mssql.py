@@ -152,25 +152,29 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
         ]
         return table
 
-    def get_query(self, dataset):
-        results_query = super().get_query(dataset)
-        # Write results to a temporary table and select them from there. This allows us
+    def get_queries(self, dataset):
+        results_queries = super().get_queries(dataset)
+        # Write results to temporary tables and select them from there. This allows us
         # to use more efficient/robust mechanisms to retrieve the results.
-        results_table = temporary_table_from_query(
-            "#results", results_query, index_col="patient_id"
-        )
-        return sqlalchemy.select(results_table)
+        select_queries = []
+        for n, results_query in enumerate(results_queries, start=1):
+            results_table = temporary_table_from_query(
+                f"#results_{n}", results_query, index_col="patient_id"
+            )
+            select_queries.append(sqlalchemy.select(results_table))
+        return select_queries
 
     def get_results(self, dataset):
-        results_query = self.get_query(dataset)
+        results_queries = self.get_queries(dataset)
 
         # We're expecting a query in a very specific form which is "select everything
         # from one table"; so we assert that it has this form and retrieve a reference
         # to the table
-        results_table = results_query.get_final_froms()[0]
-        assert str(results_query) == str(sqlalchemy.select(results_table))
+        assert len(results_queries) == 1
+        results_table = results_queries[0].get_final_froms()[0]
+        assert str(results_queries[0]) == str(sqlalchemy.select(results_table))
 
-        setup_queries, cleanup_queries = get_setup_and_cleanup_queries([results_query])
+        setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_queries)
 
         with self.engine.connect() as connection:
             # All our queries are either (a) read-only queries against static data, or
