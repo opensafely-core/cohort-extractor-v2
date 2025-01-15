@@ -1,6 +1,8 @@
+import hypothesis as hyp
+import hypothesis.strategies as st
 import pytest
 
-from ehrql.utils.itertools_utils import eager_iterator, iter_flatten
+from ehrql.utils.itertools_utils import eager_iterator, iter_flatten, iter_groups
 
 
 def test_eager_iterator():
@@ -49,3 +51,71 @@ def test_iter_flatten():
     ]
     flattened = list(iter_flatten(nested))
     assert flattened == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "foo"]
+
+
+SEPARATOR = object()
+
+
+@pytest.mark.parametrize(
+    "stream,expected",
+    [
+        (
+            [],
+            [],
+        ),
+        (
+            [SEPARATOR],
+            [[]],
+        ),
+        (
+            [SEPARATOR, 1, 2, SEPARATOR, SEPARATOR, 3, 4],
+            [[1, 2], [], [3, 4]],
+        ),
+    ],
+)
+def test_iter_groups(stream, expected):
+    results = [list(group) for group in iter_groups(stream, SEPARATOR)]
+    assert results == expected
+
+
+@hyp.given(
+    nested=st.lists(
+        st.lists(st.integers(), max_size=5),
+        max_size=5,
+    )
+)
+def test_iter_groups_roundtrips(nested):
+    flattened = []
+    for inner in nested:
+        flattened.append(SEPARATOR)
+        for item in inner:
+            flattened.append(item)
+
+    results = [list(group) for group in iter_groups(flattened, SEPARATOR)]
+    assert results == nested
+
+
+def test_iter_groups_rejects_invalid_stream():
+    stream_no_separator = [1, 2]
+    with pytest.raises(
+        AssertionError,
+        match="Invalid iterator: does not start with `separator` value",
+    ):
+        list(iter_groups(stream_no_separator, SEPARATOR))
+
+
+def test_iter_groups_rejects_out_of_order_reads():
+    stream = [SEPARATOR, 1, 2, SEPARATOR, 3, 4]
+    with pytest.raises(
+        AssertionError,
+        match="Cannot consume next group until current group has been exhausted",
+    ):
+        list(iter_groups(stream, SEPARATOR))
+
+
+def test_iter_groups_allows_overreading_groups():
+    stream = [SEPARATOR, 1, 2, SEPARATOR, 3, 4]
+    # We call `list` on each group twice: this should make no difference because on the
+    # second call the group should be exhausted and so result in an empty list
+    results = [list(group) + list(group) for group in iter_groups(stream, SEPARATOR)]
+    assert results == [[1, 2], [3, 4]]
