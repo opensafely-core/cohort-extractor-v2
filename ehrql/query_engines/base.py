@@ -1,11 +1,18 @@
+from collections.abc import Iterator, Sequence
+from typing import Any
+
+from ehrql.query_model import nodes as qm
+
+
 class BaseQueryEngine:
     """
-    A base QueryEngine to hold methods that are agnostic to how the specific queries are built.
-    Inheriting classes must implement translating the query model into their particular flavour of tables and query
-    language (SQL, pandas dataframes etc).
+    Base class to hold methods that are agnostic to how the specific queries are built
+
+    Inheriting classes must implement translating the query model into their particular
+    flavour of tables and query language (SQL, pandas dataframes etc).
     """
 
-    def __init__(self, dsn, backend=None, config=None):
+    def __init__(self, dsn: str, backend: Any = None, config: dict | None = None):
         """
         `dsn` is  Data Source Name — a string (usually a URL) which provides connection
             details to a data source (usually a RDBMS)
@@ -18,11 +25,12 @@ class BaseQueryEngine:
         self.backend = backend
         self.config = config or {}
 
-    def get_results(self, dataset):
+    def get_results(self, dataset: qm.Dataset) -> Iterator[Sequence]:
         """
-        `dataset` is a query model `Dataset` instance
+        Given a query model `Dataset` return the results as an iterator of "rows" (which
+        are usually tuples, but any sequence type will do)
 
-        Override this method to do the things necessary to generate query code and execute
-        it against a particular backend
+        Override this method to do the things necessary to generate query code and
+        execute it against a particular backend.
         """
-        raise NotImplementedError
+        raise NotImplementedError()
