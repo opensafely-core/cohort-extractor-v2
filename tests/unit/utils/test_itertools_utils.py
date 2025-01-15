@@ -32,3 +32,8 @@ def test_eager_iterator_still_mostly_lazy():
     # Check that consuming the eager iterator consumes the rest of the items
     assert list(eager) == [0, 1, 2]
     assert i.__length_hint__() == 0
+
+
+def test_eager_iterator_works_on_lists():
+    results = eager_iterator([1, 2, 3])
+    assert list(results) == [1, 2, 3]
