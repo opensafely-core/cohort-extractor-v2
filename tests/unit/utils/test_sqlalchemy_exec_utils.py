@@ -24,6 +24,9 @@ class FakeConnection:
 
     def execute(self, query):
         self.call_count += 1
+        if self.call_count > 500:  # pragma: no cover
+            raise RuntimeError("High query count: stuck in infinite loop?")
+
         compiled = query.compile()
         sql = str(compiled).replace("\n", "").strip()
         params = compiled.params
