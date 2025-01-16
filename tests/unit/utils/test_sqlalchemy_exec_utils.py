@@ -10,6 +10,7 @@ from sqlalchemy.exc import OperationalError
 from ehrql.utils.sqlalchemy_exec_utils import (
     execute_with_retry_factory,
     fetch_table_in_batches,
+    fetch_table_in_batches_nonunique,
 )
 
 
@@ -76,6 +77,85 @@ def test_fetch_table_in_batches(table_data, batch_size):
     # expect one more query than `table_size // batch_size`.
     expected_query_count = (len(table_data) // batch_size) + 1
     assert connection.call_count == expected_query_count
+
+
+# The algorithm we're using for non-unique batching fails if there are more than
+# `batch_size` values with the same key. So first we generate a batch size (shareable
+# between strategies) and then we use that to limit the number of repeated keys in the
+# table data we generate (or to deliberately exceed it to test the error handling).
+batch_size = st.shared(st.integers(min_value=2, max_value=10))
+
+
+@st.composite
+def table_data_strategy(draw, max_repeated_keys, include_example_over_max=False):
+    # Generate a list of integers, which is how many times we're going to repeat each
+    # key (possibly zero for some keys)
+    repeats = draw(
+        st.lists(
+            st.integers(min_value=0, max_value=max_repeated_keys),
+            max_size=100,
+        )
+    )
+    # If required, generate an example which exceeds the maximum and include it
+    if include_example_over_max:
+        example = draw(st.integers(max_repeated_keys + 1, max_repeated_keys + 10))
+        index = draw(st.integers(0, len(repeats)))
+        repeats.insert(index, example)
+    # Transform to a list of repeated keys
+    keys = [key for key, n in enumerate(repeats) for _ in range(n)]
+    # Pair each key occurrence with a unique value
+    return [(key, i) for i, key in enumerate(keys)]
+
+
+@hyp.given(
+    batch_size=batch_size,
+    table_data=batch_size.flatmap(
+        lambda batch_size: table_data_strategy(max_repeated_keys=batch_size - 1),
+    ),
+)
+def test_fetch_table_in_batches_nonunique(batch_size, table_data):
+    connection = FakeConnection(table_data)
+    log_messages = []
+
+    results = fetch_table_in_batches_nonunique(
+        connection.execute,
+        sql_table,
+        sql_table.c.key,
+        batch_size=batch_size,
+        log=log_messages.append,
+    )
+
+    assert sorted(results) == sorted(table_data)
+
+    # Make sure we get the row count correct in the logs
+    assert f"Fetch complete, total rows: {len(table_data)}" in log_messages
+
+
+@hyp.given(
+    batch_size=batch_size,
+    table_data=batch_size.flatmap(
+        lambda batch_size: table_data_strategy(
+            max_repeated_keys=batch_size - 1,
+            # Deliberately include an instance of too many repeated keys in order to
+            # trigger an error
+            include_example_over_max=True,
+        ),
+    ),
+)
+def test_fetch_table_in_batches_nonunique_raises_if_batch_too_small(
+    batch_size, table_data
+):
+    connection = FakeConnection(table_data)
+
+    results = fetch_table_in_batches_nonunique(
+        connection.execute,
+        sql_table,
+        sql_table.c.key,
+        batch_size=batch_size,
+    )
+
+    with pytest.raises(AssertionError, match="`batch_size` too small to make progress"):
+        list(results)
 
 
 ERROR = OperationalError("A bad thing happend", {}, None)
