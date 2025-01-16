@@ -15,6 +15,7 @@ __all__ = ["get_completion", "initialize"]
 import json
 import os
 import re
+import sys
 from pathlib import Path
 from subprocess import PIPE, Popen
 
@@ -153,9 +154,21 @@ def initialize(temp_file_path: Path):
         "text": temp_file_contents,
     }
 
+    # The pyright-langserver needs the ehrql repo directory on
+    # PYTHONPATH so it can understand ehrql, and it needs the current
+    # location of the python executable (also where pyright-langserver)
+    # is on its PATH variable
+    env = os.environ.copy()
+    env["PYTHONPATH"] = Path("").absolute().as_uri()
+    env["PATH"] = os.path.dirname(sys.executable)
+    print(sys.path)
     global language_server
     language_server = Popen(
-        ["pyright-langserver", "--stdio"], stdin=PIPE, stdout=PIPE, stderr=PIPE
+        ["pyright-langserver", "--stdio"],
+        stdin=PIPE,
+        stdout=PIPE,
+        stderr=PIPE,
+        env=env,
     )
     # Server immediately emits two messages
     read_messages(2)
