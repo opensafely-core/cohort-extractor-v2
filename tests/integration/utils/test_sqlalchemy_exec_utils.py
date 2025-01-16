@@ -14,7 +14,7 @@ class SomeTable(Base):
     foo = sqlalchemy.Column(sqlalchemy.String)
 
 
-def test_fetch_table_in_batches(engine):
+def test_fetch_table_in_batches_unique(engine):
     if engine.name == "in_memory":
         pytest.skip("SQL tests do not apply to in-memory engine")
 
@@ -29,7 +29,11 @@ def test_fetch_table_in_batches(engine):
 
     with engine.sqlalchemy_engine().connect() as connection:
         results = fetch_table_in_batches(
-            connection.execute, table, table.c.pk, batch_size=batch_size
+            connection.execute,
+            table,
+            table.c.pk,
+            key_is_unique=True,
+            batch_size=batch_size,
         )
         results = list(results)
 

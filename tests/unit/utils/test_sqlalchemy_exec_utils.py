@@ -10,7 +10,6 @@ from sqlalchemy.exc import OperationalError
 from ehrql.utils.sqlalchemy_exec_utils import (
     execute_with_retry_factory,
     fetch_table_in_batches,
-    fetch_table_in_batches_nonunique,
 )
 
 
@@ -65,11 +64,15 @@ sql_table = sqlalchemy.table(
     ),
     batch_size=st.integers(min_value=1, max_value=10),
 )
-def test_fetch_table_in_batches(table_data, batch_size):
+def test_fetch_table_in_batches_unique(table_data, batch_size):
     connection = FakeConnection(table_data)
 
     results = fetch_table_in_batches(
-        connection.execute, sql_table, sql_table.c.key, batch_size=batch_size
+        connection.execute,
+        sql_table,
+        sql_table.c.key,
+        key_is_unique=True,
+        batch_size=batch_size,
     )
 
     assert sorted(results) == sorted(table_data)
@@ -120,10 +123,11 @@ def test_fetch_table_in_batches_nonunique(batch_size, table_data):
     connection = FakeConnection(table_data)
     log_messages = []
 
-    results = fetch_table_in_batches_nonunique(
+    results = fetch_table_in_batches(
         connection.execute,
         sql_table,
         sql_table.c.key,
+        key_is_unique=False,
         batch_size=batch_size,
         log=log_messages.append,
     )
@@ -150,10 +154,11 @@ def test_fetch_table_in_batches_nonunique_raises_if_batch_too_small(
 ):
     connection = FakeConnection(table_data)
 
-    results = fetch_table_in_batches_nonunique(
+    results = fetch_table_in_batches(
         connection.execute,
         sql_table,
         sql_table.c.key,
+        key_is_unique=False,
         batch_size=batch_size,
     )
 

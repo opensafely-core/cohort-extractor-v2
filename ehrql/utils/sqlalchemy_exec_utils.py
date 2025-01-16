@@ -5,7 +5,7 @@ from sqlalchemy.exc import InternalError, OperationalError
 
 
 def fetch_table_in_batches(
-    execute, table, key_column, batch_size=32000, log=lambda *_: None
+    execute, table, key_column, key_is_unique, batch_size=32000, log=lambda *_: None
 ):
     """
     Returns an iterator over all the rows in a table by querying it in batches
@@ -14,19 +14,42 @@ def fetch_table_in_batches(
         execute: callable which accepts a SQLAlchemy query and returns results (can be
             just a Connection.execute method)
         table: SQLAlchemy TableClause
-        key_column: reference to a unique orderable column on `table`, used for
+        key_column: reference to an orderable column on `table`, used for
             paging (note that this will need an index on it to avoid terrible
             performance)
+        key_is_unique: if the key_column contains only unique values then we can use a
+            simpler and more efficient algorithm to do the paging
         batch_size: how many results to fetch in each batch
         log: callback to receive log messages
     """
+    if key_is_unique:
+        return fetch_table_in_batches_unique(
+            execute, table, key_column, batch_size, log
+        )
+    else:
+        return fetch_table_in_batches_nonunique(
+            execute, table, key_column, batch_size, log
+        )
+
+
+def fetch_table_in_batches_unique(
+    execute, table, key_column, batch_size=32000, log=lambda *_: None
+):
+    """
+    Returns an iterator over all the rows in a table by querying it in batches using a
+    unique key column
+    """
+    assert batch_size > 0
     batch_count = 1
     total_rows = 0
     min_key = None
 
     key_column_index = table.columns.values().index(key_column)
 
-    log(f"Fetching rows from '{table}' in batches of {batch_size}")
+    log(
+        f"Fetching rows from '{table}' in batches of {batch_size} using unique "
+        f"column '{key_column.name}'"
+    )
     while True:
         query = select(table).order_by(key_column).limit(batch_size)
         if min_key is not None:
@@ -56,15 +79,6 @@ def fetch_table_in_batches_nonunique(
     """
     Returns an iterator over all the rows in a table by querying it in batches using a
     non-unique key column
-
-    Args:
-        execute: callable which accepts a SQLAlchemy query and returns results (can be
-            just a Connection.execute method)
-        table: SQLAlchemy TableClause
-        key_column: reference to an orderable column on `table`, used for paging (note
-            that this will need an index on it to avoid terrible performance)
-        batch_size: how many results to fetch in each batch
-        log: callback to receive log messages
 
     The algorithm below is designed (and tested) to work correctly without relying on
     sort-stability. That is, if we repeatedly ask the database for results sorted by X
