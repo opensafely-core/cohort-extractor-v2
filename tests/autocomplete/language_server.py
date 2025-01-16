@@ -38,6 +38,8 @@ def read_message():
     \r\n\r\n then the message in JSON RPC.
     """
     line = language_server.stdout.readline().decode("utf-8").strip()
+    while not line.startswith("Content-Length:"):
+        line = language_server.stdout.readline().decode("utf-8").strip()
     content_length = int(line.split(":")[1].strip())
     content = language_server.stdout.read(content_length + 2).decode("utf-8")
     return json.loads(content)
