@@ -71,31 +71,33 @@ def generate_dataset(
         log.info(f"Testing dataset definition with tests in {str(definition_file)}")
         assure(test_data_file, environ=environ, user_args=user_args)
 
+    column_specs = get_column_specs(dataset)
+
     if dsn:
-        generate_dataset_with_dsn(
-            dataset,
-            output_file,
-            dsn,
+        log.info("Generating dataset")
+        results = generate_dataset_with_dsn(
+            dataset=dataset,
+            dsn=dsn,
             backend_class=backend_class,
             query_engine_class=query_engine_class,
             environ=environ,
         )
     else:
-        generate_dataset_with_dummy_data(
-            dataset,
-            dummy_data_config,
-            output_file,
+        log.info("Generating dummy dataset")
+        results = generate_dataset_with_dummy_data(
+            dataset=dataset,
+            dummy_data_config=dummy_data_config,
+            column_specs=column_specs,
             dummy_data_file=dummy_data_file,
             dummy_tables_path=dummy_tables_path,
         )
 
+    write_rows(output_file, results, column_specs)
+
 
 def generate_dataset_with_dsn(
-    dataset, output_file, dsn, backend_class, query_engine_class, environ
+    *, dataset, dsn, backend_class, query_engine_class, environ
 ):
-    log.info("Generating dataset")
-    column_specs = get_column_specs(dataset)
-
     query_engine = get_query_engine(
         dsn,
         backend_class,
@@ -103,35 +105,23 @@ def generate_dataset_with_dsn(
         environ,
         default_query_engine_class=LocalFileQueryEngine,
     )
-    results = query_engine.get_results(dataset)
-    write_rows(output_file, results, column_specs)
+    return query_engine.get_results(dataset)
 
 
 def generate_dataset_with_dummy_data(
-    dataset,
-    dummy_data_config,
-    output_file,
-    *,
-    dummy_data_file,
-    dummy_tables_path,
+    *, dataset, dummy_data_config, column_specs, dummy_data_file, dummy_tables_path
 ):
-    log.info("Generating dummy dataset")
-    column_specs = get_column_specs(dataset)
-
     if dummy_data_file:
         log.info(f"Reading dummy data from {dummy_data_file}")
         reader = read_rows(dummy_data_file, column_specs)
-        results = iter(reader)
+        return iter(reader)
     elif dummy_tables_path:
         log.info(f"Reading table data from {dummy_tables_path}")
         query_engine = LocalFileQueryEngine(dummy_tables_path)
-        results = query_engine.get_results(dataset)
+        return query_engine.get_results(dataset)
     else:
         generator = get_dummy_data_generator(dataset, dummy_data_config)
-        results = generator.get_results()
-
-    log.info("Building dataset and writing results")
-    write_rows(output_file, results, column_specs)
+        return generator.get_results()
 
 
 def create_dummy_tables(definition_file, dummy_tables_path, user_args, environ):
