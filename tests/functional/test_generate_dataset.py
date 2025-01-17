@@ -336,3 +336,43 @@ def test_generate_dataset_passes_dummy_data_config(call_cli, tmp_path, caplog, l
         assert "Using legacy dummy data generation" in logs
     else:
         assert "Using next generation dummy data generation" in logs
+
+
+def test_generate_dataset_with_test_data_file(call_cli, tmp_path):
+    @function_body_as_string
+    def dataset_definition_with_tests():
+        from ehrql import create_dataset
+        from ehrql.tables.core import patients
+
+        dataset = create_dataset()
+        dataset.define_population(patients.sex == "female")
+
+        test_data = {  # noqa: F841
+            1: {
+                "patients": {"sex": "male"},
+                "expected_in_population": False,
+            },
+            2: {
+                "patients": {"sex": "female"},
+                "expected_in_population": True,
+                "expected_columns": {},
+            },
+        }
+
+    test_data_file = tmp_path / "dataset_definition.py"
+    test_data_file.write_text(dataset_definition_with_tests)
+    output_file = tmp_path / "output.csv"
+
+    captured = call_cli(
+        "generate-dataset",
+        test_data_file,
+        "--output",
+        output_file,
+        "--test-data-file",
+        test_data_file,
+    )
+
+    # Check that the assurance tests were invoked
+    assert "All OK!" in captured.out
+    # Check we also generated some output
+    assert len(output_file.read_text()) > 0

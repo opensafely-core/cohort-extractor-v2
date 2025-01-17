@@ -12,6 +12,7 @@ from ehrql.file_formats.csv import (
     write_rows_csv,
     write_rows_csv_gz,
 )
+from ehrql.utils.itertools_utils import eager_iterator
 
 
 FILE_FORMATS = {
@@ -24,6 +25,12 @@ FILE_FORMATS = {
 def write_rows(filename, rows, column_specs):
     extension = get_file_extension(filename)
     writer = FILE_FORMATS[extension][0]
+    # `rows` is often a generator which won't actually execute until we start consuming
+    # it. We want to make sure we trigger any potential errors (or relevant log output)
+    # before we create the output file, write headers etc. But we don't want to read the
+    # whole thing into memory. So we wrap it in a function which draws the first item
+    # upfront, but doesn't consume the rest of the iterator.
+    rows = eager_iterator(rows)
     # We use None for stdout
     if filename is not None:
         filename.parent.mkdir(parents=True, exist_ok=True)

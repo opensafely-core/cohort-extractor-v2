@@ -24,7 +24,7 @@ class DebugQueryEngine(LocalFileQueryEngine):
             population_qm = dataset.population._qm_node
             table_nodes = get_table_nodes(population_qm, *variables_qm.values())
         self.populate_database(table_nodes)
-        return self.get_results_as_table(
+        return self.get_results_as_patient_table(
             DatasetQM(population=population_qm, variables=variables_qm)
         )
 

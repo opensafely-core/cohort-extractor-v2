@@ -29,12 +29,12 @@ class InMemoryQueryEngine(BaseQueryEngine):
     """
 
     def get_results(self, dataset):
-        table = self.get_results_as_table(dataset)
+        table = self.get_results_as_patient_table(dataset)
         Row = namedtuple("Row", table.name_to_col.keys())
         for record in table.to_records():
             yield Row(**record)
 
-    def get_results_as_table(self, dataset):
+    def get_results_as_patient_table(self, dataset):
         assert isinstance(dataset, qm.Dataset)
 
         self.cache = {}

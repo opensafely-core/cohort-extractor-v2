@@ -7,6 +7,7 @@ def eager_iterator(iterator):
     Transparently wraps an iterator, but eagerly consumes the first item so as to
     execute any generator set up code and trigger any errors which might occur
     """
+    iterator = iter(iterator)
     try:
         first_item = next(iterator)
     except StopIteration:

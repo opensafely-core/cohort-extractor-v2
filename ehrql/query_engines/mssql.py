@@ -152,8 +152,8 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
         ]
         return table
 
-    def get_query(self, variable_definitions):
-        results_query = super().get_query(variable_definitions)
+    def get_query(self, dataset):
+        results_query = super().get_query(dataset)
         # Write results to a temporary table and select them from there. This allows us
         # to use more efficient/robust mechanisms to retrieve the results.
         results_table = temporary_table_from_query(
@@ -161,8 +161,8 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
         )
         return sqlalchemy.select(results_table)
 
-    def get_results(self, variable_definitions):
-        results_query = self.get_query(variable_definitions)
+    def get_results(self, dataset):
+        results_query = self.get_query(dataset)
 
         # We're expecting a query in a very specific form which is "select everything
         # from one table"; so we assert that it has this form and retrieve a reference

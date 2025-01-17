@@ -826,8 +826,8 @@ class BaseSQLQueryEngine(BaseQueryEngine):
             query = query.where(sqlalchemy.and_(*where_clauses))
         return query
 
-    def get_results(self, variable_definitions):
-        results_query = self.get_query(variable_definitions)
+    def get_results(self, dataset):
+        results_query = self.get_query(dataset)
         setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_query)
         with self.engine.connect() as connection:
             for i, setup_query in enumerate(setup_queries, start=1):

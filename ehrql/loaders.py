@@ -249,14 +249,14 @@ def isolation_report_for_function(run_function, cwd):
 
 def load_dataset_definition_unsafe(definition_file, user_args, **kwargs):
     module = load_module(definition_file, user_args)
-    variable_definitions = get_variable_definitions_from_module(module)
-    return variable_definitions, module.dataset.dummy_data_config
+    dataset = get_dataset_from_module(module)
+    return dataset, module.dataset.dummy_data_config
 
 
 def load_test_definition_unsafe(definition_file, user_args, **kwargs):
     module = load_module(definition_file, user_args)
-    variable_definitions = get_variable_definitions_from_module(module)
-    return variable_definitions, module.test_data
+    dataset = get_dataset_from_module(module)
+    return dataset, module.test_data
 
 
 def load_debug_definition_unsafe(
@@ -269,7 +269,7 @@ def load_debug_definition_unsafe(
         load_module(definition_file, user_args)
 
 
-def get_variable_definitions_from_module(module):
+def get_dataset_from_module(module):
     try:
         dataset = module.dataset
     except AttributeError:
