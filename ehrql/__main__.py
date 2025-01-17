@@ -662,13 +662,31 @@ def existing_python_file(value):
 
 
 def valid_output_path(value):
+    # This can be either a single file or a directory, but either way it needs to
+    # specify a valid output format
     path = Path(value)
-    extension = get_file_extension(path)
-    if extension not in FILE_FORMATS:
+    directory_ext = split_directory_and_extension(path)[1]
+    file_ext = get_file_extension(path)
+    if not directory_ext and not file_ext:
         raise ArgumentTypeError(
-            f"'{extension}' is not a supported format, must be one of: "
-            f"{backtick_join(FILE_FORMATS)}"
+            f"No file format supplied\n"
+            f"To write multiple files use a directory extension: "
+            f"{backtick_join(format_directory_extension(e) for e in FILE_FORMATS)}\n"
+            f"To write a single file use a file extension: {backtick_join(FILE_FORMATS)}"
         )
+    elif directory_ext:
+        if directory_ext not in FILE_FORMATS:
+            raise ArgumentTypeError(
+                f"'{format_directory_extension(directory_ext)}' is not a supported format, "
+                f"must be one of: "
+                f"{backtick_join(format_directory_extension(e) for e in FILE_FORMATS)}"
+            )
+    else:
+        if file_ext not in FILE_FORMATS:
+            raise ArgumentTypeError(
+                f"'{file_ext}' is not a supported format, must be one of: "
+                f"{backtick_join(FILE_FORMATS)}"
+            )
     return path
 
 
