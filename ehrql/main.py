@@ -35,8 +35,8 @@ from ehrql.measures import (
 from ehrql.query_engines.local_file import LocalFileQueryEngine
 from ehrql.query_engines.sqlite import SQLiteQueryEngine
 from ehrql.query_model.column_specs import (
-    get_column_specs,
     get_column_specs_from_schema,
+    get_table_specs,
 )
 from ehrql.query_model.graphs import graph_to_svg
 from ehrql.serializer import serialize
@@ -71,7 +71,10 @@ def generate_dataset(
         log.info(f"Testing dataset definition with tests in {str(definition_file)}")
         assure(test_data_file, environ=environ, user_args=user_args)
 
-    column_specs = get_column_specs(dataset)
+    table_specs = get_table_specs(dataset)
+    # For now we only handle datasets with a single output table
+    assert len(table_specs) == 1
+    column_specs = list(table_specs.values())[0]
 
     if dsn:
         log.info("Generating dataset")

@@ -4,8 +4,8 @@ from ehrql.codes import SNOMEDCTCode
 from ehrql.query_model.column_specs import (
     ColumnSpec,
     get_categories,
-    get_column_specs,
     get_range,
+    get_table_specs,
 )
 from ehrql.query_model.nodes import (
     AggregateByPatient,
@@ -46,14 +46,16 @@ def test_get_column_specs():
             category=SelectColumn(patients, "category"),
         ),
     )
-    column_specs = get_column_specs(dataset)
-    assert column_specs == {
-        "patient_id": ColumnSpec(type=int, nullable=False, categories=None),
-        "dob": ColumnSpec(type=datetime.date, nullable=True, categories=None),
-        "code": ColumnSpec(type=str, nullable=True, categories=None),
-        "category": ColumnSpec(
-            type=str, nullable=True, categories=("123000", "456000")
-        ),
+    table_specs = get_table_specs(dataset)
+    assert table_specs == {
+        "dataset": {
+            "patient_id": ColumnSpec(type=int, nullable=False, categories=None),
+            "dob": ColumnSpec(type=datetime.date, nullable=True, categories=None),
+            "code": ColumnSpec(type=str, nullable=True, categories=None),
+            "category": ColumnSpec(
+                type=str, nullable=True, categories=("123000", "456000")
+            ),
+        }
     }
 
 
