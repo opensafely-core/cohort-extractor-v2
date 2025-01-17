@@ -325,7 +325,7 @@ def test_will_raise_if_all_data_is_impossible(patched_time, query):
     generator.timeout = 1
     patched_time.time.side_effect = [0.0, 20.0]
     with pytest.raises(CannotGenerate):
-        generator.get_results()
+        next(generator.get_results())
 
 
 def test_generates_events_starting_from_birthdate():
