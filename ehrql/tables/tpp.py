@@ -923,6 +923,14 @@ class ec_cost(EventFrame):
     )
 
 
+eca_diagnosis_description = (
+    "The SNOMED CT concept ID which is used to identify the patient diagnosis. "
+    "Note that only a limited subset of SNOMED CT codes are used; "
+    "see the [NHS Data Model and Dictionary entry for emergency care diagnosis]"
+    "(https://www.datadictionary.nhs.uk/data_elements/emergency_care_diagnosis__snomed_ct_.html)."
+)
+
+
 @table
 class emergency_care_attendances(EventFrame):
     """
@@ -959,16 +967,31 @@ class emergency_care_attendances(EventFrame):
     # The diagnosis columns are have identical descriptions
     # and there are many of them,
     # so set them programmatically instead of by hand
-    for n in range(1, 25):
-        vars()[f"diagnosis_{n:02}"] = Series(
-            SNOMEDCTCode,
-            description=(
-                "The SNOMED CT concept ID which is used to identify the patient diagnosis. "
-                "Note that only a limited subset of SNOMED CT codes are used; "
-                "see the [NHS Data Model and Dictionary entry for emergency care diagnosis]"
-                "(https://www.datadictionary.nhs.uk/data_elements/emergency_care_diagnosis__snomed_ct_.html)."
-            ),
-        )
+    # UPDATE: changed to by hand so that autocomplete works
+    diagnosis_01 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_02 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_03 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_04 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_05 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_06 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_07 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_08 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_09 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_10 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_11 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_12 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_13 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_14 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_15 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_16 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_17 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_18 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_19 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_20 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_21 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_22 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_23 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
+    diagnosis_24 = Series(SNOMEDCTCode, description=eca_diagnosis_description)
 
 
 @table

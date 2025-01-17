@@ -339,7 +339,19 @@ mkdocs-material-extensions==1.3.1 \
 nodeenv==1.9.1 \
     --hash=sha256:6ec12890a2dab7946721edbfbcd91f3319c6ccc9aec47be7c7e6b7011ee6645f \
     --hash=sha256:ba11c9782d29c27c70ffbdda2d7415098754709be8a7056d79a737cd901155c9
-    # via pre-commit
+    # via
+    #   pre-commit
+    #   pyright
+nodejs-wheel-binaries==22.13.0 \
+    --hash=sha256:1e26d39448cbb2969da10f5e62e53101591e4d6c6a6ae8d623c65f56bf28ce6b \
+    --hash=sha256:38c689d556f428415a77655f70d2046ddbe11604039489f029b12f317042eaf4 \
+    --hash=sha256:61885cbcfff0a6d40353c8ea3d861ccb65dba7ce4b19f22427719aeeb35d42f1 \
+    --hash=sha256:646ab3e65296de9c578db9a1dcfbca26386d2ead70a49008f75d02e960593b2f \
+    --hash=sha256:aa8af75d30c3132bc4e998126a78b11c269abc3060f1c7c697907299b21ae0e1 \
+    --hash=sha256:cd9c6cdfd00ec48c55cbcd21a98af1fc9c2a18f039aede729de319346ed8675d \
+    --hash=sha256:dd811e3e5b92f2e5d4eb236cdf1ff814c91d3d3533d90d63b4af41d07a8bb2fc \
+    --hash=sha256:e358439ff830db766006e6eeb85ababb94b8c41c7325c9eb1f873a52d3df3016
+    # via pyright
 packaging==24.2 \
     --hash=sha256:09abb1bccd265c01f4a3aa3f7a7db064b36514d2cba19a2f694fe6150451a759 \
     --hash=sha256:c228a6dc5e932d346bc5739379109d49e8853dd8223571c7c5b55260edc0b97f
@@ -387,6 +399,10 @@ pyproject-hooks==1.2.0 \
     # via
     #   build
     #   pip-tools
+pyright==1.1.391 \
+    --hash=sha256:54fa186f8b3e8a55a44ebfa842636635688670c6896dcf6cf4a7fc75062f4d15 \
+    --hash=sha256:66b2d42cdf5c3cbab05f2f4b76e8bec8aa78e679bfa0b6ad7b923d9e027cadb2
+    # via -r requirements.dev.in
 pytest==8.3.4 \
     --hash=sha256:50e16d954148559c9a74109af1eaf0c945ba2d8f30f0a3d3335edde19788b6f6 \
     --hash=sha256:965370d062bce11e73868e0335abac31b4d3de0e82f4007408d242b4f8610761
@@ -614,6 +630,12 @@ toml==0.10.2 \
     --hash=sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b \
     --hash=sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f
     # via -r requirements.dev.in
+typing-extensions==4.12.2 \
+    --hash=sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d \
+    --hash=sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8
+    # via
+    #   -c /home/runner/work/ehrql/requirements.prod.txt
+    #   pyright
 urllib3==2.3.0 \
     --hash=sha256:1cee9ad369867bfdbbb48b7dd50374c0967a0bb7710050facf0dd6911440e3df \
     --hash=sha256:f8c5449b3cf0861679ce7e0503c7b44b5ec981bec0d1d3795a07f1ba96f0204d

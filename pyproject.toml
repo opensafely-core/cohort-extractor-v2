@@ -41,6 +41,7 @@ exclude_also = [
 omit = [
     "ehrql/docs/__main__.py",
     "tests/acceptance/external_studies/*",
+    "tests/autocomplete/autocomplete_definition.py",
     "tests/lib/update_tpp_schema.py",
 ]
 
