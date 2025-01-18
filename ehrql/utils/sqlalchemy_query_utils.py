@@ -72,9 +72,10 @@ class GeneratedTable(sqlalchemy.Table):
         return cls(name, metadata, *columns, **kwargs)
 
 
-def get_setup_and_cleanup_queries(query):
+def get_setup_and_cleanup_queries(queries):
     """
-    Given a SQLAlchemy query find all GeneratedTables embeded in it and return a pair:
+    Given a list of SQLAlchemy queries find all GeneratedTables embeded in them and
+    return a pair:
 
         setup_queries, cleanup_queries
 
@@ -90,7 +91,7 @@ def get_setup_and_cleanup_queries(query):
     # give it a sequence of pairs of tables (A, B) indicating that A depends on B and it
     # returns a suitable ordering over the tables.
     sorter = graphlib.TopologicalSorter()
-    for parent_table, table in get_generated_table_dependencies(query):
+    for parent_table, table in get_generated_table_dependencies(queries):
         # A parent_table of None indicates a root table (i.e. one with no dependants) so
         # we record its existence without specifying any dependencies
         if parent_table is None:
@@ -118,10 +119,10 @@ def get_setup_and_cleanup_queries(query):
     return setup_queries, cleanup_queries
 
 
-def get_generated_table_dependencies(query, parent_table=None, seen_tables=None):
+def get_generated_table_dependencies(queries, parent_table=None, seen_tables=None):
     """
-    Recursively find all GeneratedTable objects referenced by `query` and yield as pairs
-    of dependencies:
+    Recursively find all GeneratedTable objects referenced by any query in `queries` and
+    yield as pairs of dependencies:
 
         table_X, table_Y_which_is_referenced_by_X
 
@@ -130,14 +131,15 @@ def get_generated_table_dependencies(query, parent_table=None, seen_tables=None)
     if seen_tables is None:
         seen_tables = set()
 
-    for table in get_generated_tables(query):
-        yield parent_table, table
-        # Don't recurse into the same table twice
-        if table not in seen_tables:
-            seen_tables.add(table)
-            for child_query in [*table.setup_queries, *table.cleanup_queries]:
+    for query in queries:
+        for table in get_generated_tables(query):
+            yield parent_table, table
+            # Don't recurse into the same table twice
+            if table not in seen_tables:
+                seen_tables.add(table)
+                child_queries = [*table.setup_queries, *table.cleanup_queries]
                 yield from get_generated_table_dependencies(
-                    child_query, parent_table=table, seen_tables=seen_tables
+                    child_queries, parent_table=table, seen_tables=seen_tables
                 )
 
 

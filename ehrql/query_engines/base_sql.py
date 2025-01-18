@@ -83,9 +83,9 @@ class BaseSQLQueryEngine(BaseQueryEngine):
         self.counter += 1
         return self.counter
 
-    def get_query(self, dataset):
+    def get_queries(self, dataset):
         """
-        Return the SQL query to fetch the results for `dataset`
+        Return the SQL queries to fetch the results for `dataset`
 
         Note that this query might make use of intermediate tables. The SQL queries
         needed to create these tables and clean them up can be retrieved by calling
@@ -126,7 +126,9 @@ class BaseSQLQueryEngine(BaseQueryEngine):
         self.get_sql.cache_clear()
         self.get_table.cache_clear()
 
-        return query
+        # At the moment we only support a single results table and so we'll only ever
+        # have a single query
+        return [query]
 
     def select_patient_id_for_population(self, population_expression):
         """
@@ -826,26 +828,29 @@ class BaseSQLQueryEngine(BaseQueryEngine):
             query = query.where(sqlalchemy.and_(*where_clauses))
         return query
 
-    def get_results(self, dataset):
-        results_query = self.get_query(dataset)
-        setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_query)
+    def get_results_stream(self, dataset):
+        results_queries = self.get_queries(dataset)
+        setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_queries)
+
         with self.engine.connect() as connection:
             for i, setup_query in enumerate(setup_queries, start=1):
                 log.info(f"Running setup query {i:03} / {len(setup_queries):03}")
                 connection.execute(setup_query)
 
-            log.info("Fetching results")
-            cursor_result = connection.execute(results_query)
-            try:
-                yield from cursor_result
-            except Exception:  # pragma: no cover
-                # If we hit an error part way through fetching results then we should
-                # close the cursor to make it clear we're not going to be fetching any
-                # more (only really relevant for the in-memory SQLite tests, but good
-                # hygiene in any case)
-                cursor_result.close()
-                # Make sure the cleanup happens before raising the error
-                raise
+            for i, results_query in enumerate(results_queries, start=1):
+                log.info(f"Fetching results {i:03} / {len(setup_queries):03}")
+                cursor_result = connection.execute(results_query)
+                yield self.RESULTS_START
+                try:
+                    yield from cursor_result
+                except Exception:  # pragma: no cover
+                    # If we hit an error part way through fetching results then we should
+                    # close the cursor to make it clear we're not going to be fetching any
+                    # more (only really relevant for the in-memory SQLite tests, but good
+                    # hygiene in any case)
+                    cursor_result.close()
+                    # Make sure the cleanup happens before raising the error
+                    raise
 
             for i, cleanup_query in enumerate(cleanup_queries, start=1):
                 log.info(f"Running cleanup query {i:03} / {len(cleanup_queries):03}")

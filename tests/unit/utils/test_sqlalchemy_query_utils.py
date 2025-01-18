@@ -72,7 +72,7 @@ def test_get_setup_and_cleanup_queries_basic():
     query = sqlalchemy.select(temp_table.c.foo)
 
     # Check that we get the right queries in the right order
-    assert _queries_as_strs(query) == [
+    assert _queries_as_strs([query]) == [
         "CREATE TABLE temp_table (\n\tfoo NULL\n)",
         "INSERT INTO temp_table (foo) VALUES (:foo)",
         "SELECT temp_table.foo \nFROM temp_table",
@@ -100,12 +100,47 @@ def test_get_setup_and_cleanup_queries_nested():
     query = sqlalchemy.select(temp_table2.c.baz)
 
     # Check that we create and drop the temporary tables in the right order
-    assert _queries_as_strs(query) == [
+    assert _queries_as_strs([query]) == [
         "CREATE TABLE temp_table1 (\n\tfoo NULL\n)",
         "INSERT INTO temp_table1 (foo) VALUES (:foo)",
         "CREATE TABLE temp_table2 (\n\tbaz NULL\n)",
         "INSERT INTO temp_table2 (baz) SELECT temp_table1.foo \nFROM temp_table1",
         "SELECT temp_table2.baz \nFROM temp_table2",
+        "DROP TABLE temp_table2",
+        "DROP TABLE temp_table1",
+    ]
+
+
+def test_get_setup_and_cleanup_queries_multiple():
+    # Make a temporary table
+    temp_table1 = _make_temp_table("temp_table1", "foo")
+    temp_table1.setup_queries.append(
+        temp_table1.insert().values(foo="bar"),
+    )
+
+    # Make a second temporary table ...
+    temp_table2 = _make_temp_table("temp_table2", "baz")
+    temp_table2.setup_queries.append(
+        # ... populated by a SELECT query against the first table
+        temp_table2.insert().from_select(
+            [temp_table2.c.baz], sqlalchemy.select(temp_table1.c.foo)
+        ),
+    )
+
+    # Select something from the second table
+    query_1 = sqlalchemy.select(temp_table2.c.baz)
+
+    # Select something from the first table
+    query_2 = sqlalchemy.select(temp_table1.c.foo)
+
+    # Check that we create and drop the temporary tables in the right order
+    assert _queries_as_strs([query_1, query_2]) == [
+        "CREATE TABLE temp_table1 (\n\tfoo NULL\n)",
+        "INSERT INTO temp_table1 (foo) VALUES (:foo)",
+        "CREATE TABLE temp_table2 (\n\tbaz NULL\n)",
+        "INSERT INTO temp_table2 (baz) SELECT temp_table1.foo \nFROM temp_table1",
+        "SELECT temp_table2.baz \nFROM temp_table2",
+        "SELECT temp_table1.foo \nFROM temp_table1",
         "DROP TABLE temp_table2",
         "DROP TABLE temp_table1",
     ]
@@ -122,11 +157,11 @@ def _make_temp_table(name, *columns):
     return table
 
 
-def _queries_as_strs(query):
-    setup_queries, cleanup_queries = get_setup_and_cleanup_queries(query)
+def _queries_as_strs(queries):
+    setup_queries, cleanup_queries = get_setup_and_cleanup_queries(queries)
     return (
         [str(q).strip() for q in setup_queries]
-        + [str(query).strip()]
+        + [str(q).strip() for q in queries]
         + [str(q).strip() for q in cleanup_queries]
     )
 
@@ -193,7 +228,7 @@ def test_get_setup_and_cleanup_queries_with_insert_many():
         sqlalchemy.Column("i", sqlalchemy.Integer()),
     )
     statement = InsertMany(table, rows=[])
-    setup_cleanup = get_setup_and_cleanup_queries(statement)
+    setup_cleanup = get_setup_and_cleanup_queries([statement])
     assert setup_cleanup == ([], [])
 
 

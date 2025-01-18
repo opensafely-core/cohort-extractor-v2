@@ -583,15 +583,16 @@ def test_inline_table_includes_organisation_hash(trino_database):
 
     variables = dataset._compile()
 
-    results_query = query_engine.get_query(variables)
+    results_queries = query_engine.get_queries(variables)
+    assert len(results_queries) == 1
     inline_tables = [
         ch
-        for ch in results_query.get_children()
+        for ch in results_queries[0].get_children()
         if isinstance(ch, GeneratedTable) and "inline_data" in ch.name
     ]
     assert len(set(inline_tables)) == 1
     inline_table = inline_tables[0]
-    setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_query)
+    setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_queries)
 
     with query_engine.engine.connect() as connection:
         for setup_query in setup_queries:
@@ -638,15 +639,16 @@ def test_temp_table_includes_organisation_hash(trino_database):
     )
 
     variables = dataset._compile()
-    results_query = query_engine.get_query(variables)
+    results_queries = query_engine.get_queries(variables)
+    assert len(results_queries) == 1
     temp_tables = [
         ch
-        for ch in results_query.get_children()
+        for ch in results_queries[0].get_children()
         if isinstance(ch, GeneratedTable) and "tmp" in ch.name
     ]
     assert len(set(temp_tables)) == 1
     temp_table = temp_tables[0]
-    setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_query)
+    setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_queries)
 
     with query_engine.engine.connect() as connection:
         for setup_query in setup_queries:

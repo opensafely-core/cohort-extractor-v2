@@ -6,7 +6,6 @@ from ehrql.query_model.nodes import (
     AggregateByPatient,
     Case,
     Constraint,
-    Dataset,
     SelectColumn,
     SelectPatientTable,
     Value,
@@ -27,16 +26,25 @@ class ColumnSpec:
     max_value: T | None = None
 
 
-def get_column_specs(dataset):
+def get_table_specs(dataset):
     """
-    Given a dataset return a dict of ColumnSpec objects, given the types (and other
-    associated metadata) of all the columns in the output
+    Return the specifications for all the results tables this Dataset will produce
+    """
+    # At present, Datasets only ever produce a single results table (which we call
+    # `dataset`) but this gives us the API we need for future expansion
+    return {"dataset": get_column_specs_from_variables(dataset.variables)}
+
+
+def get_column_specs_from_variables(variables):
+    """
+    Given a dict of dataset variables return a dict of ColumnSpec objects, given
+    the types (and other associated metadata) of all the columns in the output
     """
     # TODO: It may not be universally true that IDs are ints. Internally the EMIS IDs
     # are SHA512 hashes stored as hex strings which we convert to ints. But we can't
     # guarantee always to be able to pull this trick.
     column_specs = {"patient_id": ColumnSpec(int, nullable=False)}
-    for name, series in dataset.variables.items():
+    for name, series in variables.items():
         column_specs[name] = get_column_spec_from_series(series)
     return column_specs
 
@@ -46,14 +54,11 @@ def get_column_specs_from_schema(schema):
     # reusing all the logic above: we create a table node and then create some variables
     # by selecting each column in the schema from it.
     table = SelectPatientTable(name="table", schema=schema)
-    dataset = Dataset(
-        population=Value(False),
-        variables={
-            column_name: SelectColumn(source=table, name=column_name)
-            for column_name in schema.column_names
-        },
-    )
-    return get_column_specs(dataset)
+    variables = {
+        column_name: SelectColumn(source=table, name=column_name)
+        for column_name in schema.column_names
+    }
+    return get_column_specs_from_variables(variables)
 
 
 def get_column_spec_from_series(series):

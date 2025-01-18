@@ -14,6 +14,7 @@ from ehrql.dummy_data_nextgen import (
 )
 from ehrql.file_formats import (
     read_rows,
+    read_tables,
     split_directory_and_extension,
     write_rows,
     write_tables,
@@ -35,8 +36,8 @@ from ehrql.measures import (
 from ehrql.query_engines.local_file import LocalFileQueryEngine
 from ehrql.query_engines.sqlite import SQLiteQueryEngine
 from ehrql.query_model.column_specs import (
-    get_column_specs,
     get_column_specs_from_schema,
+    get_table_specs,
 )
 from ehrql.query_model.graphs import graph_to_svg
 from ehrql.serializer import serialize
@@ -71,11 +72,11 @@ def generate_dataset(
         log.info(f"Testing dataset definition with tests in {str(definition_file)}")
         assure(test_data_file, environ=environ, user_args=user_args)
 
-    column_specs = get_column_specs(dataset)
+    table_specs = get_table_specs(dataset)
 
     if dsn:
         log.info("Generating dataset")
-        results = generate_dataset_with_dsn(
+        results_tables = generate_dataset_with_dsn(
             dataset=dataset,
             dsn=dsn,
             backend_class=backend_class,
@@ -84,15 +85,15 @@ def generate_dataset(
         )
     else:
         log.info("Generating dummy dataset")
-        results = generate_dataset_with_dummy_data(
+        results_tables = generate_dataset_with_dummy_data(
             dataset=dataset,
             dummy_data_config=dummy_data_config,
-            column_specs=column_specs,
+            table_specs=table_specs,
             dummy_data_file=dummy_data_file,
             dummy_tables_path=dummy_tables_path,
         )
 
-    write_rows(output_file, results, column_specs)
+    write_tables(output_file, results_tables, table_specs)
 
 
 def generate_dataset_with_dsn(
@@ -105,23 +106,22 @@ def generate_dataset_with_dsn(
         environ,
         default_query_engine_class=LocalFileQueryEngine,
     )
-    return query_engine.get_results(dataset)
+    return query_engine.get_results_tables(dataset)
 
 
 def generate_dataset_with_dummy_data(
-    *, dataset, dummy_data_config, column_specs, dummy_data_file, dummy_tables_path
+    *, dataset, dummy_data_config, table_specs, dummy_data_file, dummy_tables_path
 ):
     if dummy_data_file:
         log.info(f"Reading dummy data from {dummy_data_file}")
-        reader = read_rows(dummy_data_file, column_specs)
-        return iter(reader)
+        return read_tables(dummy_data_file, table_specs)
     elif dummy_tables_path:
         log.info(f"Reading table data from {dummy_tables_path}")
         query_engine = LocalFileQueryEngine(dummy_tables_path)
-        return query_engine.get_results(dataset)
+        return query_engine.get_results_tables(dataset)
     else:
         generator = get_dummy_data_generator(dataset, dummy_data_config)
-        return generator.get_results()
+        return generator.get_results_tables()
 
 
 def create_dummy_tables(definition_file, dummy_tables_path, user_args, environ):
@@ -175,8 +175,8 @@ def dump_dataset_sql(
 
 
 def get_sql_strings(query_engine, dataset):
-    results_query = query_engine.get_query(dataset)
-    setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_query)
+    results_queries = query_engine.get_queries(dataset)
+    setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_queries)
     dialect = query_engine.sqlalchemy_dialect()
     sql_strings = []
 
@@ -184,8 +184,11 @@ def get_sql_strings(query_engine, dataset):
         sql = clause_as_str(query, dialect)
         sql_strings.append(f"-- Setup query {i:03} / {len(setup_queries):03}\n{sql}")
 
-    sql = clause_as_str(results_query, dialect)
-    sql_strings.append(f"-- Results query\n{sql}")
+    for i, query in enumerate(results_queries, start=1):
+        sql = clause_as_str(query, dialect)
+        sql_strings.append(
+            f"-- Results query {i:03} / {len(results_queries):03}\n{sql}"
+        )
 
     for i, query in enumerate(cleanup_queries, start=1):
         sql = clause_as_str(query, dialect)

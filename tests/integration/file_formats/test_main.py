@@ -1,4 +1,6 @@
+import contextlib
 import datetime
+import textwrap
 
 import pytest
 
@@ -230,3 +232,73 @@ def test_read_and_write_tables_roundtrip(tmp_path, extension):
     results = read_tables(tmp_path / "output", table_specs)
 
     assert [list(rows) for rows in results] == tables
+
+
+def test_read_tables_allows_single_table_format_if_only_one_table(tmp_path):
+    filename = tmp_path / "file.csv"
+    filename.write_text("i,s\n1,a\n2,b\n3,c\n")
+    table_specs = {
+        "table_1": {"i": ColumnSpec(int), "s": ColumnSpec(str)},
+    }
+    results = read_tables(filename, table_specs)
+    assert [list(rows) for rows in results] == [
+        [(1, "a"), (2, "b"), (3, "c")],
+    ]
+
+
+def test_write_tables_allows_single_table_format_if_only_one_table(tmp_path):
+    filename = tmp_path / "file.csv"
+    table_specs = {
+        "table_1": {"i": ColumnSpec(int), "s": ColumnSpec(str)},
+    }
+    table_data = [
+        [(1, "a"), (2, "b"), (3, "c")],
+    ]
+    write_tables(filename, table_data, table_specs)
+    assert filename.read_text() == "i,s\n1,a\n2,b\n3,c\n"
+
+
+def test_read_tables_rejects_single_table_format_if_multiple_tables(tmp_path):
+    filename = tmp_path / "input.csv"
+    filename.touch()
+    table_specs = {
+        "table_1": {"i": ColumnSpec(int), "s": ColumnSpec(str)},
+        "table_2": {"j": ColumnSpec(int), "k": ColumnSpec(float)},
+        "table_3": {"l": ColumnSpec(int), "m": ColumnSpec(float)},
+    }
+    expected_error = textwrap.dedent(
+        """\
+        Attempting to read 3 tables, but input only provides a single table
+              Try moving -> input.csv
+                      to -> input/table_1.csv
+                  adding -> table_2.csv, table_3.csv
+          and using path -> input/
+        """
+    )
+    with contextlib.chdir(tmp_path):
+        # Use relative paths to get predictable error message
+        relpath = filename.relative_to(tmp_path)
+        with pytest.raises(FileValidationError, match=expected_error.rstrip()):
+            list(read_tables(relpath, table_specs))
+
+
+def test_write_tables_rejects_single_table_format_if_multiple_tables(tmp_path):
+    filename = tmp_path / "output.csv"
+    table_specs = {
+        "table_1": {"i": ColumnSpec(int), "s": ColumnSpec(str)},
+        "table_2": {"j": ColumnSpec(int), "k": ColumnSpec(float)},
+        "table_3": {"l": ColumnSpec(int), "m": ColumnSpec(float)},
+    }
+    table_data = [[], []]
+    expected_error = textwrap.dedent(
+        """\
+        Attempting to write 3 tables, but output only supports a single table
+          Instead of -> output.csv
+                 try -> output/:csv
+        """
+    )
+    with contextlib.chdir(tmp_path):
+        # Use relative paths to get predictable error message
+        relpath = filename.relative_to(tmp_path)
+        with pytest.raises(FileValidationError, match=expected_error.rstrip()):
+            write_tables(relpath, table_data, table_specs)

@@ -152,25 +152,31 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
         ]
         return table
 
-    def get_query(self, dataset):
-        results_query = super().get_query(dataset)
-        # Write results to a temporary table and select them from there. This allows us
+    def get_queries(self, dataset):
+        results_queries = super().get_queries(dataset)
+        # Write results to temporary tables and select them from there. This allows us
         # to use more efficient/robust mechanisms to retrieve the results.
-        results_table = temporary_table_from_query(
-            "#results", results_query, index_col="patient_id"
-        )
-        return sqlalchemy.select(results_table)
+        select_queries = []
+        for n, results_query in enumerate(results_queries, start=1):
+            results_table = temporary_table_from_query(
+                f"#results_{n}", results_query, index_col="patient_id"
+            )
+            select_queries.append(sqlalchemy.select(results_table))
+        return select_queries
 
-    def get_results(self, dataset):
-        results_query = self.get_query(dataset)
+    def get_results_stream(self, dataset):
+        results_queries = self.get_queries(dataset)
 
-        # We're expecting a query in a very specific form which is "select everything
-        # from one table"; so we assert that it has this form and retrieve a reference
-        # to the table
-        results_table = results_query.get_final_froms()[0]
-        assert str(results_query) == str(sqlalchemy.select(results_table))
+        # We're expecting queries in a very specific form which is "select everything
+        # from one table"; so we assert that they have this form and retrieve references
+        # to the tables
+        results_tables = []
+        for results_query in results_queries:
+            results_table = results_query.get_final_froms()[0]
+            assert str(results_query) == str(sqlalchemy.select(results_table))
+            results_tables.append(results_table)
 
-        setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_query)
+        setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_queries)
 
         with self.engine.connect() as connection:
             # All our queries are either (a) read-only queries against static data, or
@@ -193,16 +199,26 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
                 log=log.info,
             )
 
-            yield from fetch_table_in_batches(
-                execute_with_retry,
-                results_table,
-                key_column=results_table.c.patient_id,
-                key_is_unique=True,
-                # This value was copied from the previous cohortextractor. I suspect it
-                # has no real scientific basis.
-                batch_size=32000,
-                log=log.info,
-            )
+            for i, results_table in enumerate(results_tables):
+                yield self.RESULTS_START
+                yield from fetch_table_in_batches(
+                    execute_with_retry,
+                    results_table,
+                    key_column=results_table.c.patient_id,
+                    # TODO: We need to find a better way to identify which tables have a
+                    # unique `patient_id` column because it lets the batch fetcher use a
+                    # more efficient algorithm. At present, we know that the first
+                    # results table does but this isn't a very comfortable approach. The
+                    # other option is to just always use the non-unique algorithm on the
+                    # basis that the lost efficiency probably isn't noticeable. But
+                    # until we're supporting event-level data for real I'm reluctant to
+                    # make things worse for the currently supported case.
+                    key_is_unique=(i == 0),
+                    # This value was copied from the previous cohortextractor. I suspect
+                    # it has no real scientific basis.
+                    batch_size=32000,
+                    log=log.info,
+                )
 
             for i, cleanup_query in enumerate(cleanup_queries, start=1):
                 query_id = f"cleanup query {i:03} / {len(cleanup_queries):03}"

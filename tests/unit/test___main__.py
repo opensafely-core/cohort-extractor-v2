@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 from ehrql.__main__ import (
@@ -10,6 +12,7 @@ from ehrql.__main__ import (
     import_string,
     main,
     query_engine_from_id,
+    valid_output_path,
 )
 from ehrql.backends.base import SQLBackend
 from ehrql.query_engines.base import BaseQueryEngine
@@ -248,7 +251,7 @@ def test_import_string_no_such_attribute():
 
 
 class DummyQueryEngine:
-    def get_results(self):
+    def get_results_tables(self):
         raise NotImplementedError()
 
 
@@ -323,3 +326,30 @@ def test_all_backends_have_an_alias():
 def test_all_backend_aliases_match_display_names():
     for alias in BACKEND_ALIASES.keys():
         assert backend_from_id(alias).display_name.lower() == alias
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "some/path/file.csv",
+        "some/path/dir:csv",
+        "some/path/dir/:csv",
+        "some/path/dir.foo:csv",
+    ],
+)
+def test_valid_output_path(path):
+    assert valid_output_path(path) == Path(path)
+
+
+@pytest.mark.parametrize(
+    "path, message",
+    [
+        ("no/extension", "No file format supplied"),
+        ("some/path.badfile", "'.badfile' is not a supported format"),
+        ("some/path:baddir", "':baddir' is not a supported format"),
+        ("some/path/:baddir", "':baddir' is not a supported format"),
+    ],
+)
+def test_valid_output_path_errors(path, message):
+    with pytest.raises(ArgumentTypeError, match=message):
+        valid_output_path(path)
