@@ -197,6 +197,7 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
                 execute_with_retry,
                 results_table,
                 key_column=results_table.c.patient_id,
+                key_is_unique=True,
                 # This value was copied from the previous cohortextractor. I suspect it
                 # has no real scientific basis.
                 batch_size=32000,
