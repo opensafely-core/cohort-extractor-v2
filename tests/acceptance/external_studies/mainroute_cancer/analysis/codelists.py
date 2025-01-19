@@ -55,3 +55,7 @@ ethnicity_codes_6 = codelist_from_csv(
     column="snomedcode",
     category_column="Grouping_6",
 )
+
+lowerGI_diagnostic_codes = codelist_from_csv(
+    "local_codelists/phc-lowergi-endoscopy-hrg.csv", column="code"
+)
