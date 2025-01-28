@@ -64,12 +64,12 @@ measures.configure_disclosure_control(enabled=False)
 
 measures.define_defaults(intervals=months(intervals).starting_on(start_date))
 
-measures.define_measure(
-    name="fit_test_rate", 
-    numerator=dataset.fit_test_any,
-    denominator=dataset.elig_cohort,
-    group_by={"imd": imd5}
-    )
+#measures.define_measure(
+    #name="fit_test_rate", 
+    #numerator=dataset.fit_test_any,
+    #denominator=dataset.elig_cohort,
+    #group_by={"imd": imd5}
+    #)
 
 measures.define_measure(
     name="ida_symp_rate", 
@@ -120,16 +120,16 @@ measures.define_measure(
     group_by={"imd": imd5}
     )
 
-measures.define_measure(
-    name="fit_6_rate", 
-    numerator=dataset.fit_6_all_lowerGI,
-    denominator=dataset.elig_cohort,
-    group_by={"imd": imd5}
-    )
+#measures.define_measure(
+    #name="fit_6_rate", 
+    #numerator=dataset.fit_6_all_lowerGI,
+    #denominator=dataset.elig_cohort,
+    #group_by={"imd": imd5}
+    #)
 
-measures.define_measure(
-    name="ca_6_rate", 
-    numerator=dataset.ca_6_all_lowerGI,
-    denominator=dataset.lowerGI_any_symp,
-    group_by={"imd": imd5}
-    )
+#measures.define_measure(
+    #name="ca_6_rate", 
+    #numerator=dataset.ca_6_all_lowerGI,
+    #denominator=dataset.lowerGI_any_symp,
+    #group_by={"imd": imd5}
+    #)

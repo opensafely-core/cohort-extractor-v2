@@ -1,7 +1,8 @@
 from ehrql import case, when, years, days, minimum_of, maximum_of
-from ehrql.tables.core import patients, clinical_events
+from ehrql.tables.core import patients
 from ehrql.tables.tpp import ( 
     addresses,
+    clinical_events,
     practice_registrations)
 
 import codelists
@@ -28,6 +29,13 @@ dataset.colorectal_ca_diag = clinical_events.where(clinical_events.snomedct_code
         ).where(
             clinical_events.date.is_on_or_between(index_date, end_date)
         ).exists_for_patient()
+
+dataset.colorectal_ca_diag_date = clinical_events.where(clinical_events.snomedct_code.is_in(codelists.colorectal_diagnosis_codes_snomed)
+        ).where(
+            clinical_events.date.is_on_or_between(index_date, end_date)
+        ).sort_by(
+            clinical_events.date
+        ).first_for_patient().date
 
 age = patients.age_on(dataset.entry_date)
 dataset.age = age
@@ -74,3 +82,29 @@ dataset.ethnicity6 = case(
 )
 
 dataset.region = practice_registrations.for_patient_on(dataset.entry_date).practice_nuts1_region_name
+
+def num_event(codelist, l_age, u_age):
+    return clinical_events.where(clinical_events.snomedct_code.is_in(codelist)
+        ).where(
+            clinical_events.date.is_on_or_between(index_date, end_date)
+        ).where(
+            clinical_events.date.is_on_or_between(dataset.entry_date, dataset.exit_date)
+        ).where(
+            patients.age_on(clinical_events.date)>=l_age
+        ).where(
+            patients.age_on(clinical_events.date)<u_age
+        ).date.count_episodes_for_patient(days(42))
+
+dataset.num_ida = num_event(codelists.ida_codes, 16, 111)
+dataset.num_cibh = num_event(codelists.cibh_codes, 16, 111)
+dataset.num_prbleed = num_event(codelists.prbleeding_codes, 16, 111)
+dataset.num_wl = num_event(codelists.wl_codes, 16, 111)
+dataset.num_abdomass = num_event(codelists.abdomass_codes, 16, 111)
+dataset.num_abdopain = num_event(codelists.abdopain_codes, 16, 111)
+dataset.num_anaemia = num_event(codelists.anaemia_codes, 16, 111)
+dataset.num_prbleed_50 = num_event(codelists.prbleeding_codes, 50, 111)
+dataset.num_wl_50 = num_event(codelists.wl_codes, 50, 111)
+dataset.num_abdopain_50 = num_event(codelists.abdopain_codes, 50, 111)
+dataset.num_anaemia_60 = num_event(codelists.anaemia_codes, 60, 111)
+
+dataset.num_lowerGI_any_symp = num_event(codelists.colorectal_symptom_codes, 16, 111)
