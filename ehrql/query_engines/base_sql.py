@@ -154,6 +154,44 @@ class BaseSQLQueryEngine(BaseQueryEngine):
         query = apply_patient_joins(query)
         return query
 
+    def get_measures_queries(self, dataset, measures):
+        """
+        Return the SQL queries to fetch the results for one or more measures, the results
+        of summing a numerator column and a denominator column, and grouping by one or
+        more columns.
+
+        `measures` is a collection of two-tuples for each measure:
+            (
+                (numerator_column_index, denominator_column_index), (group_column_indexes),
+                ...
+            )
+
+        Returns a list of select queries for each measure.
+        """
+        results_queries = self.get_queries(dataset)
+        assert len(results_queries) == 1, (
+            "Measures queries can only be applied to a single results table"
+        )
+        results_query = results_queries[0].subquery()
+        select_queries = []
+        for sum_over_indexes, group_by_indexes in measures:
+            sum_overs = [
+                sqlalchemy.func.sum(results_query.columns[sum_over_index]).label(
+                    f"sum_{i}"
+                )
+                for i, sum_over_index in enumerate(sum_over_indexes)
+            ]
+            group_bys = [
+                results_query.columns[group_by_index]
+                for group_by_index in group_by_indexes
+            ]
+            group_query = sqlalchemy.select(
+                *sum_overs,
+                *group_bys,
+            ).group_by(*group_bys)
+            select_queries.append(group_query)
+        return select_queries
+
     def select_patient_id_for_population(self, population_expression):
         """
         Return a SELECT query which selects all the patient_ids that _might_ be included
@@ -860,8 +898,11 @@ class BaseSQLQueryEngine(BaseQueryEngine):
             query = query.where(sqlalchemy.and_(*where_clauses))
         return query
 
-    def get_results_stream(self, dataset):
-        results_queries = self.get_queries(dataset)
+    def get_results_stream(self, dataset, measures=None):
+        if measures is not None:
+            results_queries = self.get_measures_queries(dataset, measures)
+        else:
+            results_queries = self.get_queries(dataset)
         setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_queries)
 
         with self.engine.connect() as connection:
