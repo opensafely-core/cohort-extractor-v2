@@ -29,13 +29,37 @@ class InMemoryQueryEngine(BaseQueryEngine):
     tests, and a to provide a reference implementation for other engines.
     """
 
-    def get_results_tables(self, dataset):
+    def get_results_tables(self, dataset, measures=None):
         for table in self.get_results_as_in_memory_tables(dataset):
-            # The row_id column is an internal implementation detail of the in-memory
-            # engine and should not appear in the results
-            columns = [name for name in table.name_to_col.keys() if name != "row_id"]
-            Row = namedtuple("Row", columns)
-            yield (Row(*(r[c] for c in columns)) for r in table.to_records())
+            if measures is not None:
+                for sum_over_indexes, group_by_indexes in measures:
+                    measure_groups = dict()
+                    for record in table.to_records():
+                        record_values = list(record.values())
+                        measure_group_key = tuple(
+                            record_values[group_index]
+                            for group_index in group_by_indexes
+                        )
+                        measure_groups.setdefault(
+                            measure_group_key, [0 for _ in sum_over_indexes]
+                        )
+                        for i, sum_over_index in enumerate(sum_over_indexes):
+                            if record_values[sum_over_index] is not None:
+                                measure_groups[measure_group_key][i] += record_values[
+                                    sum_over_index
+                                ]
+                    yield (
+                        (*group_counts, *group_key)
+                        for group_key, group_counts in measure_groups.items()
+                    )
+            else:
+                # The row_id column is an internal implementation detail of the in-memory
+                # engine and should not appear in the results
+                columns = [
+                    name for name in table.name_to_col.keys() if name != "row_id"
+                ]
+                Row = namedtuple("Row", columns)
+                yield (Row(*(r[c] for c in columns)) for r in table.to_records())
 
     def get_results_as_in_memory_tables(self, dataset):
         assert isinstance(dataset, qm.Dataset)
