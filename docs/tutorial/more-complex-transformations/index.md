@@ -307,8 +307,12 @@ We're showing all the boolean series together so that you can see why different 
 
 Next: [Building a dataset](../building-a-dataset/index.md)
 
+!!! abstract "Feedback"
+    Had enough? That's not a problem, but if you could fill in this very short [feedback form][6]{:target="_blank"} we'd really appreciate it.
+
 [1]: https://docs.opensafely.org/ehrql/reference/schemas/core/#practice_registrations
 [2]: https://stackoverflow.com/questions/4172448/is-it-possible-to-break-a-long-line-to-multiple-lines-in-python
 [3]: ../../how-to/codelists.md
 [4]: https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/dm_cod/
 [5]: https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/dmres_cod/
+[6]: https://docs.google.com/forms/d/e/1FAIpQLSeouuTXPnwShAjBllyln4tl2Q52PMG_aUhpma4odpE2MmCngg/viewform

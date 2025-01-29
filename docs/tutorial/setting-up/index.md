@@ -7,7 +7,7 @@ See the "[Signing up for a new GitHub account][1]" page in the GitHub docs.
 
 ## Cloning the template repository
 
-To start, clone the tutorial repository into your own GitHub account by clicking the following link: [https://github.com/opensafely/ehrql-tutorial/generate](https://github.com/opensafely/ehrql-tutorial/generate). 
+To start, clone the tutorial repository into your own GitHub account by clicking the following link: [https://github.com/opensafely/ehrql-tutorial/generate](https://github.com/opensafely/ehrql-tutorial/generate).
 
 Leave the "Include all branches" option unchecked, and, using the _Owner_ drop-down menu, select your GitHub account as the owner.
 
@@ -57,7 +57,11 @@ If you don't see this, get in touch with the OpenSAFELY tech team via your copil
 
 Next: [Working with data with ehrQL](../working-with-data-with-ehrql/index.md)
 
+!!! abstract "Feedback"
+    Had enough? That's not a problem, but if you could fill in this very short [feedback form][5]{:target="_blank"} we'd really appreciate it.
+
 [1]: https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github
 [2]: https://github.com/opensafely/ehrql-tutorial/
 [3]: https://docs.github.com/en/codespaces/overview
 [4]: https://www.bennett.ox.ac.uk/blog/2024/07/research-ready-computers-in-the-cloud/
+[5]: https://docs.google.com/forms/d/e/1FAIpQLSeouuTXPnwShAjBllyln4tl2Q52PMG_aUhpma4odpE2MmCngg/viewform
