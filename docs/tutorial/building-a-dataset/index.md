@@ -162,7 +162,11 @@ Note that it is essential that the dataset you create is given the name `dataset
 
 Next: [Using ehrQL as part of a study](../using-ehrql-as-part-of-a-study/index.md)
 
+!!! abstract "Feedback"
+    Had enough? That's not a problem, but if you could fill in this very short [feedback form][5]{:target="_blank"} we'd really appreciate it.
+
 [1]: https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/prt_cod/
 [2]: https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/mal_cod/
 [3]: https://www.opencodelists.org/codelist/opensafely/ace-inhibitor-medications/
 [4]: https://www.opencodelists.org/codelist/opensafely/angiotensin-ii-receptor-blockers-arbs/
+[5]: https://docs.google.com/forms/d/e/1FAIpQLSeouuTXPnwShAjBllyln4tl2Q52PMG_aUhpma4odpE2MmCngg/viewform

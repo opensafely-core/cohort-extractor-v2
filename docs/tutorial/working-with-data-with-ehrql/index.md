@@ -56,6 +56,10 @@ In the next sections we will demonstrate how to work with these objects.
 
 Next: [Simple transformations](../simple-transformations/index.md)
 
+!!! abstract "Feedback"
+    Had enough? That's not a problem, but if you could fill in this very short [feedback form][4]{:target="_blank"} we'd really appreciate it.
+
 [1]: https://docs.opensafely.org/getting-started/tutorial/add-a-scripted-action-to-the-pipeline/
 [2]: ../../how-to/dummy-data.md
 [3]: ../../explanation/vscode-extension.md
+[4]: https://docs.google.com/forms/d/e/1FAIpQLSeouuTXPnwShAjBllyln4tl2Q52PMG_aUhpma4odpE2MmCngg/viewform

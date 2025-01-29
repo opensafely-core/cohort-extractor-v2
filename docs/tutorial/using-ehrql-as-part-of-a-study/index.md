@@ -33,5 +33,10 @@ Note: [the main OpenSAFELY tutorial][2] documents how you can describe the actio
 
 Next: [Test your ehrQL knowledge with a quiz!](../quiz/index.md)
 
+!!! abstract "Feedback"
+    Don't fancy the quiz? That's not a problem, but if you could fill in this very short [feedback form][3]{:target="_blank"} we'd really appreciate it.
+
+
 [1]: https://docs.opensafely.org/opensafely-cli/#exec-interactive-development
 [2]: https://docs.opensafely.org/getting-started/tutorial/run-the-project-pipeline/
+[3]: https://docs.google.com/forms/d/e/1FAIpQLSeouuTXPnwShAjBllyln4tl2Q52PMG_aUhpma4odpE2MmCngg/viewform

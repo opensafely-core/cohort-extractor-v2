@@ -1,3 +1,6 @@
+!!! abstract inline end "Feedback"
+    You finished the tutorial - well done!. Either now, or after you've tried the quiz, we'd love it if you could fill in this very short [feedback form][1]{:target="_blank"}.
+
 To test your understanding of ehrQL, the tutorial repository contains a file (called `quiz.py`) with some gaps for you to fill in.
 
 Open the file now in your Codespace.
@@ -67,3 +70,5 @@ The quiz takes you through categorising patients according to two other (simplif
 9: Create a patient frame containing the latest HbA1c measurement for each patient.
 
 10: Create a boolean patient series identifying patients without moderate or severe frailty in whom the last IFCC-HbA1c is 58 mmol/mol or less.
+
+[1]: https://docs.google.com/forms/d/e/1FAIpQLSeouuTXPnwShAjBllyln4tl2Q52PMG_aUhpma4odpE2MmCngg/viewform

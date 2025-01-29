@@ -110,8 +110,12 @@ The full range of language features is documented in the [ehrQL Language Referen
 
 Next: [More complex transformations](../more-complex-transformations/index.md)
 
+!!! abstract "Feedback"
+    Had enough? That's not a problem, but if you could fill in this very short [feedback form][6]{:target="_blank"} we'd really appreciate it.
+
 [1]: ../../reference/schemas/core.md#patients.age_on
 [2]: ../../reference/language.md#DatePatientSeries.sub
 [3]: ../../reference/language.md#DateDifference.years
 [4]: ../../reference/language.md#BoolPatientSeries.is_null
 [5]: ../../reference/language.md
+[6]: https://docs.google.com/forms/d/e/1FAIpQLSeouuTXPnwShAjBllyln4tl2Q52PMG_aUhpma4odpE2MmCngg/viewform
