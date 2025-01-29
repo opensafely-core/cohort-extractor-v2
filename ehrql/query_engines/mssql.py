@@ -169,8 +169,51 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
             select_queries.append(sqlalchemy.select(results_table))
         return select_queries
 
-    def get_results_stream(self, dataset):
+    def get_measures_queries(self, dataset, measures):
+        """
+        Return the SQL queries to fetch the results for one or more measures, the results
+        of summing a numerator column and a denominator column, and grouping by one or
+        more columns.
+
+        `measures` is a collection of two-tuples for each measure:
+            (
+                (numerator_column_index, denominator_column_index), (group_column_indexes),
+                ...
+            )
+        We write each measures result table to a temporary table.
+        Returns a list of select queries for each measure.
+        """
         results_queries = self.get_queries(dataset)
+        assert len(results_queries) == 1, (
+            "Measures queries can only be applied to a single results table"
+        )
+        results_query = results_queries[0].subquery()
+        # Write results to temporary tables and select them from there. This allows us
+        # to use more efficient/robust mechanisms to retrieve the results.
+        select_queries = []
+        for n, (sum_over_indexes, group_by_indexes) in enumerate(measures):
+            sum_overs = [
+                sqlalchemy.func.sum(results_query.columns[sum_over_index]).label(
+                    f"sum_{i}"
+                )
+                for i, sum_over_index in enumerate(sum_over_indexes)
+            ]
+            group_bys = [
+                results_query.columns[group_by_index]
+                for group_by_index in group_by_indexes
+            ]
+            group_query = sqlalchemy.select(*sum_overs, *group_bys).group_by(*group_bys)
+            group_table = temporary_table_from_query(
+                f"#group_results_{n}", group_query, index_col="sum_0"
+            )
+            select_queries.append(sqlalchemy.select(group_table))
+        return select_queries
+
+    def get_results_stream(self, dataset, measures=None):
+        if measures is not None:
+            results_queries = self.get_measures_queries(dataset, measures)
+        else:
+            results_queries = self.get_queries(dataset)
 
         # We're expecting queries in a very specific form which is "select everything
         # from one table"; so we assert that they have this form and retrieve references
@@ -180,7 +223,6 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
             results_table = results_query.get_final_froms()[0]
             assert str(results_query) == str(sqlalchemy.select(results_table))
             results_tables.append(results_table)
-
         setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_queries)
 
         with self.engine.connect() as connection:
@@ -210,23 +252,34 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
                 )
 
                 for i, results_table in enumerate(results_tables):
+                    if measures:
+                        # fetch_table_in_batches needs a key column to sort on in order to
+                        # return a table in batches. For patient and event-level tables, this
+                        # is always patient ID, but we don't have patient ID for a measures
+                        # table, so we're arbitrarily giving it the first column (the numerator column).
+                        # This  doesn't really make sense for sorting (a group column would make
+                        # more sense, but measures don't always have groups). Given that this is an
+                        # aggregated table, we wouldn't expect it to exceed the batch size, so it
+                        # shouldn't have any real impact.
+                        key_column = results_table.columns[0]
+                    else:
+                        key_column = results_table.c.patient_id
                     yield self.RESULTS_START
                     yield from fetch_table_in_batches(
                         execute_with_retry,
                         results_table,
-                        key_column=results_table.c.patient_id,
-                        # TODO: We need to find a better way to identify which tables
-                        # have a unique `patient_id` column because it lets the batch
-                        # fetcher use a more efficient algorithm. At present, we know
-                        # that the first results table does but this isn't a very
-                        # comfortable approach. The other option is to just always use
-                        # the non-unique algorithm on the basis that the lost efficiency
-                        # probably isn't noticeable. But until we're supporting
-                        # event-level data for real I'm reluctant to make things worse
-                        # for the currently supported case.
+                        key_column=key_column,
+                        # TODO: We need to find a better way to identify which tables have a
+                        # unique `patient_id` column because it lets the batch fetcher use a
+                        # more efficient algorithm. At present, we know that the first
+                        # results table does but this isn't a very comfortable approach. The
+                        # other option is to just always use the non-unique algorithm on the
+                        # basis that the lost efficiency probably isn't noticeable. But
+                        # until we're supporting event-level data for real I'm reluctant to
+                        # make things worse for the currently supported case.
                         key_is_unique=(i == 0),
-                        # This value was copied from the previous cohortextractor. I
-                        # suspect it has no real scientific basis.
+                        # This value was copied from the previous cohortextractor. I suspect
+                        # it has no real scientific basis.
                         batch_size=32000,
                         log=log.info,
                     )
