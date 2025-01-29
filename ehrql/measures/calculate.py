@@ -99,7 +99,7 @@ class MeasureCalculator:
         self.population = None
         self.variables = {}
         self.measures = []
-        self.fetchers = []
+        self.aggregation_columns = []
         for measure in measures:
             self.add_measure(measure)
         self.placeholder_dataset = Dataset(
@@ -109,8 +109,8 @@ class MeasureCalculator:
     def get_results(self, query_engine):
         for interval in self.intervals:
             results = self.get_results_for_interval(query_engine, interval)
-            for measure, numerator, denominator, group in results:
-                group_dict = dict(zip(measure.group_by.keys(), group))
+            for measure, numerator, denominator, *groups in results:
+                group_dict = dict(zip(measure.group_by.keys(), groups))
                 yield measure, interval, numerator, denominator, group_dict
 
     def get_results_for_interval(self, query_engine, interval):
@@ -118,27 +118,13 @@ class MeasureCalculator:
         # placeholders with actual dates
         dataset = substitute_interval_parameters(self.placeholder_dataset, interval)
 
-        # "fetchers" are functions which take a row and return the values relevant to a
-        # given measure (numerator, denominator and groups); "accumulators" are dicts
-        # storing the cumulative numerator and denominator totals for each group in the
-        # measure
-        fetcher_accumulator_pairs = [
-            (fetcher, defaultdict(lambda: [0, 0])) for fetcher in self.fetchers
-        ]
-
-        for row in query_engine.get_results(dataset):
-            for fetcher, accumulator in fetcher_accumulator_pairs:
-                numerator, denominator, group = fetcher(row)
-                totals = accumulator[group]
-                if numerator is not None:
-                    totals[0] += numerator
-                # Denominator cannot be None because population only includes rows where
-                # denominator is non-empty
-                totals[1] += denominator
-
-        for measure, (_, accumulator) in zip(self.measures, fetcher_accumulator_pairs):
-            for group, (numerator, denominator) in accumulator.items():
-                yield measure, numerator, denominator, group
+        # "aggregation_columns" are tuples of column indexes for the values relevant to a
+        # given measure ((numerator, denominator), (groups));
+        for i, table in enumerate(
+            query_engine.get_results_tables(dataset, self.aggregation_columns)
+        ):
+            for row in table:
+                yield self.measures[i], *row
 
     def add_measure(self, measure):
         # Record denominator and intervals from first measure
@@ -155,13 +141,15 @@ class MeasureCalculator:
         group_indexes = [
             self.add_variable(column) for column in measure.group_by.values()
         ]
-
-        # Create a function which takes a results row and returns a numerator,
-        # denominator, and tuple of group values, based on their indices
-        fetcher = self.create_fetcher(numerator_index, denominator_index, group_indexes)
-
         self.measures.append(measure)
-        self.fetchers.append(fetcher)
+
+        # Note that indices all need to be offset by 1 to account for the initial `patient_id` value.
+        self.aggregation_columns.append(
+            (
+                (numerator_index + 1, denominator_index + 1),
+                tuple(g + 1 for g in group_indexes),
+            )
+        )
 
     def add_variable(self, variable):
         # Return the position of `variable` in the variables dict, adding it if not
@@ -172,24 +160,6 @@ class MeasureCalculator:
             index = len(self.variables)
             self.variables[f"column_{index}"] = variable
             return index
-
-    @staticmethod
-    def create_fetcher(numerator_index, denominator_index, group_indexes):
-        # Given a bunch of indices we want a function which extracts just those indices
-        # from a tuple. This is going to be called frequently, so the fastest way to do
-        # this is to build a function definition and then eval it. Note: indices all
-        # need to be offset by 1 to account for the initial `patient_id` value.
-        group_items = [f"row[{i + 1}]" for i in group_indexes]
-        if len(group_items) != 1:
-            group_tuple = ", ".join(group_items)
-        else:
-            # Single item tuples need a trailing comma in Python
-            group_tuple = group_items[0] + ","
-        return eval(
-            f"lambda row: ("
-            f"  row[{numerator_index + 1}], row[{denominator_index + 1}], ({group_tuple})"
-            f")"
-        )
 
 
 def series_as_bool(series):
