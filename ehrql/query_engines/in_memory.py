@@ -28,12 +28,33 @@ class InMemoryQueryEngine(BaseQueryEngine):
     tests, and a to provide a reference implementation for other engines.
     """
 
-    def get_results_stream(self, dataset):
+    def get_results_stream(self, dataset, measures=None):
         table = self.get_results_as_patient_table(dataset)
-        Row = namedtuple("Row", table.name_to_col.keys())
-        yield self.RESULTS_START
-        for record in table.to_records():
-            yield Row(**record)
+        if measures is not None:
+            for sum_over_indexes, group_by_indexes in measures:
+                measure_groups = dict()
+                for record in table.to_records():
+                    record_values = list(record.values())
+                    measure_group_key = tuple(
+                        record_values[group_index] for group_index in group_by_indexes
+                    )
+                    measure_groups.setdefault(
+                        measure_group_key, [0 for _ in sum_over_indexes]
+                    )
+                    for i, sum_over_index in enumerate(sum_over_indexes):
+                        if record_values[sum_over_index] is not None:
+                            measure_groups[measure_group_key][i] += record_values[
+                                sum_over_index
+                            ]
+
+                yield self.RESULTS_START
+                for group_key, group_counts in measure_groups.items():
+                    yield (*group_counts, *group_key)
+        else:
+            Row = namedtuple("Row", table.name_to_col.keys())
+            yield self.RESULTS_START
+            for record in table.to_records():
+                yield Row(**record)
 
     def get_results_as_patient_table(self, dataset):
         assert isinstance(dataset, qm.Dataset)
