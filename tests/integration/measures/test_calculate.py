@@ -168,6 +168,27 @@ def test_get_measures_interval_dependent_denominator(engine):
     assert set(results) == set(expected)
 
 
+def test_get_measures_same_numerator_and_denominator(engine):
+    # Ensure that calculations are handled correctly when the same column
+    # is used as both numerator and denominator
+    intervals = years(2).starting_on("2020-01-01")
+    measures = Measures()
+    measures.define_measure(
+        "test",
+        numerator=patients.exists_for_patient(),
+        denominator=patients.exists_for_patient(),
+        intervals=intervals,
+    )
+    patient_data = [dict(patient_id=1), dict(patient_id=2)]
+    engine.populate({patients: patient_data})
+    results = set(get_measure_results(engine.query_engine(), measures))
+    expected = {
+        ("test", date(2020, 1, 1), date(2020, 12, 31), 1.0, 2, 2),
+        ("test", date(2021, 1, 1), date(2021, 12, 31), 1.0, 2, 2),
+    }
+    assert results == expected
+
+
 @mock.patch("ehrql.measures.calculate.time")
 def test_get_measure_results_with_timeout(patched_time, in_memory_engine):
     events_in_interval = events.where(events.date.is_during(INTERVAL))
