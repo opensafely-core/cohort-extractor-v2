@@ -23,6 +23,14 @@ show(
 )
 ```
 
+??? tip "Autocomplete"
+
+    Notice how you get autocomplete suggestions as you type ehrQL:
+
+    ![autocomplete example](autocomplete-example.png)
+
+    This makes it easier to check your ehrQL is valid, and to discover the various columns and functions on each table.
+
 When you run the code now, you will see a table with two columns indicating each patient's age on the index date, and whether they were alive on the index date.
 
 Each of these columns is a patient series.
