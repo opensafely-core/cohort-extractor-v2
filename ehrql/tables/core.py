@@ -9,6 +9,11 @@ import functools
 import operator
 
 from ehrql.codes import DMDCode, ICD10Code, SNOMEDCTCode
+from ehrql.patient_level_table_definitions.core import (
+    ClinicalEvents,
+    Medications,
+    PracticeRegistrations,
+)
 from ehrql.tables import Constraint, EventFrame, PatientFrame, Series, table
 
 
@@ -125,7 +130,7 @@ class patients(PatientFrame):
 
 
 @table
-class practice_registrations(EventFrame):
+class practice_registrations(EventFrame[PracticeRegistrations]):
     """
     Each record corresponds to a patient's registration with a practice.
 
@@ -310,7 +315,7 @@ class ons_deaths(PatientFrame):
 
 
 @table
-class clinical_events(EventFrame):
+class clinical_events(EventFrame[ClinicalEvents]):
     """
     Each record corresponds to a single clinical or consultation event for a patient.
 
@@ -327,7 +332,7 @@ class clinical_events(EventFrame):
 
 
 @table
-class medications(EventFrame):
+class medications(EventFrame[Medications]):
     """
     The medications table provides data about prescribed medications in primary care.
 

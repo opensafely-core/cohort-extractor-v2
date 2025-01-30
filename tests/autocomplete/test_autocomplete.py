@@ -406,7 +406,6 @@ def test_all_table_methods():
         "ehrql.tables.smoketest.patients.count_for_patient",
         "ehrql.tables.smoketest.patients.exists_for_patient",
         "ehrql.tables.emis.patients.age_on",  # requires DateDifference
-        "ehrql.tables.tpp.addresses.for_patient_on",  # Needs last_for_patient
         "ehrql.tables.core.practice_registrations.for_patient_on",  # Needs last_for_patient
         "ehrql.tables.tpp.patients.age_on",  # requires DateDifference
         "ehrql.tables.core.patients.age_on",  # requires DateDifference
@@ -522,22 +521,6 @@ def test_all_query_model_series_methods(query_language_methods):
         ("BaseSeries", "map_values", EventSeries),
         ("CodeFunctions", "to_category", PatientSeries),
         ("CodeFunctions", "to_category", EventSeries),
-        ("MultiCodeStringFunctions", "is_in", PatientSeries),  # need first_for_patient
-        (
-            "MultiCodeStringFunctions",
-            "is_not_in",
-            PatientSeries,
-        ),  # need first_for_patient
-        (
-            "MultiCodeStringFunctions",
-            "contains",
-            PatientSeries,
-        ),  # need first_for_patient
-        (
-            "MultiCodeStringFunctions",
-            "contains_any_of",
-            PatientSeries,
-        ),  # need first_for_patient
     ]
 
     # To determine which methods are currently tested in the autocomplete_definition file we:
@@ -610,11 +593,9 @@ def test_all_query_model_non_series_methods(query_language_methods):
         "Dataset",
         "DateDifference",
         "DummyDataConfig",
-        "SortedEventFrameMethods",
     ]
     # Specific class methods we want to ignore
     ignored_query_language_methods = [
-        ("EventFrame", "sort_by"),
         ("when", "then"),
         ("WhenThen", "otherwise"),
     ]

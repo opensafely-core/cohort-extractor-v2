@@ -306,3 +306,50 @@ core.clinical_events.except_where(
 # Duration methods
 days(100).starting_on("2045-01-01")  ## type: list[tuple[date, date]]
 days(100).ending_on("2045-01-01")  ## type: list[tuple[date, date]]
+
+# first/last_for_patient
+first_code = (
+    core.clinical_events.sort_by(core.clinical_events.date)
+    .first_for_patient()
+    .snomedct_code
+)  ## type:CodePatientSeries
+first_val = (
+    core.clinical_events.sort_by(core.clinical_events.date)
+    .last_for_patient()
+    .numeric_value
+)  ## type:FloatPatientSeries
+first_date = (
+    core.clinical_events.sort_by(core.clinical_events.date).last_for_patient().date
+)  ## type:DatePatientSeries
+
+fist_addr_str = (
+    tpp.addresses.sort_by(tpp.addresses.start_date).first_for_patient().msoa_code
+)  ## type:StrPatientSeries
+fist_addr_int = (
+    tpp.addresses.sort_by(tpp.addresses.start_date).first_for_patient().address_type
+)  ## type:IntPatientSeries
+
+core.clinical_events.sort_by(
+    core.clinical_events.date
+)  ## type: SortedEventFrameMethods[ClinicalEvents]
+core.clinical_events.sort_by(
+    core.clinical_events.date
+).first_for_patient()  ## type: ClinicalEvents
+core.clinical_events.sort_by(
+    core.clinical_events.date
+).last_for_patient()  ## type: ClinicalEvents
+
+tpp.addresses.for_patient_on(date_str)  ## type: Addresses
+
+tpp.apcs.sort_by(tpp.apcs.admission_date).first_for_patient().all_diagnoses.contains(
+    "N17"
+)  ## type: BoolPatientSeries
+tpp.apcs.sort_by(
+    tpp.apcs.admission_date
+).first_for_patient().all_diagnoses.contains_any_of(["N17"])  ## type: BoolPatientSeries
+tpp.apcs.sort_by(tpp.apcs.admission_date).first_for_patient().all_diagnoses.is_in(
+    ["N17"]
+)  ## type: NoReturn
+tpp.apcs.sort_by(tpp.apcs.admission_date).first_for_patient().all_diagnoses.is_not_in(
+    ["N17"]
+)  ## type: NoReturn

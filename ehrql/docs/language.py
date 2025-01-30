@@ -19,7 +19,9 @@ EXCLUDE_FROM_DOCS = {
     ql.when,
     ql.DummyDataConfig,
     ql.Error,
-    ql.int_property,  # Internal thing for type hints and autocomplete
+    # All of the rest are internal things for type hints and autocomplete
+    ql.int_property,
+    ql.PatientLevelTable,
 }
 
 

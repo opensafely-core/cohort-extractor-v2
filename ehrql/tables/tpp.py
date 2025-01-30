@@ -16,6 +16,30 @@ from ehrql.codes import (
     OPCS4MultiCodeString,
     SNOMEDCTCode,
 )
+from ehrql.patient_level_table_definitions.tpp import (
+    Addresses,
+    Apcs,
+    ApcsCost,
+    Appointments,
+    ClinicalEvents,
+    ClinicalEventsRanges,
+    CovidTherapeutics,
+    DecisionSupportValues,
+    Ec,
+    EcCost,
+    EmergencyCareAttendances,
+    OccupationOnCovidVaccineRecord,
+    Opa,
+    OpaCost,
+    OpaDiag,
+    OpaProc,
+    OpenPrompt,
+    SgssCovidAllTests,
+    Ukrr,
+    Vaccinations,
+    WlClockstops,
+    WlOpenpathways,
+)
 from ehrql.tables import Constraint, EventFrame, PatientFrame, Series, table
 from ehrql.tables.core import patients
 
@@ -54,7 +78,7 @@ __all__ = [
 
 
 @table
-class addresses(EventFrame):
+class addresses(EventFrame[Addresses]):
     """
     Geographic characteristics of the home address a patient registers with a practice.
     Each row in this table is one registration period per patient.
@@ -243,7 +267,7 @@ class addresses(EventFrame):
 
 
 @table
-class apcs(EventFrame):
+class apcs(EventFrame[Apcs]):
     """
     Admitted Patient Care Spells (APCS) data is provided via the NHS Secondary Uses Service.
 
@@ -423,7 +447,7 @@ class apcs(EventFrame):
 
 
 @table
-class apcs_cost(EventFrame):
+class apcs_cost(EventFrame[ApcsCost]):
     """
     Admitted Patient Care Spells (APCS) data is provided via the NHS Secondary Uses Service.
 
@@ -468,7 +492,7 @@ class apcs_cost(EventFrame):
 
 
 @table
-class appointments(EventFrame):
+class appointments(EventFrame[Appointments]):
     """
     Appointments in primary care.
 
@@ -592,7 +616,7 @@ class appointments(EventFrame):
 
 
 @table
-class clinical_events(EventFrame):
+class clinical_events(EventFrame[ClinicalEvents]):
     """
     Each record corresponds to a single clinical or consultation event for a patient.
 
@@ -623,7 +647,7 @@ class clinical_events(EventFrame):
 
 
 @table
-class clinical_events_ranges(EventFrame):
+class clinical_events_ranges(EventFrame[ClinicalEventsRanges]):
     """
     Each record corresponds to a single clinical or consultation event for a patient,
     as presented in `clinical_events`, but with additional fields regarding the event's
@@ -687,7 +711,7 @@ class clinical_events_ranges(EventFrame):
 
 
 @table
-class covid_therapeutics(EventFrame):
+class covid_therapeutics(EventFrame[CovidTherapeutics]):
     """
     The COVID Therapeutics dataset contains information on COVID treatments used in inpatient
     and outpatient settings.
@@ -818,7 +842,7 @@ class covid_therapeutics(EventFrame):
 
 
 @table
-class decision_support_values(EventFrame):
+class decision_support_values(EventFrame[DecisionSupportValues]):
     """
     Returns values computed by decision support algorithms, for example the
     [Electronic Frailty Index (EFI)][efi_ref]
@@ -852,7 +876,7 @@ class decision_support_values(EventFrame):
 
 
 @table
-class ec(EventFrame):
+class ec(EventFrame[Ec]):
     """
     Emergency care attendances data — the Emergency Care Data Set (ECDS) —
     is provided via the NHS Secondary Uses Service.
@@ -891,7 +915,7 @@ class ec(EventFrame):
 
 
 @table
-class ec_cost(EventFrame):
+class ec_cost(EventFrame[EcCost]):
     """
     Emergency care attendances data is provided via the NHS Secondary Uses Service.
 
@@ -943,7 +967,7 @@ eca_diagnosis_description = (
 
 
 @table
-class emergency_care_attendances(EventFrame):
+class emergency_care_attendances(EventFrame[EmergencyCareAttendances]):
     """
     Emergency care attendances data is provided via the NHS Secondary Uses Service.
 
@@ -1060,7 +1084,7 @@ class medications(ehrql.tables.core.medications.__class__):
 
 
 @table
-class occupation_on_covid_vaccine_record(EventFrame):
+class occupation_on_covid_vaccine_record(EventFrame[OccupationOnCovidVaccineRecord]):
     """
     This data is from the NHS England COVID-19 data store,
     and reflects information collected at the point of vaccination
@@ -1138,7 +1162,7 @@ class ons_deaths(ehrql.tables.core.ons_deaths.__class__):
 
 
 @table
-class opa(EventFrame):
+class opa(EventFrame[Opa]):
     """
     Outpatient appointments data (OPA) is provided via the NHS Secondary Uses Service.
 
@@ -1226,7 +1250,7 @@ class opa(EventFrame):
 
 
 @table
-class opa_cost(EventFrame):
+class opa_cost(EventFrame[OpaCost]):
     """
     Outpatient appointments data is provided via the NHS Secondary Uses Service.
 
@@ -1269,7 +1293,7 @@ class opa_cost(EventFrame):
 
 
 @table
-class opa_diag(EventFrame):
+class opa_diag(EventFrame[OpaDiag]):
     """
     Outpatient appointments data is provided via the NHS Secondary Uses Service.
 
@@ -1322,7 +1346,7 @@ class opa_diag(EventFrame):
 
 
 @table
-class opa_proc(EventFrame):
+class opa_proc(EventFrame[OpaProc]):
     """
     Outpatient appointments data is provided via the NHS Secondary Uses Service.
 
@@ -1369,7 +1393,7 @@ class opa_proc(EventFrame):
 
 
 @table
-class open_prompt(EventFrame):
+class open_prompt(EventFrame[OpenPrompt]):
     """
     This table contains responses to questions from the OpenPROMPT project.
 
@@ -1533,7 +1557,7 @@ class practice_registrations(ehrql.tables.core.practice_registrations.__class__)
 
 
 @table
-class sgss_covid_all_tests(EventFrame):
+class sgss_covid_all_tests(EventFrame[SgssCovidAllTests]):
     """
     COVID-19 tests results from SGSS (the Second Generation Surveillance System).
 
@@ -1634,7 +1658,7 @@ class sgss_covid_all_tests(EventFrame):
 
 
 @table
-class ukrr(EventFrame):
+class ukrr(EventFrame[Ukrr]):
     """
     The UK Renal Registry (UKRR) contains data on patients under secondary renal care
     (advanced chronic kidney disease stages 4 and 5, dialysis, and kidney transplantation)
@@ -1688,7 +1712,7 @@ class ukrr(EventFrame):
 
 
 @table
-class vaccinations(EventFrame):
+class vaccinations(EventFrame[Vaccinations]):
     """
     This table contains information on administered vaccinations,
     identified using either the target disease (e.g., Influenza),
@@ -1721,7 +1745,7 @@ class vaccinations(EventFrame):
 
 
 @table
-class wl_clockstops(EventFrame):
+class wl_clockstops(EventFrame[WlClockstops]):
     """
     National Waiting List Clock Stops
 
@@ -1810,7 +1834,7 @@ class wl_clockstops(EventFrame):
 
 
 @table
-class wl_openpathways(EventFrame):
+class wl_openpathways(EventFrame[WlOpenpathways]):
     """
     National Waiting List Open Pathways
 

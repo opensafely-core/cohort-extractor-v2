@@ -295,6 +295,14 @@ update-external-studies: devenv
     $BIN/python -m tests.acceptance.update_external_studies
 
 
+update-patient-level-table-definitions: devenv
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    echo 'Updating the patient level table definitions'
+    $BIN/python -m tests.autocomplete.update_table_definitions
+
+
 update-tpp-schema: devenv
     #!/usr/bin/env bash
     set -euo pipefail
