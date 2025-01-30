@@ -26,7 +26,7 @@ DateT = TypeVar("DateT", bound="DateFunctions")
 IntT = TypeVar("IntT", bound="IntFunctions")
 StrT = TypeVar("StrT", bound="StrFunctions")
 
-VALID_VARIABLE_NAME_RE = re.compile(r"^[A-Za-z]+[A-Za-z0-9_]*$")
+VALID_ATTRIBUTE_NAME_RE = re.compile(r"^[A-Za-z]+[A-Za-z0-9_]*$")
 
 # This gets populated by the `__init_subclass__` methods of EventSeries and
 # PatientSeries. Its structure is:
@@ -85,8 +85,9 @@ class Dataset:
         # Set attributes with `object.__setattr__` to avoid using the
         # `__setattr__` method on this class, which prohibits use of these
         # attribute names
-        object.__setattr__(self, "variables", {})
+        object.__setattr__(self, "_variables", {})
         object.__setattr__(self, "dummy_data_config", DummyDataConfig())
+        object.__setattr__(self, "_events", {})
 
     def define_population(self, population_condition):
         """
@@ -183,22 +184,21 @@ class Dataset:
             raise AttributeError(
                 "Cannot set variable 'population'; use define_population() instead"
             )
-        if name in self.variables:
-            raise AttributeError(f"'{name}' is already set and cannot be reassigned")
-        if name in ("patient_id", "variables", "dummy_data_config"):
-            raise AttributeError(f"'{name}' is not an allowed variable name")
-        if not VALID_VARIABLE_NAME_RE.match(name):
-            raise AttributeError(
-                f"Variable names must start with a letter, and contain only "
-                f"alphanumeric characters and underscores (you defined a "
-                f"variable '{name}')"
-            )
+        _validate_attribute_name(
+            name, self._variables | self._events, context="variable"
+        )
         validate_patient_series(value, context=f"variable '{name}'")
-        self.variables[name] = value
+        self._variables[name] = value
 
     def __getattr__(self, name):
-        if name in self.variables:
-            return self.variables[name]
+        # Make this method accessible while hiding it from autocomplete until we make it
+        # generally available
+        if name == "add_event_table":
+            return self._internal
+        if name in self._variables:
+            return self._variables[name]
+        if name in self._events:
+            return self._events[name]
         if name == "population":
             raise AttributeError(
                 "A population has not been defined; define one with define_population()"
@@ -206,10 +206,70 @@ class Dataset:
         else:
             raise AttributeError(f"Variable '{name}' has not been defined")
 
+    # This method ought to be called `add_event_table` but we're deliberately
+    # obfuscating its name for now
+    def _internal(self, name, **event_series):
+        _validate_attribute_name(name, self._variables | self._events, context="table")
+        self._events[name] = EventTable(self, **event_series)
+
     def _compile(self):
         return qm.Dataset(
             population=self.population._qm_node,
-            variables={k: v._qm_node for k, v in self.variables.items()},
+            variables={k: v._qm_node for k, v in self._variables.items()},
+            events={k: v._qm_node for k, v in self._events.items()},
+        )
+
+
+class EventTable:
+    def __init__(self, dataset, **series):
+        # Store reference to the parent dataset to aid debug rendering
+        object.__setattr__(self, "_dataset", dataset)
+        object.__setattr__(self, "_series", {})
+        if not series:
+            raise ValueError("event tables must be defined with at least one column")
+        for name, value in series.items():
+            self.add_column(name, value)
+
+    def add_column(self, name, value):
+        _validate_attribute_name(name, self._series, context="column")
+        validate_ehrql_series(value, context=f"column {name!r}")
+        try:
+            qm_node = qm.CombinedSeriesFrame(
+                {
+                    name: series._qm_node
+                    for name, series in (self._series | {name: value}).items()
+                }
+            )
+        except qm.PatientDomainError:
+            raise TypeError(
+                "event tables must have columns with more than one value per patient; "
+                "for single values per patient use dataset variables"
+            )
+        except qm.DomainMismatchError:
+            raise Error(
+                "cannot combine series drawn from different tables; "
+                "create a new event table for these series"
+            )
+        self._series[name] = value
+        object.__setattr__(self, "_qm_node", qm_node)
+
+    def __setattr__(self, name, value):
+        self.add_column(name, value)
+
+    def __getattr__(self, name):
+        return self._series[name]
+
+
+def _validate_attribute_name(name, defined_names, context):
+    if name in defined_names:
+        raise AttributeError(f"'{name}' is already set and cannot be reassigned")
+    if name in ("patient_id", "population", "dummy_data_config"):
+        raise AttributeError(f"'{name}' is not an allowed {context} name")
+    if not VALID_ATTRIBUTE_NAME_RE.match(name):
+        raise AttributeError(
+            f"{context} names must start with a letter, and contain only "
+            f"alphanumeric characters and underscores (you defined a "
+            f"{context} '{name}')"
         )
 
 

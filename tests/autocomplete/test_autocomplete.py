@@ -617,6 +617,8 @@ def test_all_query_model_non_series_methods(query_language_methods):
         ("EventFrame", "sort_by"),
         ("when", "then"),
         ("WhenThen", "otherwise"),
+        # Temporarily ignore this while it's non-public
+        ("EventTable", "add_column"),
     ]
 
     # Same logic as in previous test to find methods actually tested in the autocomplete definition file

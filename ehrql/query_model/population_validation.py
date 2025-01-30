@@ -95,7 +95,7 @@ class EmptyQueryEngine(InMemoryQueryEngine):
         return {1}
 
     def series_evaluates_true(self, series):
-        results = self.get_results(Dataset(population=series, variables={}))
+        results = self.get_results(Dataset(population=series, variables={}, events={}))
         return bool(list(results))
 
     def visit_SelectTable(self, node):

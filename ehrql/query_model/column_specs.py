@@ -30,9 +30,13 @@ def get_table_specs(dataset):
     """
     Return the specifications for all the results tables this Dataset will produce
     """
-    # At present, Datasets only ever produce a single results table (which we call
-    # `dataset`) but this gives us the API we need for future expansion
-    return {"dataset": get_column_specs_from_variables(dataset.variables)}
+    return {
+        "dataset": get_column_specs_from_variables(dataset.variables),
+        **{
+            name: get_column_specs_from_variables(frame.series)
+            for name, frame in dataset.events.items()
+        },
+    }
 
 
 def get_column_specs_from_variables(variables):

@@ -1,5 +1,6 @@
 import datetime
 import logging
+import os
 import secrets
 from functools import cached_property
 
@@ -107,15 +108,23 @@ class BaseSQLQueryEngine(BaseQueryEngine):
         # generating the variable expressions below
         self.population_table = population_table
 
-        variable_expressions = {
-            name: self.get_expr(definition)
-            for name, definition in dataset.variables.items()
-        }
-        query = sqlalchemy.select(population_table.c.patient_id)
-        query = query.add_columns(
-            *[expr.label(name) for name, expr in variable_expressions.items()]
+        dataset_query = self.add_variables_to_query(
+            sqlalchemy.select(population_table.c.patient_id),
+            dataset.variables,
         )
-        query = apply_patient_joins(query)
+
+        # We want to be able to run tests for this behaviour without enabling it in
+        # production
+        if os.environ.get("EHRQL_ENABLE_EVENT_LEVEL_QUERIES") == "True":
+            other_queries = [
+                self.add_variables_to_query(
+                    self.get_select_query_for_node_domain(frame),
+                    frame.series,
+                )
+                for frame in dataset.events.values()
+            ]
+        else:  # pragma: no cover
+            other_queries = []
 
         # We use an instance variable to store the population table in order to avoid
         # having to thread it through all our `get_sql`/`get_table` method calls. But
@@ -127,9 +136,23 @@ class BaseSQLQueryEngine(BaseQueryEngine):
         self.get_sql.cache_clear()
         self.get_table.cache_clear()
 
-        # At the moment we only support a single results table and so we'll only ever
-        # have a single query
-        return [query]
+        return [dataset_query, *other_queries]
+
+    def add_variables_to_query(self, query, variables):
+        # We're relying on this shared population table reference to apply the
+        # population condition to any event-level queries below. If this ever changes
+        # we'll need to do something else to ensure that event-level queries only
+        # include patients in the population.
+        assert self.population_table is not None
+
+        variable_expressions = {
+            name: self.get_expr(definition) for name, definition in variables.items()
+        }
+        query = query.add_columns(
+            *[expr.label(name) for name, expr in variable_expressions.items()]
+        )
+        query = apply_patient_joins(query)
+        return query
 
     def select_patient_id_for_population(self, population_expression):
         """

@@ -277,6 +277,61 @@ def test_render_related_event_series(dummy_tables_path):
     ]
 
 
+def test_render_dataset_event_tables_with_population(dummy_tables_path):
+    dataset = create_dataset()
+    dataset.define_population(patients.sex == "male")
+    dataset.add_event_table("test", date=events.date, code=events.code)
+    with activate_debug_context(
+        dummy_tables_path=dummy_tables_path,
+        render_function=json_render_function,
+    ) as ctx:
+        rendered = ctx.render(dataset.test)
+    assert json.loads(rendered) == [
+        {
+            "patient_id": 1,
+            "row_id": 1,
+            "date": "2010-01-01",
+            "code": "abc",
+        },
+        {
+            "patient_id": 1,
+            "row_id": 2,
+            "date": "2020-01-01",
+            "code": "def",
+        },
+    ]
+
+
+def test_render_dataset_event_tables_without_population(dummy_tables_path):
+    dataset = create_dataset()
+    dataset.add_event_table("test", date=events.date, code=events.code)
+    with activate_debug_context(
+        dummy_tables_path=dummy_tables_path,
+        render_function=json_render_function,
+    ) as ctx:
+        rendered = ctx.render(dataset.test)
+    assert json.loads(rendered) == [
+        {
+            "patient_id": 1,
+            "row_id": 1,
+            "date": "2010-01-01",
+            "code": "abc",
+        },
+        {
+            "patient_id": 1,
+            "row_id": 2,
+            "date": "2020-01-01",
+            "code": "def",
+        },
+        {
+            "patient_id": 2,
+            "row_id": 3,
+            "date": "2005-01-01",
+            "code": "abc",
+        },
+    ]
+
+
 def test_render_date_difference(dummy_tables_path):
     with activate_debug_context(
         dummy_tables_path=dummy_tables_path,

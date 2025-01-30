@@ -1,8 +1,9 @@
-from datetime import datetime
+from datetime import date, datetime
 
 import pytest
 
 from ehrql.file_formats import FILE_FORMATS
+from ehrql.tables import core
 from tests.lib.file_utils import read_file_as_dicts
 from tests.lib.inspect_utils import function_body_as_string
 from tests.lib.tpp_schema import AllowedPatientsWithTypeOneDissent, Patient
@@ -376,3 +377,79 @@ def test_generate_dataset_with_test_data_file(call_cli, tmp_path):
     assert "All OK!" in captured.out
     # Check we also generated some output
     assert len(output_file.read_text()) > 0
+
+
+def test_generate_dataset_with_event_level_data(sqlite_engine, call_cli, tmp_path):
+    engine = sqlite_engine
+    extension = "csv"
+
+    engine.populate(
+        {
+            core.patients: [
+                {"patient_id": 1, "date_of_birth": date(1980, 1, 1)},
+                {"patient_id": 2, "date_of_birth": date(1990, 1, 1)},
+                {"patient_id": 3, "date_of_birth": date(2000, 1, 1)},
+            ],
+            core.clinical_events: [
+                {"patient_id": 1, "date": date(2020, 1, 1), "snomedct_code": "123456"},
+                {"patient_id": 1, "date": date(2020, 2, 1), "snomedct_code": "123456"},
+                {"patient_id": 1, "date": date(2020, 2, 1), "snomedct_code": "923456"},
+                {"patient_id": 2, "date": date(2020, 3, 1), "snomedct_code": "123456"},
+                {"patient_id": 2, "date": date(2020, 4, 1), "snomedct_code": "123457"},
+                {"patient_id": 3, "date": date(2020, 5, 1), "snomedct_code": "123456"},
+                {"patient_id": 3, "date": date(2020, 6, 1), "snomedct_code": "123457"},
+                {"patient_id": 3, "date": date(2020, 7, 1), "snomedct_code": "123456"},
+            ],
+        }
+    )
+
+    @function_body_as_string
+    def dataset_definition():
+        from ehrql import create_dataset
+        from ehrql.tables.core import clinical_events, patients
+
+        dataset = create_dataset()
+        dataset.define_population(patients.date_of_birth.year != 1990)
+        dataset.dob = patients.date_of_birth
+        events_1 = clinical_events.where(
+            clinical_events.snomedct_code.is_in(["123456", "123457"])
+        )
+        events_2 = clinical_events.where(
+            clinical_events.snomedct_code.is_in(["923456"])
+        )
+        dataset.add_event_table(
+            "events_1", date=events_1.date, code=events_1.snomedct_code
+        )
+        dataset.add_event_table(
+            "events_2", date=events_2.date, code=events_2.snomedct_code
+        )
+
+    dataset_definition_path = tmp_path / "dataset_definition.py"
+    dataset_definition_path.write_text(dataset_definition)
+    output_path = tmp_path / "results"
+
+    call_cli(
+        "generate-dataset",
+        dataset_definition_path,
+        "--output",
+        f"{output_path}:{extension}",
+        "--dsn",
+        engine.database.host_url(),
+        "--query-engine",
+        engine.name,
+    )
+
+    assert read_file_as_dicts(output_path / f"dataset.{extension}") == [
+        {"patient_id": "1", "dob": "1980-01-01"},
+        {"patient_id": "3", "dob": "2000-01-01"},
+    ]
+    assert read_file_as_dicts(output_path / f"events_1.{extension}") == [
+        {"patient_id": "1", "date": "2020-01-01", "code": "123456"},
+        {"patient_id": "1", "date": "2020-02-01", "code": "123456"},
+        {"patient_id": "3", "date": "2020-05-01", "code": "123456"},
+        {"patient_id": "3", "date": "2020-06-01", "code": "123457"},
+        {"patient_id": "3", "date": "2020-07-01", "code": "123456"},
+    ]
+    assert read_file_as_dicts(output_path / f"events_2.{extension}") == [
+        {"patient_id": "1", "date": "2020-02-01", "code": "923456"},
+    ]

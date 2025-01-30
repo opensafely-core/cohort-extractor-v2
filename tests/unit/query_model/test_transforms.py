@@ -361,4 +361,4 @@ def test_substitute_parameters():
 
 
 def dataset_factory(**variables):
-    return Dataset(population=Value(False), variables=variables)
+    return Dataset(population=Value(False), variables=variables, events={})

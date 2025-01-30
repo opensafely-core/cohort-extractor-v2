@@ -4,6 +4,7 @@ from collections import namedtuple
 
 from ehrql.query_engines.base import BaseQueryEngine
 from ehrql.query_engines.in_memory_database import (
+    EventTable,
     PatientColumn,
     PatientTable,
     apply_function,
@@ -28,14 +29,15 @@ class InMemoryQueryEngine(BaseQueryEngine):
     tests, and a to provide a reference implementation for other engines.
     """
 
-    def get_results_stream(self, dataset):
-        table = self.get_results_as_patient_table(dataset)
-        Row = namedtuple("Row", table.name_to_col.keys())
-        yield self.RESULTS_START
-        for record in table.to_records():
-            yield Row(**record)
+    def get_results_tables(self, dataset):
+        for table in self.get_results_as_in_memory_tables(dataset):
+            # The row_id column is an internal implementation detail of the in-memory
+            # engine and should not appear in the results
+            columns = [name for name in table.name_to_col.keys() if name != "row_id"]
+            Row = namedtuple("Row", columns)
+            yield (Row(*(r[c] for c in columns)) for r in table.to_records())
 
-    def get_results_as_patient_table(self, dataset):
+    def get_results_as_in_memory_tables(self, dataset):
         assert isinstance(dataset, qm.Dataset)
 
         self.cache = {}
@@ -46,25 +48,33 @@ class InMemoryQueryEngine(BaseQueryEngine):
         # patient IDs contained in those in our big list of all the patients
         all_patients = self.all_patients.union(all_inline_patient_ids(dataset))
 
+        # Determine the population
+        population = self.visit(dataset.population)
+        assert isinstance(population, PatientColumn)
+
+        # Build PatientColumns for the ID and each patient-level variable
         name_to_col = {
             "patient_id": PatientColumn(
                 {patient: patient for patient in all_patients},
                 default=None,
             )
         }
-
         for name, node in dataset.variables.items():
             col = self.visit(node)
             assert isinstance(col, PatientColumn)
             name_to_col[name] = col
 
-        population = self.visit(dataset.population)
-        assert isinstance(population, PatientColumn)
-
+        # Combine the columns into a PatientTable
         table = PatientTable(name_to_col)
+        # Filter out any rows associated with patients not in the population
         table = table.filter(population)
 
-        return table
+        # Build any specified EventTables
+        other_tables = [
+            self.visit(frame).filter(population) for frame in dataset.events.values()
+        ]
+
+        return [table, *other_tables]
 
     @property
     def database(self):
@@ -369,6 +379,21 @@ class InMemoryQueryEngine(BaseQueryEngine):
 
     def visit_MinimumOf(self, node):
         return self.visit_nary_op_disregarding_null(node, min)
+
+    def visit_CombinedSeriesFrame(self, node):
+        columns = [self.visit(series) for series in node.series.values()]
+        # Combine the list of columns into a single column of tuples (doing things
+        # this way allows us to use `apply_fuction` which handles lining everything
+        # up correctly for us)
+        combined = apply_function(lambda *args: args, *columns)
+        # Expand the single column of tuples out into a table of multiple columns
+        return EventTable.from_records(
+            ["patient_id", "row_id", *node.series.keys()],
+            (
+                (record["patient_id"], record["row_id"], *record["value"])
+                for record in combined.to_records()
+            ),
+        )
 
 
 def case_flattened(default, *cases):

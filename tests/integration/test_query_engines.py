@@ -34,7 +34,7 @@ def test_handles_degenerate_population(engine):
     # Specifying a population of "False" is obviously silly, but it's more work to
     # identify and reject just this kind of silliness than it is to handle it gracefully
     engine.setup(metadata=sqlalchemy.MetaData())
-    dataset = Dataset(
+    dataset = build_dataset(
         population=Value(False),
         variables={"v": Value(1)},
     )
@@ -196,7 +196,7 @@ def test_minimum_maximum_of_single_series(engine, operation):
         }
     )
 
-    dataset = Dataset(
+    dataset = build_dataset(
         population=as_query_model(patients.exists_for_patient()),
         variables={
             "v": operation(
@@ -332,7 +332,7 @@ def test_population_which_uses_combine_as_set_and_no_patient_frame(engine):
     # so it's possible to use it to create a population SQL expression which references
     # just a single event-level SQL table. This falsifies a previous assumption we made
     # and so we need to test that we handle it correctly.
-    dataset = Dataset(
+    dataset = build_dataset(
         population=Function.In(
             Value(1),
             AggregateByPatient.CombineAsSet(as_query_model(events.i)),
@@ -395,3 +395,52 @@ def test_cast_to_int_on_minimum_of_float(engine):
     assert engine.extract(dataset) == [
         {"patient_id": 1, "i": 1},
     ]
+
+
+def test_basic_event_level_data_support(engine):
+    engine.populate(
+        {
+            patients: [
+                {"patient_id": 1, "i": 100},
+                {"patient_id": 2, "i": 200},
+                {"patient_id": 3, "i": 300},
+                {"patient_id": 4, "i": 400},
+            ],
+            events: [
+                {"patient_id": 1, "code": "a"},
+                {"patient_id": 1, "code": "b"},
+                {"patient_id": 1, "code": "c"},
+                {"patient_id": 2, "code": "d"},
+                {"patient_id": 3, "code": "e"},
+                {"patient_id": 3, "code": "f"},
+                {"patient_id": 4, "code": "g"},
+                {"patient_id": 4, "code": "h"},
+                {"patient_id": 5, "code": "i"},
+            ],
+        }
+    )
+    dataset = create_dataset()
+    dataset.define_population(patients.i != 300)
+    dataset.i = patients.i
+    dataset.add_event_table("events", c=events.code)
+
+    assert engine.get_results_tables(dataset) == [
+        [
+            {"patient_id": 1, "i": 100},
+            {"patient_id": 2, "i": 200},
+            {"patient_id": 4, "i": 400},
+        ],
+        [
+            {"patient_id": 1, "c": "a"},
+            {"patient_id": 1, "c": "b"},
+            {"patient_id": 1, "c": "c"},
+            {"patient_id": 2, "c": "d"},
+            {"patient_id": 4, "c": "g"},
+            {"patient_id": 4, "c": "h"},
+        ],
+    ]
+
+
+# Yeah, yeah mutable defaults – but nothing mutates them
+def build_dataset(*, population, variables={}, events={}):
+    return Dataset(population=population, variables=variables, events=events)

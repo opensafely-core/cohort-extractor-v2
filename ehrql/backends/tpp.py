@@ -128,6 +128,7 @@ class TPPBackend(SQLBackend):
         return qm.Dataset(
             population=new_population,
             variables=dataset.variables,
+            events=dataset.events,
         )
 
     def get_exit_status_for_exception(self, exception):

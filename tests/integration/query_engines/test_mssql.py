@@ -22,6 +22,7 @@ def test_get_results_with_retries(mssql_engine):
     dataset = Dataset(
         population=AggregateByPatient.Exists(patient_table),
         variables={"i": SelectColumn(patient_table, "i")},
+        events={},
     )
     mssql_engine.populate(
         {

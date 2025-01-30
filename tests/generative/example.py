@@ -20,5 +20,6 @@ p0 = SelectPatientTable(
 dataset = Dataset(
     population=AggregateByPatient.Exists(p0),
     variables={"v": SelectColumn(p0, "i1")},
+    events={},
 )
 data = []

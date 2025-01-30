@@ -205,7 +205,9 @@ class QueryEngineFixture:
         results_tables = query_engine.get_results_tables(dataset)
         # We don't explicitly order the results and not all databases naturally
         # return in the same order
-        return [[row._asdict() for row in sorted(table)] for table in results_tables]
+        return [
+            [row._asdict() for row in sort_table(table)] for table in results_tables
+        ]
 
     def extract(self, dataset, **engine_kwargs):
         return self.get_results_tables(dataset, **engine_kwargs)[0]
@@ -218,6 +220,16 @@ class QueryEngineFixture:
 
     def sqlalchemy_engine(self):
         return self.query_engine().engine
+
+
+def sort_table(table):
+    # Python won't naturally compare None with other values, but we need to sort tables
+    # containg None values so we treat None as smaller than all other values
+    return sorted(table, key=sort_key_with_nones)
+
+
+def sort_key_with_nones(row):
+    return [(v is not None, v) for v in row]
 
 
 QUERY_ENGINE_NAMES = ("in_memory", "sqlite", "mssql", "trino")
@@ -269,6 +281,11 @@ def trino_engine(request):
 @pytest.fixture
 def in_memory_engine(request):
     return engine_factory(request, "in_memory")
+
+
+@pytest.fixture
+def sqlite_engine(request):
+    return engine_factory(request, "sqlite")
 
 
 @pytest.fixture(scope="session")

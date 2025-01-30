@@ -8,6 +8,7 @@ from hypothesis.control import current_build_context
 from ehrql.query_model.nodes import (
     AggregateByPatient,
     Case,
+    CombinedSeriesFrame,
     Dataset,
     Filter,
     Function,
@@ -602,9 +603,15 @@ def dataset(patient_tables, event_tables, schema, value_strategies):
     #
     # Puts everything above together to create a variable.
     @st.composite
-    def valid_variable(draw):
+    def valid_patient_variable(draw):
         type_ = draw(any_type())
         frame = draw(one_row_per_patient_frame())
+        return draw(series(type_, frame))
+
+    @st.composite
+    def valid_event_series(draw):
+        type_ = draw(any_type())
+        frame = draw(many_rows_per_patient_frame())
         return draw(series(type_, frame))
 
     # A population definition is a boolean-typed variable that meets some additional
@@ -616,11 +623,19 @@ def dataset(patient_tables, event_tables, schema, value_strategies):
         hyp.assume(is_valid_population(population))
         return population
 
-    return st.builds(make_dataset, valid_population(), valid_variable())
+    return st.builds(
+        make_dataset, valid_population(), valid_patient_variable(), valid_event_series()
+    )
 
 
-def make_dataset(population, variable):
-    return Dataset(population=population, variables={"v": variable})
+def make_dataset(population, patient_variable, event_series):
+    return Dataset(
+        population=population,
+        variables={"v": patient_variable},
+        events={
+            "event_table": CombinedSeriesFrame({"e": event_series}),
+        },
+    )
 
 
 def is_valid_population(series):

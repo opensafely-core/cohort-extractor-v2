@@ -120,6 +120,7 @@ def test_dataset():
                 )
             ),
         },
+        events={},
     )
 
 
@@ -172,7 +173,7 @@ def test_dataset_accepts_valid_variable_names(name):
 def test_add_column():
     dataset = Dataset()
     dataset.add_column("foo", patients.i)
-    variables = list(dataset.variables.keys())
+    variables = list(dataset._variables.keys())
     assert variables == ["foo"]
 
 
@@ -180,14 +181,13 @@ def test_add_column():
     "variable_name,error",
     [
         ("population", "Cannot set variable 'population'; use define_population"),
-        ("variables", "'variables' is not an allowed variable name"),
         ("patient_id", "'patient_id' is not an allowed variable name"),
         (
             "dummy_data_config",
             "'dummy_data_config' is not an allowed variable name",
         ),
-        ("_something", "Variable names must start with a letter"),
-        ("1something", "Variable names must start with a letter"),
+        ("_something", "variable names must start with a letter"),
+        ("1something", "variable names must start with a letter"),
         ("something!", "contain only alphanumeric characters and underscores"),
     ],
 )
@@ -282,6 +282,90 @@ def test_dataset_setattr_rejects_invalid_variables(variable, error):
 def test_accessing_unassigned_variable_gives_helpful_error():
     with pytest.raises(AttributeError, match="'foo' has not been defined"):
         Dataset().foo
+
+
+def test_add_event_table():
+    dataset = Dataset()
+    dataset.define_population(events.exists_for_patient())
+
+    dataset.add_event_table("some_events", date=events.event_date)
+    dataset.some_events.add_column("f", events.f)
+    dataset.some_events.f_double = dataset.some_events.f * 2
+
+    assert dataset._compile() == qm.Dataset(
+        population=qm.AggregateByPatient.Exists(
+            source=SelectTable(name="events", schema=events_schema)
+        ),
+        variables={},
+        events={
+            "some_events": qm.CombinedSeriesFrame(
+                series={
+                    "date": SelectColumn(
+                        source=SelectTable(name="events", schema=events_schema),
+                        name="event_date",
+                    ),
+                    "f": SelectColumn(
+                        source=SelectTable(name="events", schema=events_schema),
+                        name="f",
+                    ),
+                    "f_double": Function.Multiply(
+                        lhs=SelectColumn(
+                            source=SelectTable(name="events", schema=events_schema),
+                            name="f",
+                        ),
+                        rhs=Value(value=2.0),
+                    ),
+                }
+            )
+        },
+    )
+
+
+def test_add_event_table_rejects_clashing_names():
+    dataset = Dataset()
+    dataset.dob = patients.date_of_birth
+    dataset.add_event_table("f", f=events.f)
+
+    with pytest.raises(
+        AttributeError,
+        match="'dob' is already set and cannot be reassigned",
+    ):
+        dataset.add_event_table("dob", f=events.f)
+
+    with pytest.raises(
+        AttributeError,
+        match="'f' is already set and cannot be reassigned",
+    ):
+        dataset.f = events.f.maximum_for_patient()
+
+
+def test_add_event_table_rejects_empty_tables():
+    dataset = Dataset()
+    with pytest.raises(
+        ValueError,
+        match="event tables must be defined with at least one column",
+    ):
+        dataset.add_event_table("test")
+
+
+def test_add_event_table_rejects_patient_series():
+    dataset = Dataset()
+    with pytest.raises(
+        TypeError,
+        match="event tables must have columns with more than one value per patient",
+    ):
+        dataset.add_event_table("test", dob=patients.date_of_birth)
+
+
+def test_add_event_table_rejects_mixed_domains():
+    dataset = Dataset()
+    dataset.add_event_table("events", f=events.f)
+    filtered_events = events.where(events.event_date > "2000-01-01")
+    with pytest.raises(
+        Error,
+        match="cannot combine series drawn from different tables",
+    ):
+        dataset.events.filtered_f = filtered_events.f
 
 
 # The problem: We'd like to test that operations on query language (QL) elements return

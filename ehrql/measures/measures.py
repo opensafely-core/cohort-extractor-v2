@@ -3,7 +3,7 @@ import datetime
 from collections import namedtuple
 
 from ehrql.query_language import (
-    VALID_VARIABLE_NAME_RE,
+    VALID_ATTRIBUTE_NAME_RE,
     BoolPatientSeries,
     DummyDataConfig,
     Duration,
@@ -167,7 +167,7 @@ class Measures:
                 raise Error(f"No value supplied for '{key}' and no default defined")
 
         # Ensure measure names are valid
-        if not VALID_VARIABLE_NAME_RE.match(name):
+        if not VALID_ATTRIBUTE_NAME_RE.match(name):
             raise Error(
                 f"Measure names must start with a letter and contain only"
                 f" alphanumeric characters and underscores, got: {name!r}"
@@ -276,7 +276,7 @@ class Measures:
                 raise Error(
                     f"`group_by` names must be strings, got '{type(key)}': {key!r}"
                 )
-            if not VALID_VARIABLE_NAME_RE.match(key):
+            if not VALID_ATTRIBUTE_NAME_RE.match(key):
                 raise Error(
                     f"`group_by` names must start with a letter and contain only"
                     f" alphanumeric characters and underscores, got: {key!r}"

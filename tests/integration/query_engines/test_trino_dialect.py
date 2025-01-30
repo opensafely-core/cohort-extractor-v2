@@ -24,6 +24,7 @@ def test_float_precision(trino_engine):
     dataset = Dataset(
         population=AggregateByPatient.Exists(t),
         variables={"v": Function.Subtract(f1, Function.Add(f1, f2))},
+        events={},
     )
 
     results = trino_engine.extract(dataset)

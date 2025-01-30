@@ -36,7 +36,11 @@ def test_gentest_example_simplify():
         ),
         Value(frozenset({1, 2, 3})),
     )
-    dataset = Dataset(population=population, variables={"v": variable})
+    dataset = Dataset(
+        population=population,
+        variables={"v": variable},
+        events={},
+    )
     data = [
         {"type": data_setup.P0, "patient_id": 1},
     ]
