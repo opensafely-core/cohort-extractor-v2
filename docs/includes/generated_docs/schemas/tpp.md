@@ -420,6 +420,18 @@ The destination of a patient on completion of a hospital provider spell, or that
 </div>
 
 <div markdown="block">
+  <dt id="apcs.discharge_method">
+    <strong>discharge_method</strong>
+    <a class="headerlink" href="#apcs.discharge_method" title="Permanent link">🔗</a>
+    <code>string</code>
+  </dt>
+  <dd markdown="block">
+The method of discharge from a hospital provider spell. Currently the code is a 1 character string (e.g. 1 = discharged on clinical advice, 4 = died). Refer to [this documentation](https://www.datadictionary.nhs.uk/attributes/discharge_method.html) for a full list of codes.
+
+  </dd>
+</div>
+
+<div markdown="block">
   <dt id="apcs.spell_core_hrg_sus">
     <strong>spell_core_hrg_sus</strong>
     <a class="headerlink" href="#apcs.spell_core_hrg_sus" title="Permanent link">🔗</a>

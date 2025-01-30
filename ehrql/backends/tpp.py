@@ -221,6 +221,7 @@ class TPPBackend(SQLBackend):
                 apcs.Admission_Date AS admission_date,
                 apcs.Discharge_Date AS discharge_date,
                 apcs.Discharge_Destination as discharge_destination,
+                apcs.Discharge_Method as discharge_method,
                 apcs.Spell_Core_HRG_SUS AS spell_core_hrg_sus,
                 apcs.Admission_Method AS admission_method,
                 apcs.Der_Diagnosis_All AS all_diagnoses,

@@ -284,6 +284,16 @@ class apcs(EventFrame):
             "for a full list of codes."
         ),
     )
+    discharge_method = Series(
+        str,
+        description=(
+            "The method of discharge from a hospital provider spell. "
+            "Currently the code is a 1 character string (e.g. 1 = discharged on clinical advice, "
+            "4 = died). "
+            "Refer to [this documentation](https://www.datadictionary.nhs.uk/attributes/discharge_method.html) "
+            "for a full list of codes."
+        ),
+    )
     spell_core_hrg_sus = Series(
         str,
         description=(
