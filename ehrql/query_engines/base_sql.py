@@ -129,7 +129,30 @@ class BaseSQLQueryEngine(BaseQueryEngine):
 
         # At the moment we only support a single results table and so we'll only ever
         # have a single query
-        return [query]
+        queries = [query]
+
+        if dataset.measures:
+            assert len(queries) == 1, (
+                "Measures queries can only be applied to a single results table"
+            )
+            results_query = query.subquery()
+            measure_queries = []
+            for measure in dataset.measures.values():
+                sum_overs = [
+                    sqlalchemy.func.sum(results_query.c[sum_over_col]).label(f"sum_{i}")
+                    for i, sum_over_col in enumerate(measure.sum_over)
+                ]
+                group_bys = [
+                    results_query.c[group_by_col] for group_by_col in measure.group_by
+                ]
+                group_query = sqlalchemy.select(
+                    *sum_overs,
+                    *group_bys,
+                ).group_by(*group_bys)
+                measure_queries.append(group_query)
+            return measure_queries
+
+        return queries
 
     def select_patient_id_for_population(self, population_expression):
         """

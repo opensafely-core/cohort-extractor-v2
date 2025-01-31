@@ -70,20 +70,20 @@ def test_generate_measures(
         assert output_file.read_text() == textwrap.dedent(
             """\
             measure,interval_start,interval_end,ratio,numerator,denominator,sex
-            births,2020-01-01,2020-12-31,,0,0,male
             births,2020-01-01,2020-12-31,0.0,0,10,female
-            births,2021-01-01,2021-12-31,,0,0,male
+            births,2020-01-01,2020-12-31,,0,0,male
             births,2021-01-01,2021-12-31,1.0,10,10,female
+            births,2021-01-01,2021-12-31,,0,0,male
             """
         )
     else:
         assert output_file.read_text() == textwrap.dedent(
             """\
             measure,interval_start,interval_end,ratio,numerator,denominator,sex
-            births,2020-01-01,2020-12-31,1.0,1,1,male
             births,2020-01-01,2020-12-31,0.0,0,8,female
-            births,2021-01-01,2021-12-31,0.0,0,1,male
+            births,2020-01-01,2020-12-31,1.0,1,1,male
             births,2021-01-01,2021-12-31,1.0,8,8,female
+            births,2021-01-01,2021-12-31,0.0,0,1,male
             """
         )
 

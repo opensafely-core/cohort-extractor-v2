@@ -126,11 +126,18 @@ class OneRowPerPatientSeries(Series): ...
 class ManyRowsPerPatientSeries(Series): ...
 
 
+class GroupedSum(Frame):
+    sum_over: tuple[str]
+    group_by: tuple[str]
+
+
 # Combines a collection of OneRowPerPatientSeries with a "population" predicate which
 # defines membership
+# and measures which define aggregations to be performed on this Dataset population
 class Dataset(OneRowPerPatientFrame):
     population: Series[bool]
     variables: Mapping[str, Series[Any]]
+    measures: Mapping[str, GroupedSum] = dataclasses.field(default_factory=dict)
 
     def __hash__(self):
         # `variables` is a dict and so not naturally hashable, but we treat it as
@@ -142,6 +149,8 @@ class Dataset(OneRowPerPatientFrame):
                 self.population,
                 frozenset(self.variables),
                 frozenset(self.variables.values()),
+                frozenset(self.measures),
+                frozenset(self.measures.values()),
             )
         )
 
@@ -589,9 +598,12 @@ def validate_input_domains(node):
                 "Attempt to sort frame by a one-row-per-patient series"
             )
     elif isinstance(node, Dataset):
-        if get_input_domains(node) != {Domain.PATIENT}:
+        if get_input_domains(node) not in [
+            {Domain.PATIENT},
+            {Domain.PATIENT, Domain.MEASURE},
+        ]:
             raise DomainMismatchError(
-                "Dataset can only contain one-row-per-patient series"
+                "Dataset can only contain one-row-per-patient series or measure grouped-sum"
             )
     else:
         non_patient_domains = get_input_domains(node) - {Domain.PATIENT}
@@ -627,6 +639,7 @@ class Domain:
 
 # We use an arbitrary string to represent the patient domain for more readable debugging
 Domain.PATIENT = Domain(("PatientDomain",))
+Domain.MEASURE = Domain(("GroupedSum",))
 
 
 def get_input_domains(node):

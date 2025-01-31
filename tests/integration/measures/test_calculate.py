@@ -101,6 +101,94 @@ def test_get_measure_results(engine):
     assert set(results) == set(expected)
 
 
+def test_get_measures_interval_dependent_denominator(engine):
+    # Test results when an interval denominator is dependent on the specific interval
+    # (i.e. values in other intervals affect the inclusion in this interval population)
+    # i.e. the union of all measure denominators will exclude some patients
+    intervals = years(2).starting_on("2020-01-01")
+    measures = Measures()
+
+    is_female = patients.sex == "female"
+    had_event_in_interval = events.where(
+        events.date.is_during(INTERVAL)
+    ).exists_for_patient()
+    had_event_outside_interval = events.where(
+        events.date.is_before(INTERVAL.start_date)
+        | events.date.is_after(INTERVAL.end_date)
+    ).exists_for_patient()
+    measures.define_measure(
+        "female_by_events_outside_interval_only",
+        numerator=is_female,
+        denominator=had_event_outside_interval & ~(had_event_in_interval),
+        intervals=intervals,
+    )
+
+    patient_data = [
+        dict(patient_id=1, sex="male"),
+        dict(patient_id=2, sex="female"),
+        dict(patient_id=3, sex="male"),
+        dict(patient_id=4, sex="female"),
+    ]
+    event_data = [
+        # Interval 1 includes only patient 2 (female) in the population (has an event in interval 2 only)
+        # Interval 2 includes only patient 1 (male) in the population (has an event in interval 1 only)
+        dict(patient_id=1, code="abc", date=date(2020, 2, 1)),
+        dict(patient_id=2, code="abc", date=date(2021, 2, 1)),
+        # Patient 3 and 4 have events in both intervals, so aren't included in the population for
+        # either
+        dict(patient_id=3, code="abc", date=date(2020, 2, 1)),
+        dict(patient_id=4, code="abc", date=date(2020, 2, 1)),
+        dict(patient_id=3, code="abc", date=date(2021, 2, 1)),
+        dict(patient_id=4, code="abc", date=date(2021, 2, 1)),
+    ]
+    engine.populate({patients: patient_data, events: event_data})
+    results = get_measure_results(engine.query_engine(), measures)
+
+    expected = [
+        # interval 1 has 1 female patient in the population - numerator 1, denominator 1
+        (
+            "female_by_events_outside_interval_only",
+            date(2020, 1, 1),
+            date(2020, 12, 31),
+            1.0,
+            1,
+            1,
+        ),
+        # interval 2 has 1 male patient in the population - numerator 0, denominator 1
+        (
+            "female_by_events_outside_interval_only",
+            date(2021, 1, 1),
+            date(2021, 12, 31),
+            0.0,
+            0,
+            1,
+        ),
+    ]
+
+    assert set(results) == set(expected)
+
+
+def test_get_measures_same_numerator_and_denominator(engine):
+    # Ensure that calculations are handled correctly when the same column
+    # is used as both numerator and denominator
+    intervals = years(2).starting_on("2020-01-01")
+    measures = Measures()
+    measures.define_measure(
+        "test",
+        numerator=patients.exists_for_patient(),
+        denominator=patients.exists_for_patient(),
+        intervals=intervals,
+    )
+    patient_data = [dict(patient_id=1), dict(patient_id=2)]
+    engine.populate({patients: patient_data})
+    results = set(get_measure_results(engine.query_engine(), measures))
+    expected = {
+        ("test", date(2020, 1, 1), date(2020, 12, 31), 1.0, 2, 2),
+        ("test", date(2021, 1, 1), date(2021, 12, 31), 1.0, 2, 2),
+    }
+    assert results == expected
+
+
 @mock.patch("ehrql.measures.calculate.time")
 def test_get_measure_results_with_timeout(patched_time, in_memory_engine):
     events_in_interval = events.where(events.date.is_during(INTERVAL))
@@ -140,14 +228,20 @@ def generate_data(intervals):
         for patient_id in range(1, 50)
     ]
     # Generate some addresses (at least one) for each patient
+    # Make sure that address dates for the same patient are different; otherwise
+    # we can't be sure which region will be returned as the last
     address_data = []
     interval_range = (intervals[0][0], intervals[-1][1])
     for patient in patient_data:
+        address_dates = set()
         for _ in range(rnd.randint(1, 3)):
+            address_dates.add(random_date_in_interval(rnd, interval_range))
+
+        for address_date in address_dates:
             address_data.append(
                 dict(
                     patient_id=patient["patient_id"],
-                    date=random_date_in_interval(rnd, interval_range),
+                    date=address_date,
                     region=rnd.choice(["London", "The North", "The Countryside"]),
                 )
             )
