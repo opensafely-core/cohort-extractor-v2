@@ -137,7 +137,7 @@ class GroupedSum(Frame):
 class Dataset(OneRowPerPatientFrame):
     population: Series[bool]
     variables: Mapping[str, Series[Any]]
-    measures: Mapping[str, GroupedSum]
+    measures: Mapping[str, GroupedSum] = dataclasses.field(default_factory=dict)
 
     def __hash__(self):
         # `variables` is a dict and so not naturally hashable, but we treat it as
