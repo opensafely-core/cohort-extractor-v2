@@ -16,9 +16,9 @@ build==1.2.2.post1 \
     --hash=sha256:1d61c0887fa860c01971625baae8bdd338e517b836a2f70dd1f7aa3a6b2fc5b5 \
     --hash=sha256:b36993e92ca9375a219c99e606a122ff365a760a2d4bba0caa09bd5278b608b7
     # via pip-tools
-certifi==2024.12.14 \
-    --hash=sha256:1275f7a45be9464efc1173084eaa30f866fe2e47d389406136d332ed4967ec56 \
-    --hash=sha256:b650d30f370c2b724812bee08008be0c4163b163ddaec3f2546c1caf65f191db
+certifi==2025.1.31 \
+    --hash=sha256:3d5da6925056f6f18f119200434a4780a94263f10d1c21d032a6f6b2baa20651 \
+    --hash=sha256:ca78db4565a652026a4db2bcdf68f2fb589ea80d0be70e03929ed730746b84fe
     # via
     #   -c /home/runner/work/ehrql/ehrql/requirements.prod.txt
     #   requests
@@ -328,9 +328,9 @@ mkdocs-get-deps==0.2.0 \
     --hash=sha256:162b3d129c7fad9b19abfdcb9c1458a651628e4b1dea628ac68790fb3061c60c \
     --hash=sha256:2bf11d0b133e77a0dd036abeeb06dec8775e46efa526dc70667d8863eefc6134
     # via mkdocs
-mkdocs-material==9.5.50 \
-    --hash=sha256:ae5fe16f3d7c9ccd05bb6916a7da7420cf99a9ce5e33debd9d40403a090d5825 \
-    --hash=sha256:f24100f234741f4d423a9d672a909d859668a4f404796be3cf035f10d6050385
+mkdocs-material==9.6.1 \
+    --hash=sha256:c1742d410be29811a9b7e863cb25a578b9e255fe6f04c69f8c6838863a58e141 \
+    --hash=sha256:da37dba220d9fbfc5f1fc567fafc4028e3c3d7d828f2779ed09ab726ceca77dc
     # via -r requirements.dev.in
 mkdocs-material-extensions==1.3.1 \
     --hash=sha256:10c9511cea88f568257f960358a467d12b970e1f7b2c0e5fb2bb48cab1928443 \
@@ -390,9 +390,9 @@ pygments==2.19.1 \
     --hash=sha256:61c16d2a8576dc0649d9f39e089b5f02bcd27fba10d8fb4dcc28173f7a45151f \
     --hash=sha256:9ea1544ad55cecf4b8242fab6dd35a93bbce657034b0611ee383099054ab6d8c
     # via mkdocs-material
-pymdown-extensions==10.14.1 \
-    --hash=sha256:637951cbfbe9874ba28134fb3ce4b8bcadd6aca89ac4998ec29dcbafd554ae08 \
-    --hash=sha256:b65801996a0cd4f42a3110810c306c45b7313c09b0610a6f773730f2a9e3c96b
+pymdown-extensions==10.14.2 \
+    --hash=sha256:7a77b8116dc04193f2c01143760a43387bd9dc4aa05efacb7d838885a7791253 \
+    --hash=sha256:f45bc5892410e54fd738ab8ccd736098b7ff0cb27fdb4bf24d0a0c6584bc90e1
     # via mkdocs-material
 pyproject-hooks==1.2.0 \
     --hash=sha256:1e859bd5c40fae9448642dd871adf459e5e2084186e8d2c2a79a824c970da1f8 \
@@ -400,9 +400,9 @@ pyproject-hooks==1.2.0 \
     # via
     #   build
     #   pip-tools
-pyright==1.1.392.post0 \
-    --hash=sha256:252f84458a46fa2f0fd4e2f91fc74f50b9ca52c757062e93f6c250c0d8329eb2 \
-    --hash=sha256:3b7f88de74a28dcfa90c7d90c782b6569a48c2be5f9d4add38472bdaac247ebd
+pyright==1.1.393 \
+    --hash=sha256:8320629bb7a44ca90944ba599390162bf59307f3d9fb6e27da3b7011b8c17ae5 \
+    --hash=sha256:aeeb7ff4e0364775ef416a80111613f91a05c8e01e58ecfefc370ca0db7aed9c
     # via -r requirements.dev.in
 pytest==8.3.4 \
     --hash=sha256:50e16d954148559c9a74109af1eaf0c945ba2d8f30f0a3d3335edde19788b6f6 \
@@ -597,25 +597,25 @@ requests==2.32.3 \
     #   -c /home/runner/work/ehrql/ehrql/requirements.prod.txt
     #   docker
     #   mkdocs-material
-ruff==0.9.3 \
-    --hash=sha256:006e5de2621304c8810bcd2ee101587712fa93b4f955ed0985907a36c427e0c2 \
-    --hash=sha256:040ceb7f20791dfa0e78b4230ee9dce23da3b64dd5848e40e3bf3ab76468dcf4 \
-    --hash=sha256:2dc153c25e715be41bb228bc651c1e9b1a88d5c6e5ed0194fa0dfea02b026439 \
-    --hash=sha256:33866c3cc2a575cbd546f2cd02bdd466fed65118e4365ee538a3deffd6fcb730 \
-    --hash=sha256:5a5a46e09355695fbdbb30ed9889d6cf1c61b77b700a9fafc21b41f097bfbba4 \
-    --hash=sha256:646909a1e25e0dc28fbc529eab8eb7bb583079628e8cbe738192853dbbe43af5 \
-    --hash=sha256:7f39b879064c7d9670197d91124a75d118d00b0990586549949aae80cdc16624 \
-    --hash=sha256:800d773f6d4d33b0a3c60e2c6ae8f4c202ea2de056365acfa519aa48acf28e0b \
-    --hash=sha256:8293f89985a090ebc3ed1064df31f3b4b56320cdfcec8b60d3295bddb955c22a \
-    --hash=sha256:90230a6b8055ad47d3325e9ee8f8a9ae7e273078a66401ac66df68943ced029b \
-    --hash=sha256:96a87ec31dc1044d8c2da2ebbed1c456d9b561e7d087734336518181b26b3aa5 \
-    --hash=sha256:9bb7554aca6f842645022fe2d301c264e6925baa708b392867b7a62645304df4 \
-    --hash=sha256:a187171e7c09efa4b4cc30ee5d0d55a8d6c5311b3e1b74ac5cb96cc89bafc43c \
-    --hash=sha256:ba6eea4459dbd6b1be4e6bfc766079fb9b8dd2e5a35aff6baee4d9b1514ea519 \
-    --hash=sha256:c4bb09d2bbb394e3730d0918c00276e79b2de70ec2a5231cd4ebb51a57df9ba1 \
-    --hash=sha256:c59ab92f8e92d6725b7ded9d4a31be3ef42688a115c6d3da9457a5bda140e2b4 \
-    --hash=sha256:cabc332b7075a914ecea912cd1f3d4370489c8018f2c945a30bcc934e3bc06a6 \
-    --hash=sha256:eabe5eb2c19a42f4808c03b82bd313fc84d4e395133fb3fc1b1516170a31213c
+ruff==0.9.4 \
+    --hash=sha256:05bebf4cdbe3ef75430d26c375773978950bbf4ee3c95ccb5448940dc092408e \
+    --hash=sha256:1d4c8772670aecf037d1bf7a07c39106574d143b26cfe5ed1787d2f31e800214 \
+    --hash=sha256:37c892540108314a6f01f105040b5106aeb829fa5fb0561d2dcaf71485021137 \
+    --hash=sha256:433dedf6ddfdec7f1ac7575ec1eb9844fa60c4c8c2f8887a070672b8d353d34c \
+    --hash=sha256:54499fb08408e32b57360f6f9de7157a5fec24ad79cb3f42ef2c3f3f728dfe2b \
+    --hash=sha256:56acd6c694da3695a7461cc55775f3a409c3815ac467279dfa126061d84b314b \
+    --hash=sha256:585792f1e81509e38ac5123492f8875fbc36f3ede8185af0a26df348e5154f41 \
+    --hash=sha256:64e73d25b954f71ff100bb70f39f1ee09e880728efb4250c632ceed4e4cdf706 \
+    --hash=sha256:6907ee3529244bb0ed066683e075f09285b38dd5b4039370df6ff06041ca19e7 \
+    --hash=sha256:6ce6743ed64d9afab4fafeaea70d3631b4d4b28b592db21a5c2d1f0ef52934bf \
+    --hash=sha256:87c90c32357c74f11deb7fbb065126d91771b207bf9bfaaee01277ca59b574ec \
+    --hash=sha256:a6c634fc6f5a0ceae1ab3e13c58183978185d131a29c425e4eaa9f40afe1e6d6 \
+    --hash=sha256:bfc5f1d7afeda8d5d37660eeca6d389b142d7f2b5a1ab659d9214ebd0e025231 \
+    --hash=sha256:d612dbd0f3a919a8cc1d12037168bfa536862066808960e0cc901404b77968f0 \
+    --hash=sha256:db1192ddda2200671f9ef61d9597fcef89d934f5d1705e571a93a67fb13a4402 \
+    --hash=sha256:de9edf2ce4b9ddf43fd93e20ef635a900e25f622f87ed6e3047a664d0e8f810e \
+    --hash=sha256:e0c93e7d47ed951b9394cf352d6695b31498e68fd5782d6cbc282425655f687a \
+    --hash=sha256:faa935fc00ae854d8b638c16a5f1ce881bc3f67446957dd6f2af440a5fc8526b
     # via -r requirements.dev.in
 six==1.17.0 \
     --hash=sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274 \
