@@ -159,7 +159,7 @@ class Dataset(OneRowPerPatientFrame):
     events: Mapping[str, SeriesCollectionFrame]
     # Collection of named GroupedSum objects representing aggregations to be performed
     # on this Dataset population
-    measures: Mapping[str, GroupedSum]
+    measures: Mapping[str, GroupedSum] = dataclasses.field(default_factory=dict)
 
     def __hash__(self):
         # `variables` and `events` are dicts and so not naturally hashable, but we treat
