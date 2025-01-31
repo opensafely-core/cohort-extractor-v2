@@ -32,9 +32,7 @@ class BaseQueryEngine:
         self.backend = backend
         self.config = config or {}
 
-    def get_results_tables(
-        self, dataset: qm.Dataset, measures: tuple = None
-    ) -> Iterator[Iterator[Sequence]]:
+    def get_results_tables(self, dataset: qm.Dataset) -> Iterator[Iterator[Sequence]]:
         """
         Given a query model `Dataset` return an iterator of "results tables", where each
         table is an iterator of rows (usually tuples, but any sequence type will do)
@@ -46,20 +44,12 @@ class BaseQueryEngine:
         `RESULTS_START` marker value. This is converted into the appropriate structure
         by `iter_groups` which also enforces that the caller interacts with it safely.
         """
-        return iter_groups(
-            self.get_results_stream(dataset, measures), self.RESULTS_START
-        )
+        return iter_groups(self.get_results_stream(dataset), self.RESULTS_START)
 
-    def get_results_stream(
-        self, dataset: qm.Dataset, measures: tuple = None
-    ) -> Iterator[Sequence | Marker]:
+    def get_results_stream(self, dataset: qm.Dataset) -> Iterator[Sequence | Marker]:
         """
         Given a query model `Dataset` return an iterator of rows over all the results
         tables, with each table's results separated by the `RESULTS_START` marker value
-
-        If provided, use the `measures` tuple to aggregate a results table from `Dataset`
-        by to return one or more measures results tables, which are the result of summing
-        two columns (a numerator and denominator column) and grouping by one or more columns.
 
         Override this method to do the things necessary to generate query code and
         execute it against a particular backend.
