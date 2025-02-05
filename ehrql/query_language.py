@@ -26,6 +26,9 @@ DateT = TypeVar("DateT", bound="DateFunctions")
 IntT = TypeVar("IntT", bound="IntFunctions")
 StrT = TypeVar("StrT", bound="StrFunctions")
 
+PatientLevelTableT = TypeVar("PatientLevelTableT", bound="PatientLevelTable")
+
+
 VALID_VARIABLE_NAME_RE = re.compile(r"^[A-Za-z]+[A-Za-z0-9_]*$")
 
 # This gets populated by the `__init_subclass__` methods of EventSeries and
@@ -1529,7 +1532,7 @@ class PatientFrame(BaseFrame):
     """
 
 
-class EventFrame(BaseFrame):
+class EventFrame(BaseFrame, Generic[PatientLevelTableT]):
     """
     Frame which may contain multiple rows per patient.
     """
@@ -1564,7 +1567,7 @@ class EventFrame(BaseFrame):
             )
         )
 
-    def sort_by(self, *sort_values):
+    def sort_by(self, *sort_values) -> "SortedEventFrameMethods[PatientLevelTableT]":
         """
         Sort the rows for each patient by each of the supplied `sort_values`.
 
@@ -1597,8 +1600,8 @@ class EventFrame(BaseFrame):
         return cls(qm_node)
 
 
-class SortedEventFrameMethods:
-    def first_for_patient(self):
+class SortedEventFrameMethods(Generic[PatientLevelTableT]):
+    def first_for_patient(self) -> PatientLevelTableT:
         """
         Return a PatientFrame containing, for each patient, the first matching row
         according to whatever sort order has been applied.
@@ -1616,7 +1619,7 @@ class SortedEventFrameMethods:
             )
         )
 
-    def last_for_patient(self):
+    def last_for_patient(self) -> PatientLevelTableT:
         """
         Return a PatientFrame containing, for each patient, the last matching row
         according to whatever sort order has been applied.
@@ -2153,3 +2156,6 @@ def _format_operator_error_note(operator):
         f"\n"
         f"    {example_good}"
     )
+
+
+class PatientLevelTable: ...

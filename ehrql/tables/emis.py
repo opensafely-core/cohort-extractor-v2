@@ -8,6 +8,7 @@ import datetime
 
 import ehrql.tables.core
 from ehrql.codes import SNOMEDCTCode
+from ehrql.patient_level_table_definitions.emis import Vaccinations
 from ehrql.tables import Constraint, EventFrame, PatientFrame, Series, table
 from ehrql.tables.core import clinical_events, medications, ons_deaths
 
@@ -145,7 +146,7 @@ class practice_registrations(ehrql.tables.core.practice_registrations.__class__)
 
 
 @table
-class vaccinations(EventFrame):
+class vaccinations(EventFrame[Vaccinations]):
     """
     This table contains information on administered vaccinations,
     identified using SNOMED-CT codes for the vaccination procedure.
