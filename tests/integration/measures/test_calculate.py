@@ -228,14 +228,20 @@ def generate_data(intervals):
         for patient_id in range(1, 50)
     ]
     # Generate some addresses (at least one) for each patient
+    # Make sure that address dates for the same patient are different; otherwise
+    # we can't be sure which region will be returned as the last
     address_data = []
     interval_range = (intervals[0][0], intervals[-1][1])
     for patient in patient_data:
+        address_dates = set()
         for _ in range(rnd.randint(1, 3)):
+            address_dates.add(random_date_in_interval(rnd, interval_range))
+
+        for address_date in address_dates:
             address_data.append(
                 dict(
                     patient_id=patient["patient_id"],
-                    date=random_date_in_interval(rnd, interval_range),
+                    date=address_date,
                     region=rnd.choice(["London", "The North", "The Countryside"]),
                 )
             )
