@@ -157,6 +157,11 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
         # to use more efficient/robust mechanisms to retrieve the results.
         select_queries = []
         for n, results_query in enumerate(results_queries, start=1):
+            if "patient_id" in results_query.selected_columns:
+                index_col = "patient_id"
+            else:
+                assert "sum_0" in results_query.selected_columns
+                index_col = "sum_0"
             results_table = temporary_table_from_query(
                 # The double `##` prefix here makes this a global temporary table, i.e.
                 # one accessible to other sessions, hence we need a globally unique
@@ -164,56 +169,14 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
                 # which gives us more robust retries.
                 f"##results_{self.global_unique_id}_{n}",
                 results_query,
-                index_col="patient_id",
+                index_col=index_col,
             )
             select_queries.append(sqlalchemy.select(results_table))
+
         return select_queries
 
-    def get_measures_queries(self, dataset, measures):
-        """
-        Return the SQL queries to fetch the results for one or more measures, the results
-        of summing a numerator column and a denominator column, and grouping by one or
-        more columns.
-
-        `measures` is a collection of two-tuples for each measure:
-            (
-                (numerator_column_index, denominator_column_index), (group_column_indexes),
-                ...
-            )
-        We write each measures result table to a temporary table.
-        Returns a list of select queries for each measure.
-        """
+    def get_results_stream(self, dataset):
         results_queries = self.get_queries(dataset)
-        assert len(results_queries) == 1, (
-            "Measures queries can only be applied to a single results table"
-        )
-        results_query = results_queries[0].subquery()
-        # Write results to temporary tables and select them from there. This allows us
-        # to use more efficient/robust mechanisms to retrieve the results.
-        select_queries = []
-        for n, (sum_over_indexes, group_by_indexes) in enumerate(measures):
-            sum_overs = [
-                sqlalchemy.func.sum(results_query.columns[sum_over_index]).label(
-                    f"sum_{i}"
-                )
-                for i, sum_over_index in enumerate(sum_over_indexes)
-            ]
-            group_bys = [
-                results_query.columns[group_by_index]
-                for group_by_index in group_by_indexes
-            ]
-            group_query = sqlalchemy.select(*sum_overs, *group_bys).group_by(*group_bys)
-            group_table = temporary_table_from_query(
-                f"#group_results_{n}", group_query, index_col="sum_0"
-            )
-            select_queries.append(sqlalchemy.select(group_table))
-        return select_queries
-
-    def get_results_stream(self, dataset, measures=None):
-        if measures is not None:
-            results_queries = self.get_measures_queries(dataset, measures)
-        else:
-            results_queries = self.get_queries(dataset)
 
         # We're expecting queries in a very specific form which is "select everything
         # from one table"; so we assert that they have this form and retrieve references
@@ -252,18 +215,19 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
                 )
 
                 for i, results_table in enumerate(results_tables):
-                    if measures:
-                        # fetch_table_in_batches needs a key column to sort on in order to
-                        # return a table in batches. For patient and event-level tables, this
-                        # is always patient ID, but we don't have patient ID for a measures
-                        # table, so we're arbitrarily giving it the first column (the numerator column).
-                        # This  doesn't really make sense for sorting (a group column would make
-                        # more sense, but measures don't always have groups). Given that this is an
-                        # aggregated table, we wouldn't expect it to exceed the batch size, so it
-                        # shouldn't have any real impact.
-                        key_column = results_table.columns[0]
-                    else:
+                    # fetch_table_in_batches needs a key column to sort on in order to
+                    # return a table in batches. For patient and event-level tables, this
+                    # is always patient ID, but we don't have patient ID for a measures
+                    # table, so we're arbitrarily giving it the first column (the numerator column).
+                    # This  doesn't really make sense for sorting (a group column would make
+                    # more sense, but measures don't always have groups). Given that this is an
+                    # aggregated table, we wouldn't expect it to exceed the batch size, so it
+                    # shouldn't have any real impact.
+                    if "patient_id" in results_table.columns:
                         key_column = results_table.c.patient_id
+                    else:
+                        key_column = results_table.columns[0]
+
                     yield self.RESULTS_START
                     yield from fetch_table_in_batches(
                         execute_with_retry,

@@ -29,24 +29,22 @@ class InMemoryQueryEngine(BaseQueryEngine):
     tests, and a to provide a reference implementation for other engines.
     """
 
-    def get_results_tables(self, dataset, measures=None):
+    def get_results_tables(self, dataset):
         for table in self.get_results_as_in_memory_tables(dataset):
-            if measures is not None:
-                for sum_over_indexes, group_by_indexes in measures:
+            if dataset.measures:
+                for measure in dataset.measures.values():
                     measure_groups = dict()
                     for record in table.to_records():
-                        record_values = list(record.values())
                         measure_group_key = tuple(
-                            record_values[group_index]
-                            for group_index in group_by_indexes
+                            record[group] for group in measure.group_by
                         )
                         measure_groups.setdefault(
-                            measure_group_key, [0 for _ in sum_over_indexes]
+                            measure_group_key, [0 for _ in measure.sum_over]
                         )
-                        for i, sum_over_index in enumerate(sum_over_indexes):
-                            if record_values[sum_over_index] is not None:
-                                measure_groups[measure_group_key][i] += record_values[
-                                    sum_over_index
+                        for i, sum_over_col in enumerate(measure.sum_over):
+                            if record[sum_over_col] is not None:
+                                measure_groups[measure_group_key][i] += record[
+                                    sum_over_col
                                 ]
                     yield (
                         (*group_counts, *group_key)

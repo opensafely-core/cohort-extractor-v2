@@ -4,7 +4,13 @@ from collections import defaultdict
 
 from ehrql.measures.measures import get_all_group_by_columns
 from ehrql.query_model.column_specs import ColumnSpec, get_column_spec_from_series
-from ehrql.query_model.nodes import Dataset, Function, Value, get_series_type
+from ehrql.query_model.nodes import (
+    Dataset,
+    Function,
+    GroupedSum,
+    Value,
+    get_series_type,
+)
 from ehrql.query_model.transforms import substitute_parameters
 
 
@@ -99,11 +105,14 @@ class MeasureCalculator:
         self.population = None
         self.variables = {}
         self.measures = []
-        self.aggregation_columns = []
+        self.grouped_sums = {}
         for measure in measures:
             self.add_measure(measure)
         self.placeholder_dataset = Dataset(
-            population=self.population, variables=self.variables, events={}
+            population=self.population,
+            variables=self.variables,
+            events={},
+            measures=self.grouped_sums,
         )
 
     def get_results(self, query_engine):
@@ -118,11 +127,7 @@ class MeasureCalculator:
         # placeholders with actual dates
         dataset = substitute_interval_parameters(self.placeholder_dataset, interval)
 
-        # "aggregation_columns" are tuples of column indexes for the values relevant to a
-        # given measure ((numerator, denominator), (groups));
-        for i, table in enumerate(
-            query_engine.get_results_tables(dataset, self.aggregation_columns)
-        ):
+        for i, table in enumerate(query_engine.get_results_tables(dataset)):
             for row in table:
                 yield self.measures[i], *row
 
@@ -136,30 +141,26 @@ class MeasureCalculator:
             assert measure.denominator == self.denominator
             assert measure.intervals == self.intervals
 
-        numerator_index = self.add_variable(series_as_int(measure.numerator))
-        denominator_index = self.add_variable(series_as_int(measure.denominator))
-        group_indexes = [
-            self.add_variable(column) for column in measure.group_by.values()
-        ]
+        numerator_key = self.add_variable(series_as_int(measure.numerator))
+        denominator_key = self.add_variable(series_as_int(measure.denominator))
+        group_keys = [self.add_variable(column) for column in measure.group_by.values()]
         self.measures.append(measure)
-
-        # Note that indices all need to be offset by 1 to account for the initial `patient_id` value.
-        self.aggregation_columns.append(
-            (
-                (numerator_index + 1, denominator_index + 1),
-                tuple(g + 1 for g in group_indexes),
-            )
+        self.grouped_sums[measure.name] = GroupedSum(
+            sum_over=(numerator_key, denominator_key), group_by=tuple(group_keys)
         )
 
     def add_variable(self, variable):
-        # Return the position of `variable` in the variables dict, adding it if not
+        # Return the name and position of `variable` in the variables dict, adding it if not
         # already present
         try:
-            return list(self.variables.values()).index(variable)
-        except ValueError:
+            return next(
+                k for k, v in enumerate(self.variables.items()) if v == variable
+            )
+        except StopIteration:
             index = len(self.variables)
-            self.variables[f"column_{index}"] = variable
-            return index
+            key = f"column_{index}"
+            self.variables[key] = variable
+            return key
 
 
 def series_as_bool(series):
