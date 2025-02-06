@@ -17,6 +17,7 @@ from ehrql.query_model.nodes import (
     Column,
     Dataset,
     Function,
+    GroupedSum,
     Parameter,
     SelectColumn,
     SelectPatientTable,
@@ -359,6 +360,7 @@ def test_dataset_strategy_is_comprehensive():
     known_missing_operations = {
         # Parameters don't themselves form part of valid queries: they are placeholders
         # which must all be replaced with Values before the query can be executed.
+        GroupedSum,
         Parameter,
     }
     all_operations = set(get_all_operations())

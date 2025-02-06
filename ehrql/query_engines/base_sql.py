@@ -126,6 +126,27 @@ class BaseSQLQueryEngine(BaseQueryEngine):
         else:  # pragma: no cover
             other_queries = []
 
+        measure_queries = []
+        if dataset.measures:
+            assert not other_queries, (
+                "Measures queries can only be applied to a single results table"
+            )
+            results_query = dataset_query.subquery()
+
+            for measure in dataset.measures.values():
+                sum_overs = [
+                    sqlalchemy.func.sum(results_query.c[sum_over_col]).label(f"sum_{i}")
+                    for i, sum_over_col in enumerate(measure.sum_over)
+                ]
+                group_bys = [
+                    results_query.c[group_by_col] for group_by_col in measure.group_by
+                ]
+                group_query = sqlalchemy.select(
+                    *sum_overs,
+                    *group_bys,
+                ).group_by(*group_bys)
+                measure_queries.append(group_query)
+
         # We use an instance variable to store the population table in order to avoid
         # having to thread it through all our `get_sql`/`get_table` method calls. But
         # this means that we can't safely re-use cached values across different calls to
@@ -136,6 +157,8 @@ class BaseSQLQueryEngine(BaseQueryEngine):
         self.get_sql.cache_clear()
         self.get_table.cache_clear()
 
+        if measure_queries:
+            return measure_queries
         return [dataset_query, *other_queries]
 
     def add_variables_to_query(self, query, variables):

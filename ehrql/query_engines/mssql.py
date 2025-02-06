@@ -157,6 +157,11 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
         # to use more efficient/robust mechanisms to retrieve the results.
         select_queries = []
         for n, results_query in enumerate(results_queries, start=1):
+            if "patient_id" in results_query.selected_columns:
+                index_col = "patient_id"
+            else:
+                assert "sum_0" in results_query.selected_columns
+                index_col = "sum_0"
             results_table = temporary_table_from_query(
                 # The double `##` prefix here makes this a global temporary table, i.e.
                 # one accessible to other sessions, hence we need a globally unique
@@ -164,9 +169,10 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
                 # which gives us more robust retries.
                 f"##results_{self.global_unique_id}_{n}",
                 results_query,
-                index_col="patient_id",
+                index_col=index_col,
             )
             select_queries.append(sqlalchemy.select(results_table))
+
         return select_queries
 
     def get_results_stream(self, dataset):
@@ -180,7 +186,6 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
             results_table = results_query.get_final_froms()[0]
             assert str(results_query) == str(sqlalchemy.select(results_table))
             results_tables.append(results_table)
-
         setup_queries, cleanup_queries = get_setup_and_cleanup_queries(results_queries)
 
         with self.engine.connect() as connection:
@@ -210,23 +215,35 @@ class MSSQLQueryEngine(BaseSQLQueryEngine):
                 )
 
                 for i, results_table in enumerate(results_tables):
+                    # fetch_table_in_batches needs a key column to sort on in order to
+                    # return a table in batches. For patient and event-level tables, this
+                    # is always patient ID, but we don't have patient ID for a measures
+                    # table, so we're arbitrarily giving it the first column (the numerator column).
+                    # This  doesn't really make sense for sorting (a group column would make
+                    # more sense, but measures don't always have groups). Given that this is an
+                    # aggregated table, we wouldn't expect it to exceed the batch size, so it
+                    # shouldn't have any real impact.
+                    if "patient_id" in results_table.columns:
+                        key_column = results_table.c.patient_id
+                    else:
+                        key_column = results_table.columns[0]
+
                     yield self.RESULTS_START
                     yield from fetch_table_in_batches(
                         execute_with_retry,
                         results_table,
-                        key_column=results_table.c.patient_id,
-                        # TODO: We need to find a better way to identify which tables
-                        # have a unique `patient_id` column because it lets the batch
-                        # fetcher use a more efficient algorithm. At present, we know
-                        # that the first results table does but this isn't a very
-                        # comfortable approach. The other option is to just always use
-                        # the non-unique algorithm on the basis that the lost efficiency
-                        # probably isn't noticeable. But until we're supporting
-                        # event-level data for real I'm reluctant to make things worse
-                        # for the currently supported case.
+                        key_column=key_column,
+                        # TODO: We need to find a better way to identify which tables have a
+                        # unique `patient_id` column because it lets the batch fetcher use a
+                        # more efficient algorithm. At present, we know that the first
+                        # results table does but this isn't a very comfortable approach. The
+                        # other option is to just always use the non-unique algorithm on the
+                        # basis that the lost efficiency probably isn't noticeable. But
+                        # until we're supporting event-level data for real I'm reluctant to
+                        # make things worse for the currently supported case.
                         key_is_unique=(i == 0),
-                        # This value was copied from the previous cohortextractor. I
-                        # suspect it has no real scientific basis.
+                        # This value was copied from the previous cohortextractor. I suspect
+                        # it has no real scientific basis.
                         batch_size=32000,
                         log=log.info,
                     )

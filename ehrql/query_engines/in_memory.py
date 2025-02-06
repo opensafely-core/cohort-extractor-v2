@@ -31,11 +31,33 @@ class InMemoryQueryEngine(BaseQueryEngine):
 
     def get_results_tables(self, dataset):
         for table in self.get_results_as_in_memory_tables(dataset):
-            # The row_id column is an internal implementation detail of the in-memory
-            # engine and should not appear in the results
-            columns = [name for name in table.name_to_col.keys() if name != "row_id"]
-            Row = namedtuple("Row", columns)
-            yield (Row(*(r[c] for c in columns)) for r in table.to_records())
+            if dataset.measures:
+                for measure in dataset.measures.values():
+                    measure_groups = dict()
+                    for record in table.to_records():
+                        measure_group_key = tuple(
+                            record[group] for group in measure.group_by
+                        )
+                        measure_groups.setdefault(
+                            measure_group_key, [0 for _ in measure.sum_over]
+                        )
+                        for i, sum_over_col in enumerate(measure.sum_over):
+                            if record[sum_over_col] is not None:
+                                measure_groups[measure_group_key][i] += record[
+                                    sum_over_col
+                                ]
+                    yield (
+                        (*group_counts, *group_key)
+                        for group_key, group_counts in measure_groups.items()
+                    )
+            else:
+                # The row_id column is an internal implementation detail of the in-memory
+                # engine and should not appear in the results
+                columns = [
+                    name for name in table.name_to_col.keys() if name != "row_id"
+                ]
+                Row = namedtuple("Row", columns)
+                yield (Row(*(r[c] for c in columns)) for r in table.to_records())
 
     def get_results_as_in_memory_tables(self, dataset):
         assert isinstance(dataset, qm.Dataset)
