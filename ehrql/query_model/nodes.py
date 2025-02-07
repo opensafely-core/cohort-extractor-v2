@@ -9,7 +9,6 @@ from typing import Any, TypeVar
 
 from ehrql.codes import BaseCode
 from ehrql.query_model.table_schema import Column, Constraint, TableSchema
-from ehrql.utils.functools_utils import cached_method
 from ehrql.utils.typing_utils import get_typespec, get_typevars, type_matches
 
 
@@ -87,14 +86,34 @@ class Node:
     "Abstract base class for all objects in the Query Model"
 
     def __init_subclass__(cls, **kwargs):
+        # This looks pointless, but `dataclass` overwrites inherited `__hash__` methods
+        # so we need this to be an explictly defined method
+        cls.__hash__ = cls.__hash__
         # All nodes in the query model are frozen dataclasses
         dataclasses.dataclass(cls, frozen=True)
+
+    def __hash__(self):
         # Calculating the hash of an object requires recursively calculating the hashes
         # of its children. In a deeply nested query graph this can take some time and,
         # given how frequently `__hash__()` is called, this can end up completely
         # dominating ehrQL's execution time. Given that these are immutable
         # objects we can cache the hash value instead of recalcuting it each time.
-        cls.__hash__ = cached_method(cls.__hash__)
+        try:
+            return self.__hash__cache
+        except AttributeError:
+            pass
+        values = [getattr(self, field.name) for field in dataclasses.fields(self)]
+        # We use dicts in several places in the query model and although they are not
+        # immutable we pinky-promise not to mutate them and therefore want to make them
+        # hashable. The below recipe is based on a recommendation by Raymond Hettinger:
+        # https://stackoverflow.com/a/16162138
+        hashable_values = tuple(
+            v if not isinstance(v, dict) else (frozenset(v), frozenset(v.values()))
+            for v in values
+        )
+        hash_value = hash(hashable_values)
+        object.__setattr__(self, "__hash__cache", hash_value)
+        return hash_value
 
     def __post_init__(self):
         # validate the things which have to be checked dynamically
@@ -132,13 +151,6 @@ class ManyRowsPerPatientSeries(Series): ...
 class SeriesCollectionFrame(ManyRowsPerPatientFrame):
     members: Mapping[str, Series[Any]]
 
-    def __hash__(self):
-        # `members` is a dict and so not naturally hashable, but we treat it as
-        # immutable. The specfic hash used below is based on a recommendation by Raymond
-        # Hettinger. See:
-        # https://stackoverflow.com/a/16162138
-        return hash((frozenset(self.members), frozenset(self.members.values())))
-
 
 # Specifies the data to be extracted
 class Dataset(OneRowPerPatientFrame):
@@ -149,21 +161,6 @@ class Dataset(OneRowPerPatientFrame):
     # Collection of named "event tables" which are themselves collections of named
     # ManyRowsPerPatientSeries objects
     events: Mapping[str, SeriesCollectionFrame]
-
-    def __hash__(self):
-        # `variables` and `events` are dicts and so not naturally hashable, but we treat
-        # it as immutable. The specfic hash used below is based on a recommendation by
-        # Raymond Hettinger. See:
-        # https://stackoverflow.com/a/16162138
-        return hash(
-            (
-                self.population,
-                frozenset(self.variables),
-                frozenset(self.variables.values()),
-                frozenset(self.events),
-                frozenset(self.events.values()),
-            )
-        )
 
 
 # A OneRowPerPatientSeries which is the result of aggregating one or more
@@ -465,17 +462,6 @@ class Function:
 class Case(Series[T]):
     cases: Mapping[Series[bool], Series[T] | None]
     default: Series[T] | None
-
-    def __hash__(self):
-        # `cases` is a dict and so not naturally hashable, but we treat it as immutable.
-        # The specfic hash used below is based on a recommendation by Raymond Hettinger.
-        # It's almost certainly unnecessary to include the values and default in the
-        # hash, but given that it's all cached anyway we may as well save ourselves the
-        # trouble of thinking about it. See:
-        # https://stackoverflow.com/a/16162138
-        return hash(
-            (frozenset(self.cases), frozenset(self.cases.values()), self.default)
-        )
 
 
 # TODO: We don't currently support Join in the DSL or the Query Engine but this is the

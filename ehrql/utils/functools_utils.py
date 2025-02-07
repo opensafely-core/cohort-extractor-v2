@@ -71,23 +71,3 @@ class singledispatchmethod_with_cache(singledispatchmethod):
         # the whole thing pointless.
         obj.__dict__[self.attribute_name] = cached_method
         return cached_method
-
-
-def cached_method(method):
-    """
-    Decorate a zero-argument method to apply caching
-    """
-    MISSING = object()
-    cache_attr = f"__{method.__name__}_cache"
-
-    def wrapper(self):
-        value = getattr(self, cache_attr, MISSING)
-        if value is not MISSING:
-            return value
-        value = method(self)
-        # We want to use this with frozen dataclasses which override `__setattr__` to
-        # trigger an error, so we have to use the method from `object` to do this
-        object.__setattr__(self, cache_attr, value)
-        return value
-
-    return wrapper

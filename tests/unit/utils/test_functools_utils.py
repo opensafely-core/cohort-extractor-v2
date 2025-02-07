@@ -1,11 +1,6 @@
-import dataclasses
-
 import pytest
 
-from ehrql.utils.functools_utils import (
-    cached_method,
-    singledispatchmethod_with_cache,
-)
+from ehrql.utils.functools_utils import singledispatchmethod_with_cache
 
 
 @pytest.fixture
@@ -53,24 +48,3 @@ def test_clearing_cache_only_affects_single_instance(TestClass):
     obj1.test.cache_clear()
     assert result1 is not obj1.test("hello")
     assert result2 is obj2.test("hello")
-
-
-def test_cached_method():
-    CALL_COUNT = 0
-
-    @dataclasses.dataclass(frozen=True)
-    class SomeValue:
-        n: int
-
-        @cached_method
-        def n_plus_one(self):
-            nonlocal CALL_COUNT
-            CALL_COUNT += 1
-            return self.n + 1
-
-    value = SomeValue(42)
-    assert CALL_COUNT == 0
-    assert value.n_plus_one() == 43
-    assert CALL_COUNT == 1
-    assert value.n_plus_one() == 43
-    assert CALL_COUNT == 1
