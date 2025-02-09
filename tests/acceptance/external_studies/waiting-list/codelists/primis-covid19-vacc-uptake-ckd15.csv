@@ -1,0 +1,82 @@
+code,term
+117681000119102,Chronic kidney disease stage 1 due to hypertension
+129151000119102,Chronic kidney disease stage 4 due to hypertension
+129161000119100,Chronic kidney disease stage 5 due to hypertension
+129171000119106,Chronic kidney disease stage 3 due to hypertension
+129181000119109,Chronic kidney disease stage 2 due to hypertension
+140101000119109,Hypertension in chronic kidney disease stage 5 due to type 2 diabetes mellitus
+140111000119107,Hypertension in chronic kidney disease stage 4 due to type 2 diabetes mellitus
+140121000119100,Hypertension in chronic kidney disease stage 3 due to type 2 diabetes mellitus
+140131000119102,Hypertension in chronic kidney disease stage 2 due to type 2 diabetes mellitus
+153851000119106,Malignant hypertensive chronic kidney disease stage 5
+284971000119100,Chronic kidney disease stage 1 due to benign hypertension
+284981000119102,Chronic kidney disease stage 2 due to benign hypertension
+284991000119104,Chronic kidney disease stage 3 due to benign hypertension
+285001000119105,Chronic kidney disease stage 4 due to benign hypertension
+285011000119108,Chronic kidney disease stage 5 due to benign hypertension
+285851000119102,Malignant hypertensive chronic kidney disease stage 1
+285861000119100,Malignant hypertensive chronic kidney disease stage 2
+285871000119106,Malignant hypertensive chronic kidney disease stage 3
+285881000119109,Malignant hypertensive chronic kidney disease stage 4
+324121000000109,Chronic kidney disease stage 1 with proteinuria
+324151000000104,Chronic kidney disease stage 1 without proteinuria
+324181000000105,Chronic kidney disease stage 2 with proteinuria
+324211000000106,Chronic kidney disease stage 2 without proteinuria
+324251000000105,Chronic kidney disease stage 3 with proteinuria
+324281000000104,Chronic kidney disease stage 3 without proteinuria
+324311000000101,Chronic kidney disease stage 3A with proteinuria
+324341000000100,Chronic kidney disease stage 3A without proteinuria
+324371000000106,Chronic kidney disease stage 3B with proteinuria
+324411000000105,Chronic kidney disease stage 3B without proteinuria
+324441000000106,Chronic kidney disease stage 4 with proteinuria
+324471000000100,Chronic kidney disease stage 4 without proteinuria
+324501000000107,Chronic kidney disease stage 5 with proteinuria
+324541000000105,Chronic kidney disease stage 5 without proteinuria
+368421000119108,Chronic kidney disease stage 1 due to drug induced diabetes mellitus
+368431000119106,Chronic kidney disease stage 2 due to drug induced diabetes mellitus
+368441000119102,Chronic kidney disease stage 3 due to drug induced diabetes mellitus
+368451000119100,Chronic kidney disease stage 4 due to drug induced diabetes mellitus
+368461000119103,Chronic kidney disease stage 5 due to drug induced diabetes mellitus
+431855005,Chronic kidney disease stage 1
+431856006,Chronic kidney disease stage 2
+431857002,Chronic kidney disease stage 4
+433144002,Chronic kidney disease stage 3
+433146000,Chronic kidney disease stage 5
+691421000119108,Anemia co-occurrent and due to chronic kidney disease stage 3
+700378005,Chronic kidney disease stage 3A
+700379002,Chronic kidney disease stage 3B
+711000119100,Chronic kidney disease stage 5 due to type 2 diabetes mellitus
+714152005,Chronic kidney disease stage 5 on dialysis
+714153000,Chronic kidney disease stage 5 with transplant
+721000119107,Chronic kidney disease stage 4 due to type 2 diabetes mellitus
+731000119105,Chronic kidney disease stage 3 due to type 2 diabetes mellitus
+741000119101,Chronic kidney disease stage 2 due to type 2 diabetes mellitus
+751000119104,Chronic kidney disease stage 1 due to type 2 diabetes mellitus
+90721000119101,Chronic kidney disease stage 1 due to type 1 diabetes mellitus
+90731000119103,Chronic kidney disease stage 2 due to type 1 diabetes mellitus
+90741000119107,Chronic kidney disease stage 3 due to type 1 diabetes mellitus
+90751000119109,Chronic kidney disease stage 4 due to type 1 diabetes mellitus
+90761000119106,Chronic kidney disease stage 5 due to type 1 diabetes mellitus
+949401000000103,Chronic kidney disease with glomerular filtration rate category G1 and albuminuria category A1
+949421000000107,Chronic kidney disease with glomerular filtration rate category G1 and albuminuria category A2
+949481000000108,Chronic kidney disease with glomerular filtration rate category G1 and albuminuria category A3
+949521000000108,Chronic kidney disease with glomerular filtration rate category G2 and albuminuria category A1
+949561000000100,Chronic kidney disease with glomerular filtration rate category G2 and albuminuria category A2
+949621000000109,Chronic kidney disease with glomerular filtration rate category G2 and albuminuria category A3
+949881000000106,Chronic kidney disease with glomerular filtration rate category G3a and albuminuria category A1
+949901000000109,Chronic kidney disease with glomerular filtration rate category G3a and albuminuria category A2
+949921000000100,Chronic kidney disease with glomerular filtration rate category G3a and albuminuria category A3
+950061000000103,Chronic kidney disease with glomerular filtration rate category G3b and albuminuria category A1
+950081000000107,Chronic kidney disease with glomerular filtration rate category G3b and albuminuria category A2
+950101000000101,Chronic kidney disease with glomerular filtration rate category G3b and albuminuria category A3
+950181000000106,Chronic kidney disease with glomerular filtration rate category G4 and albuminuria category A1
+950211000000107,Chronic kidney disease with glomerular filtration rate category G4 and albuminuria category A2
+950231000000104,Chronic kidney disease with glomerular filtration rate category G4 and albuminuria category A3
+950251000000106,Chronic kidney disease with glomerular filtration rate category G5 and albuminuria category A1
+950291000000103,Chronic kidney disease with glomerular filtration rate category G5 and albuminuria category A2
+950311000000102,Chronic kidney disease with glomerular filtration rate category G5 and albuminuria category A3
+96711000119105,Hypertensive heart AND chronic kidney disease stage 5
+96721000119103,Hypertensive heart AND chronic kidney disease stage 4
+96731000119100,Hypertensive heart AND chronic kidney disease stage 3
+96741000119109,Hypertensive heart AND chronic kidney disease stage 2
+96751000119106,Hypertensive heart AND chronic kidney disease stage 1

@@ -1,0 +1,1280 @@
+code,term
+10041001,Tracheal stenosis following tracheostomy
+1010333003,Emphysema of left lung
+1010334009,Emphysema of right lung
+1010603001,Primary mucoepidermoid carcinoma of nasopharynx
+1010607000,Primary lymphoepithelial carcinoma of nasopharynx
+1010623000,Disorder of lung due to immunoglobulin A vasculitis
+1010624006,Primary salivary gland type neoplasm of nasopharynx
+1010631005,Primary malignant melanoma of overlapping sites of accessory sinuses
+1010633008,Primary papillary adenocarcinoma of nasopharynx
+1010656004,Adenoid squamous cell carcinoma of nasopharynx
+1010657008,Secondary hypoplasia of bilateral lungs
+1010669000,Primary squamous cell carcinoma of superior wall of nasopharynx
+1010670004,Chronic endogenous lipoid pneumonia
+1010674008,Basaloid squamous cell carcinoma of nasopharynx
+1010675009,Squamous cell carcinoma of posterior wall of nasopharynx
+1010677001,Primary squamous cell carcinomas of anterior wall of nasopharynx
+1010679003,Primary squamous cell carcinoma of lateral wall of nasopharynx
+1010681001,Primary squamous cell carcinoma of overlapping sites of nasopharynx
+1017196003,Interstitial pulmonary fibrosis due to inhalation of substance
+1017197007,Interstitial pulmonary fibrosis due to inhalation of drug
+102361000119104,Chronic pneumonia
+103781000119103,Allergic bronchopulmonary mycosis
+103851000119100,Restrictive lung disease due to amyotrophic lateral sclerosis
+103871000119109,Restrictive lung disease due to Parkinson disease
+10501004,Pulmonary alveolar proteinosis
+105041000119109,Metastatic squamous cell carcinoma to lung
+105051000119106,Metastatic undifferentiated large cell carcinoma to lung
+106001000119101,Chronic obstructive lung disease co-occurrent with acute bronchitis
+10625871000119105,Pneumoconiosis caused by organic dust
+10672271000119100,Acute-on-chronic hypoxemic respiratory failure
+10692761000119107,Asthma-chronic obstructive pulmonary disease overlap syndrome
+10713006,Diffuse interstitial rheumatoid disease of lung
+10785007,Vinyard sprayers' lung
+1078881000119102,Primary adenocarcinoma of lower lobe of left lung
+1078891000119104,Primary adenocarcinoma of left main bronchus
+1078901000119100,Primary adenocarcinoma of upper lobe of left lung
+1078931000119107,Primary adenocarcinoma of lower lobe of right lung
+1078941000119103,Primary adenocarcinoma of right main bronchus
+1078951000119101,Primary adenocarcinoma of middle lobe of right lung
+1078961000119104,Primary adenocarcinoma of upper lobe of right lung
+1080451000119101,Primary large cell carcinoma of lower lobe of left lung
+1080471000119105,Primary large cell carcinoma of upper lobe of left lung
+1080501000119104,Primary large cell carcinoma of lower lobe of right lung
+1080531000119106,Primary large cell carcinoma of upper lobe of right lung
+1081841000119106,Primary small cell carcinoma of lower lobe of left lung
+1081851000119108,Primary small cell carcinoma of left main bronchus
+1081861000119105,Primary small cell carcinoma of upper lobe of left lung
+1081891000119103,Primary small cell carcinoma of lower lobe of right lung
+1081901000119104,Primary small cell carcinoma of right main bronchus
+1081911000119101,Primary small cell carcinoma of middle lobe of right lung
+1081921000119108,Primary small cell carcinoma of upper lobe of right lung
+1082111000119109,Primary squamous cell carcinoma of lower lobe of left lung
+1082121000119102,Primary squamous cell carcinoma of left main bronchus
+1082141000119108,Primary squamous cell carcinoma of upper lobe of left lung
+1082231000119109,Primary squamous cell carcinoma of lower lobe of right lung
+1082241000119100,Primary squamous cell carcinoma of right main bronchus
+1082251000119103,Primary squamous cell carcinoma of middle lobe of right lung
+1082271000119107,Primary squamous cell carcinoma of upper lobe of right lung
+1090231000000103,Malignant neoplasm of respiratory tract
+1090881000000100,Malignant neoplasm of bronchus or lung
+109366009,Overlapping malignant neoplasm of accessory sinuses
+109367000,Overlapping malignant neoplasm of nasopharynx
+109368005,Overlapping malignant neoplasm of hypopharynx
+109369002,Overlapping malignant neoplasm of larynx
+109370001,Primary malignant neoplasm of laryngeal cartilage
+109371002,Overlapping malignant neoplasm of bronchus and lung
+109374005,Overlapping malignant neoplasm of mediastinum and pleura
+109384006,"Overlapping malignant neoplasm of heart, mediastinum and pleura"
+109390005,Kaposi's sarcoma of lung
+109832008,Overlapping malignant neoplasm of oropharynx
+110013004,Overlapping malignant neoplasm of tonsil
+111292008,Necrotizing sarcoid granulomatosis
+111901001,Bronchocentric granulomatosis
+11296007,Stenosis of trachea
+1141621000,Malignant epithelial neoplasm of pyriform fossa
+1141627001,Non-small cell lung carcinoma with neuregulin 1 gene fusion
+115666004,Animal handlers' lung
+1162677006,Rheumatoid arthritis with rheumatoid lung disease
+1163147006,Chronic fibrosis of lung caused by Aspergillus
+1163150009,Chronic cavitation of lung caused by Aspergillus
+1172606002,Idiopathic pleuroparenchymal fibroelastosis
+1177007001,Fibrosis of lung due to pulmonary paracoccidioidomycosis
+1177120001,Bronchiolitis obliterans syndrome due to and following allogeneic stem cell transplant
+1179762006,Malignant neoplasm of middle lobe of right lung
+11944003,Feather-pickers' disease
+1196841007,Primary desmoplastic mesothelioma of pleura
+1196856003,Primary biphasic malignant mesothelioma of pleura
+1196883002,Primary epithelioid malignant mesothelioma of pleura
+1197259008,Primary sarcomatoid malignant mesothelioma of pleura
+1197276007,Primary squamous cell carcinoma of pharyngeal lymphoid ring
+1197296004,Primary malignant germ cell neoplasm of pleura
+1197476009,"Infantile-onset pulmonary alveolar proteinosis, hypogammaglobulinemia"
+12070002,Congenital stenosis of larynx
+12088005,Budgerigar-fanciers' disease
+12181002,Tropical pulmonary alveolitis
+12200321000119107,Failure of lung transplant
+1222677008,Interstitial lung disease due to surfactant protein C deficiency
+1222678003,Interstitial lung disease due to ATP-binding cassette subfamily A member 3 deficiency
+1222679006,"Autoimmune interstitial lung disease, arthritis syndrome"
+12240951000119107,Squamous cell carcinoma of left lung
+12240991000119102,Squamous cell carcinoma of right lung
+1228876007,Severe early-onset pulmonary alveolar proteinosis due to methionyl-transfer ribonucleic acid synthetase 1 deficiency
+12295008,Bronchiectasis
+1229871006,Primary squamous cell carcinoma of nasal cavity and paranasal sinus
+12310001,Childhood bronchiectasis
+1236947005,Metastatic carcinoma to dorsal surface of base of tongue
+1236960004,Metastatic carcinoma to lingual tonsil
+1237048006,Metastatic squamous cell carcinoma to bronchus
+123713005,Chronic atelectasis
+1237466009,Metastatic squamous cell carcinoma to bronchus of left upper lobe
+1237467000,Metastatic squamous cell carcinoma to bronchus of right upper lobe
+1237469002,Metastatic squamous cell carcinoma to bronchus of left lower lobe
+1237471002,Metastatic squamous cell carcinoma to bronchus of right lower lobe
+1237472009,Metastatic squamous cell carcinoma to bronchus of right middle lobe
+1237487004,Metastatic carcinoma to base of tongue
+1237489001,Metastatic carcinoma to tonsil
+1237495000,Metastatic carcinoma to glottis
+1237496004,Metastatic carcinoma to subglottis
+1237497008,Metastatic carcinoma to supraglottis
+1237516000,Metastatic carcinoma to lower lobe of lung
+1237518004,Metastatic carcinoma to main bronchus
+1237523004,Metastatic carcinoma to vocal cord
+1251491008,Metastatic carcinoma to larynx
+1254724005,Metastatic adenoid cystic carcinoma to oropharynx
+1254728008,Metastatic adenoid cystic carcinoma to trachea
+1254732002,Metastatic large cell carcinoma to lung
+1254733007,Metastatic large cell carcinoma to right lung
+1254734001,Metastatic large cell carcinoma to left lung
+1254735000,Metastatic large cell carcinoma to bilateral lungs
+1254740008,Metastatic giant cell carcinoma to lung
+1254745003,Metastatic giant cell carcinoma to left lung
+1254746002,Metastatic giant cell carcinoma to right lung
+1254747006,Metastatic giant cell carcinoma to bilateral lungs
+1254783002,Verrucous carcinoma of trachea
+1254785009,Squamous cell adenoid carcinoma of trachea
+1254786005,Spindle cell carcinoma of trachea
+1254787001,Papillary squamous cell carcinoma of trachea
+1254788006,Lymphoepithelial carcinoma of trachea
+1254789003,Clear cell squamous cell carcinoma of trachea
+1254790007,Basaloid squamous cell carcinoma of trachea
+1254800007,Squamous cell carcinoma of lateral wall of oropharynx
+1254801006,Basaloid squamous cell carcinoma of oropharynx
+1254803009,Papillary squamous cell carcinoma of oropharynx
+1254805002,Squamous cell carcinoma of posterior wall of oropharynx
+1254806001,Spindle cell squamous cell carcinoma of oropharynx
+1254852008,Squamous cell carcinoma of laryngeal cartilage
+1255074005,Adenocarcinoma of frontal sinus
+1255084006,Adenocarcinoma of sphenoidal sinus
+1255085007,Adenocarcinoma of trachea
+1255092002,Adenocarcinoma of accessory sinus
+1255096004,Adenocarcinoma of ethmoidal sinus
+1255110007,Adenocarcinoma of maxillary sinus
+1255112004,Adenocarcinoma of oropharynx
+1255392007,Undifferentiated carcinoma of trachea
+1255393002,Undifferentiated carcinoma of lung
+1255395009,Spindle cell carcinoma of lung
+1255629002,Signet ring cell carcinoma of lung
+1255630007,Signet ring cell carcinoma of trachea
+1255631006,Spindle cell squamous cell carcinoma of hypopharynx
+1255632004,Spindle cell squamous cell carcinoma of larynx
+1255641009,Pleomorphic carcinoma of lung
+1255642002,Polymorphous low grade adenocarcinoma of oropharynx
+1255643007,Acinar cell carcinoma of trachea
+1255644001,Acinar cell carcinoma of lung
+1255645000,Acinar cell carcinoma of oropharynx
+1255646004,Basaloid squamous cell carcinoma of hypopharynx
+1255647008,Basaloid squamous cell carcinoma of larynx
+1255648003,Basaloid carcinoma of hypopharynx
+1255649006,Basaloid carcinoma of oropharynx
+1255650006,Basaloid carcinoma of larynx
+1255651005,Basaloid squamous cell carcinoma of lung
+1255652003,Carcinoma ex pleomorphic adenoma of oropharynx
+1255654002,Giant cell carcinoma of larynx
+1255655001,Giant cell carcinoma of trachea
+1255656000,Giant cell carcinoma of hypopharynx
+1255657009,Carcinoma of sphenoidal sinus
+1255658004,Carcinosarcoma of lung
+1255659007,Epithelial-myoepithelial carcinoma of oropharynx
+1255660002,Squamous cell carcinoma of sphenoidal sinus
+1255661003,Myoepithelial carcinoma of oropharynx
+1255662005,Myoepithelial carcinoma of lung
+1255663000,Myoepithelial carcinoma of trachea
+1255725002,Non-small cell adenocarcinoma of lung
+1259003,Schistosis
+1259318004,Primary carcinoma of tongue base - dorsal surface
+1259321002,Primary carcinoma of larynx
+1259330005,Primary carcinoma of lingual tonsil
+1259366006,Primary adenoid cystic carcinoma of trachea
+1259367002,Primary squamous cell carcinoma of bronchus
+1259368007,Primary large cell carcinoma of lung
+1259369004,Primary giant cell carcinoma of lung
+1259370003,Primary oat cell carcinoma of lung
+1259371004,Primary squamous cell carcinoma of lung
+1259409000,Primary squamous cell carcinoma of bronchus in left lower lobe
+1259410005,Primary squamous cell carcinoma of bronchus in left upper lobe
+1259411009,Primary squamous cell carcinoma of bronchus in right lower lobe
+1259412002,Primary squamous cell carcinoma of bronchus in right middle lobe
+1259413007,Primary squamous cell carcinoma of bronchus in right upper lobe
+1259438002,Primary carcinoma of base of tongue
+1259440007,Primary tonsil carcinoma
+1259444003,Primary undifferentiated carcinoma of nasal sinus
+1259445002,Primary keratinizing squamous cell carcinoma of nasopharynx
+1259446001,Primary undifferentiated nonkeratinizing squamous cell carcinoma of nasopharynx
+1259461000,Primary squamous cell carcinoma of right lung
+1259463002,Primary squamous cell carcinoma of left lung
+1259470002,Primary nonkeratinizing carcinoma of the nasopharynx
+1259507000,Primary adenoid cystic carcinoma of oropharynx
+1259509002,Primary undifferentiated carcinoma of nasopharynx
+1259520002,Primary carcinoma of glottis
+1259521003,Primary carcinoma of subglottis
+1259523000,Primary carcinoma of supraglottis
+1259528009,Primary carcinoma of main bronchus
+1259537009,Primary carcinoma of vocal cord
+1259620008,Primary papillary squamous cell carcinoma of nasopharynx
+1259668002,Primary acinar cell cystadenocarcinoma of lung
+1259686004,Primary non-small cell lung carcinoma with neuregulin 1 gene fusion
+1259702008,Primary adenoid squamous cell carcinoma of nasopharynx
+1259704009,Primary basaloid squamous cell carcinoma of nasopharynx
+1259715004,Primary overlapping malignant neoplasm of nasopharynx
+1259726005,Primary epithelioid hemangioendothelioma of lung
+1259727001,Primary non-small cell lung cancer
+1259754003,Primary squamous non-small cell lung cancer
+1259757005,Primary nonsquamous nonsmall cell neoplasm of lung
+1259758000,Primary reactive oxygen species 1 positive non-small cell lung cancer
+1259760003,Primary non-small cell lung cancer with mutation in epidermal growth factor receptor
+1259761004,Primary non-small cell lung cancer without mutation in epidermal growth factor receptor
+1259768005,Primary non-small cell lung cancer negative for epidermal growth factor receptor expression
+1259776007,"Primary non-small cell lung cancer, positive for epidermal growth factor receptor expression"
+1259794001,Primary Pancoast tumor
+1259820006,Primary reactive oxygen species 1 negative non-small cell lung cancer
+1259821005,Primary anaplastic lymphoma kinase fusion oncogene positive non-small cell lung cancer
+1259822003,Primary anaplastic lymphoma kinase fusion oncogene negative non-small cell lung cancer
+1260018001,Adenoid cystic carcinoma of hypopharynx
+1260019009,Adenoid cystic carcinoma of lung
+1260021004,Adenoid squamous cell carcinoma of hypopharynx
+1260024007,Adenoid squamous cell carcinoma of larynx
+1260031006,Clear cell adenocarcinoma of oropharynx
+1260032004,Clear cell adenocarcinoma of lung
+1260033009,Clear cell adenocarcinoma of trachea
+1260034003,Basal cell adenocarcinoma of oropharynx
+1260035002,Carcinoma of ethmoidal sinus
+1260036001,Carcinoma of frontal sinus
+1260037005,Adenosquamous carcinoma of larynx
+1260038000,Adenosquamous carcinoma of trachea
+1260039008,Adenosquamous carcinoma of oropharynx
+1260040005,Adenosquamous carcinoma of hypopharynx
+1260042002,Adenosquamous carcinoma of lung
+1260045000,Cystadenocarcinoma of oropharynx
+1260046004,Squamous cell carcinoma of ethmoidal sinus
+1260048003,Squamous cell carcinoma of frontal sinus
+1260056000,Clear cell squamous cell carcinoma of lung
+1260057009,Mucinous adenocarcinoma of lung
+1260058004,Mucinous adenocarcinoma of oropharynx
+1260059007,Mucinous bronchiolo-alveolar carcinoma of lung
+1260060002,Mucinous adenocarcinoma of trachea
+1260061003,Mucoepidermoid carcinoma of oropharynx
+1260062005,Mucoepidermoid carcinoma of lung
+1260063000,Mucoepidermoid carcinoma of hypopharynx
+1260064006,Mucinous cystadenocarcinoma of trachea
+1260065007,Mucinous cystadenocarcinoma of lung
+1260066008,Papillary adenocarcinoma of trachea
+1260067004,Papillary adenocarcinoma of oropharynx
+1260068009,Papillary adenocarcinoma of lung
+1260069001,Oncocytic carcinoma of oropharynx
+1260070000,Non-mucinous bronchiolo-alveolar carcinoma of lung
+1260071001,Papillary squamous cell carcinoma of lung
+1260072008,Pseudosarcomatous carcinoma of lung
+1260073003,Papillary squamous cell carcinoma of larynx
+1260074009,Papillary squamous cell carcinoma of hypopharynx
+1260075005,Solid carcinoma of trachea
+1260076006,Small cell non-keratinizing squamous cell carcinoma of lung
+1260077002,Solid carcinoma of lung
+1260079004,Squamous cell carcinoma of hypopharyngeal aspect of aryepiglottic fold
+1260080001,Squamous cell carcinoma of maxillary sinus
+1260081002,Squamous cell carcinoma of postcricoid region
+1260082009,Squamous cell carcinoma of posterior wall of hypopharynx
+1260083004,Squamous cell carcinoma of piriform sinus
+1260084005,Squamous cell carcinoma of vallecula
+1260085006,Undifferentiated carcinoma of hypopharynx
+1260087003,Fetal adenocarcinoma of lung
+1260088008,Infiltrating duct carcinoma of oropharynx
+1260089000,Lymphoepithelial carcinoma of hypopharynx
+1260090009,Lymphoepithelial carcinoma of larynx
+1260091008,Lymphoepithelial carcinoma of oropharynx
+1260092001,Mixed mucinous and non-mucinous bronchiolo-alveolar carcinoma of lung
+1260093006,Mixed subtype adenocarcinoma of lung
+1260094000,Verrucous carcinoma of hypopharynx
+1260100002,Salivary gland type carcinoma of hypopharynx
+1260110006,Salivary gland type carcinoma of oropharynx
+1260115001,Salivary gland type carcinoma of lung
+129451001,Respiratory bronchiolitis associated interstitial lung disease
+129452008,Nonspecific interstitial pneumonia
+13151001,Flax-dressers' disease
+13217005,Fusiform bronchiectasis
+13274008,Atrophic fibrosis of lung
+13394002,Suberosis
+133971000119108,Chronic pulmonary embolism
+135836000,End stage chronic obstructive airways disease
+13645005,Chronic obstructive lung disease
+145298771000119104,Malignant carcinoid tumor of left lung
+146081000119104,Lung disease due to connective tissue disorder
+14700006,Bauxite fibrosis of lung
+152921000119101,Dependence on respiratory device
+154283005,Pulmonary tuberculosis
+15955901000119104,Primary small cell carcinoma of right lung
+15955941000119102,Primary small cell carcinoma of left lung
+15956181000119102,Metastatic adenocarcinoma to bilateral lungs
+15956221000119105,Metastatic adenocarcinoma to right lung
+15956261000119100,Metastatic adenocarcinoma to left lung
+15956341000119105,Adenocarcinoma of left lung
+15956381000119100,Adenocarcinoma of right lung
+15956661000119102,Metastatic small cell carcinoma to right lung
+15956701000119109,Metastatic small cell carcinoma to left lung
+15956741000119106,Metastatic small cell carcinoma to bilateral lungs
+15957141000119109,Metastatic squamous cell carcinoma to bilateral lungs
+15957181000119104,Metastatic squamous cell carcinoma to right lung
+15957221000119107,Metastatic squamous cell carcinoma to left lung
+15957261000119102,Kaposi sarcoma of bilateral lungs
+16003001,Giant bullous emphysema
+161672008,History of being lung transplant recipient
+16419651000119103,Dependence on biphasic positive airway pressure ventilation due to central sleep apnea syndrome
+16527441000119105,Primary non-small cell carcinoma of lower lobe of left lung
+16527481000119100,Primary non-small cell carcinoma of middle lobe of right lung
+16527521000119100,Primary non-small cell carcinoma of upper lobe of left lung
+16527561000119105,Primary non-small cell carcinoma of lower lobe of right lung
+16527601000119105,Primary non-small cell carcinoma of right lung
+16527641000119107,Primary non-small cell carcinoma of left lung
+16527721000119108,Primary non-small cell carcinoma of upper lobe of right lung
+1661000119106,Metastasis to lung from adenocarcinoma
+16623004,Coffee-workers' lung
+16846004,Obstructive emphysema
+17097001,Chronic disease of respiratory system
+17385007,Graphite fibrosis of lung
+174802006,Allotransplant of heart and lung
+1751000119100,Acute exacerbation of chronic obstructive airways disease with asthma
+17996008,Pneumoconiosis caused by inorganic dust
+18121000119104,Primary squamous cell carcinoma of palatine tonsil
+18121009,Chronic berylliosis
+18354001,Chronic induration of lung
+185086009,Chronic obstructive bronchitis
+186175002,Infiltrative lung tuberculosis
+186177005,Tuberculosis of lung with cavitation
+186193001,"Tuberculosis of lung, confirmed by sputum microscopy with or without culture"
+186194007,"Tuberculosis of lung, confirmed by culture only"
+186195008,"Tuberculosis of lung, confirmed histologically"
+186203002,"Tuberculosis of lung, bacteriologically and histologically negative"
+186204008,"Tuberculosis of lung, bacteriological and histological examination not done"
+18690003,Farmers' lung
+187233002,Sarcoidosis of lung with sarcoidosis of lymph nodes
+187631006,Malignant neoplasm of base of tongue dorsal surface
+187644001,Malignant tumor of junctional zone of tongue
+187675005,Malignant tumor of tonsillar pillar
+187681002,Malignant neoplasm of anterior epiglottis
+187682009,"Malignant neoplasm of epiglottis, free border"
+187683004,Malignant neoplasm of glossoepiglottic fold
+187685006,Malignant neoplasm of junctional region of epiglottis
+187688008,Malignant tumor of posterior wall of oropharynx
+187692001,Malignant tumor of nasopharynx
+187693006,Malignant tumor of posterior wall of nasopharynx
+187694000,Malignant tumor of adenoid
+187697007,Malignant tumor of pharyngeal recess
+187700006,Malignant tumor of anterior wall of nasopharynx
+187701005,Malignant neoplasm of floor of nasopharynx
+187708004,Malignant tumor aryepiglottic fold - hypopharyngeal aspect
+187709007,Malignant neoplasm of posterior pharynx
+187716008,Malignant tumor of Waldeyer's ring
+187828007,"Malignant neoplasm of nasal cavities, middle ear and accessory sinuses"
+187830009,Malignant neoplasm of nasal conchae
+187831008,Malignant tumor of nasal vestibule
+187841006,Malignant tumor of glottis
+187842004,Malignant tumor of supraglottis
+187843009,Malignant neoplasm of arytenoid cartilage
+187844003,Malignant neoplasm of cricoid cartilage
+187845002,Malignant neoplasm of cuneiform cartilage
+187846001,Malignant neoplasm of thyroid cartilage
+187853005,Malignant neoplasm of cartilage of trachea
+187854004,Malignant neoplasm of mucosa of trachea
+187857006,Malignant neoplasm of carina of bronchus
+187861000,Malignant neoplasm of upper lobe bronchus
+187862007,Malignant neoplasm of upper lobe of lung
+187864008,"Malignant neoplasm of middle lobe, bronchus or lung"
+187865009,Malignant neoplasm of middle lobe bronchus
+187866005,Malignant neoplasm of middle lobe of lung
+187869003,Malignant neoplasm of lower lobe bronchus
+187870002,Malignant neoplasm of lower lobe of lung
+189262006,Carcinoma in situ of bronchus and lung
+189265008,Carcinoma in situ of upper lobe bronchus and lung
+189266009,Carcinoma in situ of middle lobe bronchus and lung
+189267000,Carcinoma in situ of lower lobe bronchus and lung
+189815007,Pulmonary blastoma
+19076009,Sick building syndrome
+190905008,Cystic fibrosis
+190966007,Extreme obesity with alveolar hypoventilation
+192658007,Giant cell interstitial pneumonitis
+19274004,Grain-handlers' disease
+19325002,Traction bronchiectasis
+195949008,Chronic asthmatic bronchitis
+195951007,Acute exacerbation of chronic obstructive airways disease
+195953005,Mixed simple and mucopurulent chronic bronchitis
+195957006,Chronic bullous emphysema
+195958001,Segmental bullous emphysema
+195959009,Zonal bullous emphysema
+195984007,Recurrent bronchiectasis
+195985008,Post-infective bronchiectasis
+195989002,Pituitary snuff-takers' disease
+196001008,Chronic obstructive pulmonary disease with acute lower respiratory infection
+196017002,Pneumoconiosis associated with tuberculosis
+196026004,Chronic emphysema caused by chemical fumes
+196028003,Chronic pulmonary fibrosis caused by chemical fumes
+196049002,Chronic pulmonary radiation disease
+196051003,Drug-induced interstitial lung disorder
+196053000,Chronic drug-induced interstitial lung disorders
+196115007,Pulmonary congestion and hypostasis
+196116008,Pulmonary hypostasis
+196124003,Alveolar capillary block
+196125002,Diffuse interstitial pulmonary fibrosis
+196190001,Chronic pulmonary insufficiency following surgery
+196191002,Postprocedural subglottic stenosis
+197367007,Hepatic granulomas in berylliosis
+20091000175107,Acute on chronic hypoxemic and hypercapnic respiratory failure
+204550009,"Congenital stenosis of larynx, trachea and bronchus"
+204551008,Congenital bronchial stenosis
+204552001,Congenital subglottic stenosis
+204553006,Congenital supraglottic stenosis
+213152006,Heart-lung transplant failure and rejection
+22607003,Asbestosis
+226521000119108,Primary malignant neoplasm of nasopharynx
+22668006,Subglottic stenosis
+23022004,Tuberculous bronchiectasis
+230494007,Alveolar sleep apnea
+232440009,Acquired laryngeal stenosis
+232657004,Single lung transplant
+232658009,Double lung transplant
+232659001,Double lung transplant as a block
+232660006,Bilateral sequential single lung transplant
+23315001,Sequoiosis
+233615002,Chronic pulmonary coccidioidomycosis
+233623000,Mononuclear interstitial pneumonia
+233625007,Giant cell pneumonia
+233627004,Congenital cystic bronchiectasis
+233628009,Acquired bronchiectasis
+233629001,Idiopathic bronchiectasis
+233630006,Obstructive bronchiectasis
+233631005,Toxin-induced bronchiectasis
+233632003,Bronchiectasis caused by toxic aspiration
+233633008,Bronchiectasis caused by toxic inhalation
+233634002,Post-lung transplantation bronchiectasis
+233659006,Asbestos-induced pleural plaque
+233672007,Byssinosis grade 3
+233674008,Pulmonary emphysema in alpha-1 primary immunodeficiency deficiency
+233675009,Toxic emphysema
+233677001,Scar emphysema
+233694004,Dog house disease
+233695003,Dry rot lung
+233696002,Lycoperdonosis
+233697006,New Guinea lung
+233698001,Paprika splitters' lung
+233699009,Pyrethrum alveolitis
+233700005,Rodent handlers' lung
+233701009,Sewage workers' lung
+233702002,Summer-type hypersensitivity pneumonitis
+233703007,Interstitial lung disease
+233713004,Seasonal cryptogenic organizing pneumonia with biochemical cholestasis
+233716007,Micronodular pulmonary ossification
+233717003,Diffuse pulmonary neurofibromatosis
+233718008,Pulmonary tuberous sclerosis
+233724002,Toxic diffuse interstitial pulmonary fibrosis
+233725001,Drug-induced diffuse interstitial pulmonary fibrosis
+233726000,Localized pulmonary fibrosis
+233744008,Hilar lymph node sarcoidosis
+233748006,Simple pneumoconiosis
+233749003,Complicated pneumoconiosis
+233750003,Erionite pneumoconiosis
+233751004,Metal pneumoconiosis
+233753001,Subacute berylliosis
+233754007,Cerium pneumoconiosis
+233755008,Nickel pneumoconiosis
+233756009,Thorium pneumoconiosis
+233757000,Zirconium pneumoconiosis
+233758005,Mica pneumoconiosis
+233759002,Mixed mineral dust pneumoconiosis
+233760007,Acute silicosis
+233761006,Subacute silicosis
+233762004,Chronic silicosis
+233763009,Silicotuberculosis
+233764003,Wollastonite pneumoconiosis
+233767005,Stage 1 pulmonary sarcoidosis
+233768000,Stage 2 pulmonary sarcoidosis
+233769008,Stage 3 pulmonary sarcoidosis
+233770009,Stage 4 pulmonary sarcoidosis
+233771008,Endobronchial sarcoidosis
+233772001,Sarcoid pulmonary calcification
+233774000,Humidifier fever
+233786002,Acquired tracheal stenosis
+233787006,Acquired subglottic stenosis
+233796006,Acquired bronchial stenosis
+233805005,Bronchial anastomotic stricture
+233940007,Pulmonary tumor embolism
+235978006,Cystic fibrosis of pancreas
+236302005,Acute interstitial pneumonia
+236432001,Pulmonary renal syndrome
+238676008,Lofgrens syndrome
+23958009,Vanishing lung
+240163000,Malignant neoplasm of nasopharyngeal wall
+240702004,Chronic necrotizing pulmonary aspergillosis
+240742009,Chronic pulmonary African histoplasmosis
+240747003,Chronic pulmonary blastomycosis
+241861008,Metastatic malignant neoplasm to nasopharynx
+242862004,Metastatic malignant neoplasm to nasopharyngeal wall
+24369008,Pulmonary sarcoidosis
+249460003,Supraglottic stenosis
+25050002,"Alpha heavy chain disease, respiratory form"
+253003009,Carcinoid bronchial adenoma
+254423005,Carcinoma of lingual tonsil
+254459004,Malignant tumor of anterior pillar of fauces
+254478004,Malignant tumor of inferior turbinate
+254481009,Malignant tumor of middle turbinate
+254484001,Malignant tumor of posterior margin of nasal septum and choanae
+254503007,Malignant tumor of inferior surface of soft palate
+254509006,Malignant tumor of anterior commissure
+254513004,Malignant tumor of posterior commissure
+254517003,Malignant tumor of suprahyoid epiglottis
+254520006,Malignant tumor of infrahyoid epiglottis
+254526000,Malignant tumor of laryngeal ventricle
+254619006,Adenoid cystic carcinoma of trachea
+254620000,Squamous cell carcinoma of trachea
+254622008,Squamous cell carcinoma of bronchus
+254625005,Malignant tumor of lung parenchyma
+254626006,Adenocarcinoma of lung
+254628007,Carcinoma of lung parenchyma
+254629004,Large cell carcinoma of lung
+254631008,Giant cell carcinoma of lung
+254632001,Small cell carcinoma of lung
+254633006,Oat cell carcinoma of lung
+254634000,Squamous cell carcinoma of lung
+254635004,Epithelioid hemangioendothelioma of lung
+254637007,Non-small cell lung cancer
+254638002,Pancoast tumor
+254639005,Carcinoma in situ of lung parenchyma
+254645002,Malignant mesothelioma of pleura
+255074000,Malignant tumor of nasal cavity and nasopharynx
+255075004,Malignant tumor of lateral nasal wall
+25897000,Malt-workers' lung
+26427008,Chronic pulmonary histoplasmosis
+266355005,Bullous emphysema with collapse
+266356006,Atrophic (senile) emphysema
+266368002,Post-inflammatory pulmonary fibrosis
+266404004,Chronic chemical respiratory disease
+269464000,"Malignant neoplasm of upper lobe, bronchus or lung"
+271943005,Carcinoma of base of tongue
+274085008,Tonsil carcinoma
+275490009,Carcinoma of tongue base - dorsal surface
+276537001,Chronic pulmonary insufficiency of prematurity
+276635001,Acquired subglottic stenosis in newborn
+276636000,Post-intubation subglottic stenosis
+276975007,Carcinoma of larynx
+277485007,Secondary pulmonary hypoplasia
+277486008,Pulmonary hypoplasia associated with short gestation
+277656005,Primary pulmonary hypoplasia
+277844007,Pulmonary lymphangioleiomyomatosis
+28295001,Middle lobe syndrome
+285381006,Acute infective exacerbation of chronic obstructive airways disease
+285598005,Metastasis to trachea of unknown primary
+285603002,Metastasis to bronchus of unknown primary
+285604008,Metastasis to lung of unknown primary
+285605009,Metastasis to pleura of unknown primary
+28791000119105,Chronic coccidioidomycotic pneumonia
+2912004,Cystic-bullous disease of the lung
+293241000119100,Acute exacerbation of chronic obstructive bronchitis
+293991000000106,Very severe chronic obstructive pulmonary disease
+29422001,Coal workers' pneumoconiosis
+30042003,Confluent fibrosis of lung
+30188007,Alpha-1-antitrypsin deficiency
+302913000,Diffuse pulmonary calcinosis
+303012000,Malignant tumor of posterior wall of hypopharynx
+312603000,Lung transplant rejection
+313296004,Mild chronic obstructive pulmonary disease
+313297008,Moderate chronic obstructive pulmonary disease
+313299006,Severe chronic obstructive pulmonary disease
+313353007,Squamous cell carcinoma of bronchus in left lower lobe
+313354001,Squamous cell carcinoma of bronchus in left upper lobe
+313355000,Squamous cell carcinoma of bronchus in right lower lobe
+313356004,Squamous cell carcinoma of bronchus in right middle lobe
+313357008,Squamous cell carcinoma of bronchus in right upper lobe
+314954002,Local recurrence of malignant tumor of lung
+317931000119101,Pulmonary disease due to allergic granulomatosis angiitis
+31898008,Paraseptal emphysema
+32139003,Mixed dust pneumoconiosis
+32477003,Heart-lung transplant with recipient cardiectomy-pneumonectomy
+328641000119109,Genetic disorder of surfactant dysfunction
+328661000119108,Interstitial lung disease of childhood
+33325001,Compensatory emphysema
+33548005,Anthracosilicosis
+34004002,Siderosilicosis
+35037009,Primary atypical interstitial pneumonia
+350586651000119105,Chronic respiratory failure due to neuromuscular disease
+3514002,Peribronchial fibrosis of lung
+353561000119103,Metastatic malignant neoplasm to right lung
+353741000119106,Metastatic malignant neoplasm to left lung
+354391000119100,Kaposi sarcoma of left lung
+354461000119102,Kaposi sarcoma of right lung
+354721000119103,Primary malignant neoplasm of left main bronchus
+354731000119100,Primary malignant neoplasm of right main bronchus
+35491000119107,Restrictive lung mechanics due to neuromuscular disease
+36042005,Parietoalveolar pneumopathy
+361194002,Perinatal pulmonary fibroplasia
+361195001,Pulmonary fibroplasia
+361196000,Idiopathic hilar fibrosis
+363358000,Malignant tumor of lung
+363376007,Malignant tumor of base of tongue
+363377003,Malignant tumor of lingual tonsil
+363392002,Malignant tumor of oropharynx
+363393007,Malignant tumor of tonsil
+363394001,Malignant tumor of tonsillar fossa
+363395000,Malignant tumor of vallecula
+363398003,Malignant tumor of lateral wall of nasopharynx
+363399006,Malignant tumor of hypopharynx
+363400004,Malignant tumor of postcricoid region
+363401000,Malignant tumor of pyriform fossa
+363422006,Malignant tumor of nasal cavity
+363423001,Malignant tumor of nasal septum
+363425008,Malignant tumor of maxillary sinus
+363426009,Malignant tumor of ethmoid sinus
+363427000,Malignant tumor of frontal sinus
+363428005,Malignant tumor of sphenoid sinus
+363429002,Malignant tumor of larynx
+363430007,Malignant tumor of subglottis
+363431006,Malignant tumor of laryngeal cartilage
+363432004,Malignant tumor of trachea
+363433009,Malignant tumor of pleura
+363486007,Malignant tumor of vocal cord
+363487003,Malignant tumor of aryepiglottic fold - laryngeal aspect
+363488008,Malignant tumor of false cord
+363493006,Malignant tumor of bronchus
+363506007,Malignant tumor of nasal sinuses
+363507003,Malignant neoplasm of pharynx
+36485005,Restrictive lung disease
+36599006,Chronic fibrosis of lung
+36696005,Kaolinosis
+371067004,Hepatopulmonary syndrome
+37180002,Chronic nonspecific lung disease
+371988005,Primary malignant neoplasm of false vocal cord
+371994002,Primary malignant neoplasm of laryngeal aspect of aryepiglottic fold
+371995001,Primary malignant neoplasm of larynx
+372020000,Primary malignant neoplasm of tonsil
+372030009,Primary malignant neoplasm of vocal cord
+372065009,Malignant neoplasm of main bronchus
+372103002,Carcinoma of glottis
+372104008,Carcinoma of subglottis
+372105009,Carcinoma of supraglottis
+372110008,"Primary malignant neoplasm of lower lobe, bronchus or lung"
+372111007,Carcinoma of lower lobe of lung
+372113005,"Carcinoma of middle lobe, bronchus or lung"
+372120003,Carcinoma of main bronchus
+372136001,"Carcinoma of upper lobe, bronchus or lung"
+372141009,Carcinoma of vocal cord
+37471005,Extrinsic allergic alveolitis
+37711000,Cadmium pneumonitis
+37981002,Allergic bronchopulmonary aspergillosis
+38729007,Wheat weevil disease
+398640008,Rheumatoid arthritis with pneumoconiosis
+39871006,Chronic respiratory failure
+398726004,Rheumatoid lung disease
+39905002,Scimitar syndrome
+40122008,Pneumoconiosis
+40218008,Carbon electrode makers' pneumoconiosis
+402503002,Basal cell carcinoma of nasal columella
+404807005,Cheese-washers' lung
+40527005,Idiopathic pulmonary hemosiderosis
+405570007,Pulmonary fibrosis due to and following radiotherapy
+405822008,Squamous cell carcinoma of larynx
+40640008,Massive fibrosis of lung co-occurrent and due to silicosis
+408648004,Squamous cell carcinoma of epiglottis
+408649007,Squamous cell carcinoma of pharynx
+413839001,Chronic lung disease
+417688002,Chronic progressive coccidioidal pneumonia
+41997000,Asthmatic pulmonary alveolitis
+422541001,Undifferentiated carcinoma of nasopharynx
+422691006,Squamous cell carcinoma of nasopharynx
+422758009,Carcinoma of nasal meatus
+422886007,Olfactory neuroblastoma
+422968005,"Non-small cell carcinoma of lung, TNM stage 3"
+423050000,"Large cell carcinoma of lung, TNM stage 2"
+423106003,Adenocarcinoma of nasopharynx
+423121009,"Non-small cell carcinoma of lung, TNM stage 4"
+423295000,"Squamous cell carcinoma of lung, TNM stage 1"
+423318000,Adenoid cystic carcinoma of oropharynx
+423464009,Squamous cell carcinoma of oropharynx
+423468007,"Squamous cell carcinoma of lung, TNM stage 2"
+423600008,"Large cell carcinoma of lung, TNM stage 4"
+42402006,Kartagener syndrome
+424078005,"Adenocarcinoma of lung, stage I"
+424132000,"Non-small cell carcinoma of lung, TNM stage 1"
+424454009,"Adenocarcinoma of lung, stage III"
+424632001,"Adenocarcinoma of lung, stage II"
+424938000,"Large cell carcinoma of lung, TNM stage 1"
+424970000,"Large cell carcinoma of lung, TNM stage 3"
+424993006,"Adenocarcinoma of lung, stage IV"
+425048006,"Non-small cell carcinoma of lung, TNM stage 2"
+425230006,"Squamous cell carcinoma of lung, TNM stage 3"
+425376008,"Squamous cell carcinoma of lung, TNM stage 4"
+425748003,Acute exacerbation of chronic bronchitis
+425951002,Shrinking lung syndrome
+426437004,Familial idiopathic pulmonary fibrosis
+426705001,Diabetes mellitus co-occurrent and due to cystic fibrosis
+426853005,Pneumoconiosis caused by silicate
+426896000,Chronic hypercapnic respiratory failure
+426964009,"Non-small cell lung cancer, positive for epidermal growth factor receptor expression"
+427038005,"Non-small cell lung cancer, negative for epidermal growth factor receptor expression"
+427123006,Interstitial lung disease due to collagen vascular disease
+427777003,Restrictive lung disease due to muscular dystrophy
+427896006,Chronic respiratory insufficiency
+427908002,Restrictive lung disease due to kyphoscoliosis
+427928003,Disorder related to lung transplantation
+428173007,Chronic hypoxemic respiratory failure
+428697002,Inactive tuberculosis of lung
+429091008,Dependence on biphasic positive airway pressure ventilation
+429332008,Transplantation of single lobe of lung
+429487005,Dependence on continuous positive airway pressure ventilation
+430476004,Diffuse panbronchiolitis
+430621000,Malignant neoplasm of lower respiratory tract
+430969000,Recurrent aspiration pneumonia
+431223003,Acute rejection of lung transplant
+431507002,Accelerated rejection of lung transplant
+432066002,Lung disorder due to autoimmune disorder
+432774005,Hyperacute rejection of lung transplant
+432958009,Chronic rejection of lung transplant
+438773007,Recurrent pulmonary embolism
+440173001,Nonsquamous nonsmall cell neoplasm of lung
+440527006,Primary squamous cell carcinoma of naris
+44165003,Complication of transplanted lung
+442025000,Acute exacerbation of chronic asthmatic bronchitis
+44274007,Lymphoid interstitial pneumonia
+444932008,Dependence on ventilator
+445378003,Acute exacerbation of bronchiectasis
+44547005,Chalicosis
+446946005,Reinfection pulmonary tuberculosis
+447006007,Relapse pulmonary tuberculosis
+447810006,Congenital stenosis of trachea due to complete rings
+447811005,Congenital stenosis of trachea due to tracheal web
+448214005,Malignant epithelial neoplasm of oropharynx
+448305002,Vascular ring with malrotation and dextroversion of heart and hypoplasia of right lung and left arterial duct
+448319002,Diffuse non-Hodgkin's lymphoma of nasopharynx
+448371005,Non-Hodgkin's lymphoma of nasopharynx
+448372003,Non-Hodgkin's lymphoma of lung
+448509007,Transglottic malignant neoplasm of larynx
+448595006,Scimitar syndrome with additional anomalous pulmonary venous connection
+448665005,Malignant epithelial neoplasm of hypopharynx
+448672006,Follicular non-Hodgkin's lymphoma of lung
+448867004,Diffuse non-Hodgkin's lymphoma of lung
+448868009,Malignant neoplasm of lateral wall of oropharynx
+448990005,Malignant epithelial neoplasm of nasal cavity
+448993007,Malignant epithelial neoplasm of lung
+449058008,Follicular non-Hodgkin's lymphoma of tonsil
+449066004,Malignant neoplasm of upper respiratory tract
+449067008,Malignant neoplasm of parietal pleura
+449096009,Malignant neoplasm of respiratory system
+449173006,Diffuse non-Hodgkin's lymphoma of tonsil
+449219006,Follicular non-Hodgkin's lymphoma of nasopharynx
+449248000,Nasopharyngeal carcinoma
+449254004,Malignant epithelial neoplasm of pharynx
+449292003,Non-Hodgkin's lymphoma of tonsil
+449308006,Malignant neoplasm of visceral pleura
+449417005,Malignant epithelial neoplasm of nasal septum
+46847001,Chronic pulmonary edema
+470101491000119107,Interstitial lung disease due to dabbing
+47515009,Simple silicosis
+47895001,Congenital emphysema
+47938003,Chronic obliterative bronchiolitis
+48347002,Humidifier lung
+49691004,Occupational bronchitis
+4981000,Panacinar emphysema
+49840000,Complicated silicosis
+50076003,Baritosis
+50196008,Perialveolar fibrosis of lung
+50581000,Goodpasture's syndrome
+50589003,Silver polishers' lung disease
+51068008,Adult bronchiectasis
+51277007,Stannosis
+51615001,Fibrosis of lung
+52333004,Mushroom workers' lung
+52500008,Saccular bronchiectasis
+52571006,Chronic tracheobronchitis
+526071000000104,Arthropathy in cystic fibrosis
+54867000,Rheumatoid arthritis with fibrosing alveolitis
+556179491000119104,Interstitial lung disease due to vaping
+56440001,Segmental tracheal stenosis
+56841008,Massive fibrosis of lung
+58691003,Antimony pneumoconiosis
+59128005,Congenital honeycomb lung
+59773008,Simple pulmonary alveolitis
+599006,Chronic pneumothorax
+59940009,Hypersensitivity alveolitis in lungworm infection
+60631000119109,Dependence on home ventilator
+60651000119103,Dependence on continuous supplemental oxygen
+60805002,Hemolytic anemia with emphysema AND cutis laxa
+61471000119100,Basal cell carcinoma of naris
+61937009,Simple chronic bronchitis
+62371005,Pulmonary siderosis
+62511003,Autotransplant of lung
+63480004,Chronic bronchitis
+63841001,Chronic pulmonary congestion
+64631008,Fullers' earth disease
+64667001,Interstitial pneumonia
+66987001,Congenital lobar emphysema
+67242002,Bagassosis
+67569000,Bronchopulmonary dysplasia of newborn
+67811000119102,"Primary small cell malignant neoplasm of lung, TNM stage 1"
+67821000119109,"Primary small cell malignant neoplasm of lung, TNM stage 2"
+67831000119107,"Primary small cell malignant neoplasm of lung, TNM stage 3"
+67841000119103,"Primary small cell malignant neoplasm of lung, TNM stage 4"
+67905004,Acute-on-chronic respiratory failure
+68328006,Centriacinar emphysema
+68333005,Furriers' lung
+683991000119103,Extensive stage primary small cell carcinoma of lung
+684633371000119107,Diffuse pulmonary meningotheliomatosis
+688711000119104,Primary squamous cell carcinoma of aryepiglottic fold
+689251000119101,Primary squamous cell carcinoma of posterior wall of nasopharynx
+689361000119108,Primary squamous cell carcinoma of tonsillar fossa
+689371000119102,Primary squamous cell carcinoma of tonsillar pillar
+69339004,Bird-fanciers' lung
+69454006,Chronic respiratory condition caused by fumes AND/OR vapors
+697921005,Pulmonary hypertension in sarcoidosis
+697923008,Pulmonary hypertension in lymphangioleiomyomatosis
+697993003,Undifferentiated carcinoma of nasal sinus
+698011002,Keratinizing squamous cell carcinoma of nasopharynx
+698040004,Malignant melanoma of nasal cavity
+698044008,Malignant melanoma of palatine arch
+698048006,Undifferentiated nonkeratinizing squamous cell carcinoma of nasopharynx
+698285005,Malignant melanoma of ethmoid sinus
+698288007,Malignant melanoma of maxillary sinus
+699014000,Recurrent pneumonia
+700249006,Idiopathic interstitial pneumonia
+700250006,Idiopathic pulmonary fibrosis
+702432006,"Diaphragmatic hernia, abnormal face and distal limb anomalies"
+703228009,Non-small cell lung cancer with mutation in epidermal growth factor receptor
+703230006,Non-small cell lung cancer without mutation in epidermal growth factor receptor
+704345008,Chronic interstitial pneumonia
+707337006,Primary adenocarcinoma of accessory sinus
+707339009,Primary adenocarcinoma of maxillary sinus
+707342003,Primary adenocarcinoma of ethmoidal sinus
+707343008,Primary adenocarcinoma of frontal sinus
+707344002,Primary adenocarcinoma of sphenoidal sinus
+707345001,Primary carcinoma of accessory sinus
+707346000,Primary carcinoma of ethmoidal sinus
+707347009,Primary carcinoma of maxillary sinus
+707348004,Primary carcinoma of sphenoidal sinus
+707349007,Primary carcinoma of frontal sinus
+707350007,Malignant melanoma of accessory sinus
+707353009,Primary squamous cell carcinoma of accessory sinus
+707354003,Primary squamous cell carcinoma of maxillary sinus
+707355002,Primary squamous cell carcinoma of sphenoidal sinus
+707356001,Primary squamous cell carcinoma of frontal sinus
+707357005,Primary squamous cell carcinoma of laryngeal cartilage
+707358000,Primary squamous cell carcinoma of larynx
+707359008,Primary squamous cell carcinoma of ethmoidal sinus
+707360003,Primary lymphoepithelial carcinoma of larynx
+707361004,Malignant melanoma of frontal sinus
+707362006,Malignant melanoma of sphenoidal sinus
+707377003,Primary signet ring cell carcinoma of trachea
+707378008,Primary myoepithelial carcinoma of trachea
+707379000,Primary mucoepidermoid carcinoma of trachea
+707380002,Primary salivary gland type carcinoma of trachea
+707383000,Primary mucinous cystadenocarcinoma of trachea
+707384006,Primary solid carcinoma of trachea
+707385007,Primary undifferentiated carcinoma of trachea
+707386008,Primary acinar cell carcinoma of trachea
+707388009,Primary squamous cell carcinoma of trachea
+707389001,Primary clear cell squamous cell carcinoma of trachea
+707390005,Primary basaloid squamous cell carcinoma of trachea
+707391009,Primary papillary squamous cell carcinoma of trachea
+707392002,Primary giant cell carcinoma of trachea
+707393007,Primary adenosquamous carcinoma of trachea
+707394001,Primary spindle cell carcinoma of trachea
+707395000,Primary adenocarcinoma of hypopharynx
+707396004,Primary oxyphilic adenocarcinoma of oropharynx
+707398003,Primary polymorphous low grade adenocarcinoma of oropharynx
+707399006,Primary papillary adenocarcinoma of oropharynx
+707400004,Primary mucinous adenocarcinoma of oropharynx
+707401000,Primary clear cell adenocarcinoma of oropharynx
+707402007,Primary adenocarcinoma of oropharynx
+707403002,Primary fetal adenocarcinoma of lung
+707404008,Primary mixed subtype adenocarcinoma of lung
+707405009,Primary adenosquamous carcinoma of lung
+707406005,Primary mucoepidermoid carcinoma of hypopharynx
+707407001,Primary signet ring cell carcinoma of lung
+707408006,Primary small cell non-keratinizing squamous cell carcinoma of lung
+707409003,Primary acinar cell carcinoma of lung
+707410008,Primary solid carcinoma of lung
+707411007,Primary papillary adenocarcinoma of lung
+707412000,Chronic pulmonary thromboembolism
+707413005,Chronic pulmonary thromboembolism without pulmonary hypertension
+707421004,Primary undifferentiated carcinoma of larynx
+707422006,Primary spindle cell squamous cell carcinoma of larynx
+707423001,Primary basaloid carcinoma of larynx
+707424007,Primary adenosquamous cell carcinoma of larynx
+707425008,Primary adenoid squamous cell carcinoma of larynx
+707426009,Primary papillary squamous cell carcinoma of larynx
+707427000,Primary verrucous carcinoma of larynx
+707429002,Overlapping squamous cell carcinoma of larynx
+707430007,Overlapping squamous cell carcinoma of laryngeal cartilage
+707433009,Lymphangioleiomyomatosis due to tuberous sclerosis syndrome
+707434003,Pulmonary fibrosis due to Hermansky-Pudlak syndrome
+707442002,Congenital pulmonary alveolar proteinosis
+707443007,Autoimmune pulmonary alveolar proteinosis
+707451005,Primary adenocarcinoma of lung
+707452003,Primary mucinous adenocarcinoma of lung
+707453008,Primary clear cell squamous cell carcinoma of lung
+707454002,Primary basaloid squamous cell carcinoma of lung
+707455001,Primary papillary squamous cell carcinoma of lung
+707456000,Primary undifferentiated carcinoma of lung
+707457009,Primary spindle cell carcinoma of lung
+707458004,Primary pleomorphic carcinoma of lung
+707460002,Primary pseudosarcomatous carcinoma of lung
+707464006,Primary myoepithelial carcinoma of lung
+707465007,Primary mucoepidermoid carcinoma of lung
+707466008,Primary adenoid cystic carcinoma of lung
+707467004,Primary salivary gland type carcinoma of lung
+707468009,Primary mixed mucinous and non-mucinous bronchiolo-alveolar carcinoma of lung
+707469001,Primary non-mucinous bronchiolo-alveolar carcinoma of lung
+707470000,Primary mucinous bronchiolo-alveolar carcinoma of lung
+707471001,Primary clear cell adenocarcinoma of trachea
+707472008,Primary papillary adenocarcinoma of trachea
+707473003,Primary mucinous adenocarcinoma of trachea
+707475005,Primary adenocarcinoma of trachea
+707479004,Primary adenocarcinoma of subglottis
+707481002,Primary basaloid squamous cell carcinoma of hypopharynx
+707482009,Primary papillary squamous cell carcinoma of hypopharynx
+707483004,Primary undifferentiated carcinoma of hypopharynx
+707484005,Primary adenoid squamous cell carcinoma of hypopharynx
+707485006,Primary adenosquamous carcinoma of hypopharynx
+707486007,Primary basaloid carcinoma of hypopharynx
+707487003,Primary giant cell carcinoma of hypopharynx
+707489000,Primary spindle cell squamous cell carcinoma of hypopharynx
+707490009,Primary verrucous carcinoma of hypopharynx
+707491008,Primary lymphoepithelial carcinoma of hypopharynx
+707492001,Primary squamous cell carcinoma of hypopharynx
+707493006,Primary lymphoepithelial carcinoma of trachea
+707494000,Primary verrucous carcinoma of trachea
+707495004,Primary squamous cell adenoid carcinoma of trachea
+707510005,Secondary pulmonary alveolar proteinosis
+707528007,Primary squamous cell carcinoma of nasopharynx
+707529004,Overlapping squamous cell carcinoma of oropharynx
+707532001,Primary squamous cell carcinoma of posterior wall of oropharynx
+707534000,Chronic lung disease due to surfactant disorder
+707535004,Primary squamous cell carcinoma of lateral wall of oropharynx
+707537007,Primary squamous cell carcinoma of anterior surface of epiglottis
+707538002,Primary squamous cell carcinoma of vallecula
+707539005,Primary adenoid cystic carcinoma of hypopharynx
+707553005,Chronic exogenous lipoid pneumonia
+70756004,Bronchial atresia with segmental pulmonary emphysema
+707575007,Primary squamous cell carcinoma of supraglottis
+707576008,Primary squamous cell carcinoma of subglottis
+707579001,Primary basaloid squamous cell carcinoma of oropharynx
+707580003,Primary basaloid carcinoma of oropharynx
+707581004,Primary papillary squamous cell carcinoma of oropharynx
+707582006,Primary spindle cell squamous cell carcinoma of oropharynx
+707583001,Primary adenosquamous carcinoma of oropharynx
+707584007,Primary lymphoepithelial carcinoma of oropharynx
+707585008,Primary squamous cell carcinoma of oropharynx
+707586009,Primary myoepithelial carcinoma of oropharynx
+707587000,Primary carcinoma ex pleomorphic adenoma of oropharynx
+707588005,Primary epithelial-myoepithelial carcinoma of oropharynx
+707589002,Primary cystadenocarcinoma of oropharynx
+707590006,Primary acinar cell carcinoma of oropharynx
+707591005,Primary mucoepidermoid carcinoma of oropharynx
+707592003,Primary infiltrating duct carcinoma of oropharynx
+707593008,Primary salivary gland-type tumor of oropharynx
+707595001,Primary mucinous cystadenocarcinoma of lung
+707596000,Primary carcinosarcoma of lung
+707627009,Primary salivary gland type carcinoma of hypopharynx
+707628004,Overlapping squamous cell carcinoma of hypopharynx
+707660007,Primary giant cell carcinoma of larynx
+707662004,Primary basaloid squamous cell carcinoma of larynx
+707664003,Primary squamous cell carcinoma of glottis
+707670009,Pleuropulmonary blastoma
+707671008,Pleuropulmonary blastoma type I
+707672001,Pleuropulmonary blastoma type II
+707673006,Pleuropulmonary blastoma type III
+707674000,Primary malignant epithelial neoplasm of trachea
+707686002,Primary squamous cell carcinoma of posterior wall of hypopharynx
+707697002,Primary squamous cell carcinoma of hypopharyngeal aspect of aryepiglottic fold
+707703001,Primary squamous cell carcinoma of postcricoid region
+707704007,Primary squamous cell carcinoma of pyriform sinus
+707705008,Nonkeratinizing carcinoma of the nasopharynx
+707766007,Exocrine pancreatic manifestation co-occurrent and due to cystic fibrosis
+708026002,Chronic pneumonitis of infancy
+708030004,Pulmonary emphysema co-occurrent with fibrosis of lung
+709031009,Malignant neoplasm of superior wall of nasopharynx
+711379004,Interstitial lung disease due to connective tissue disease
+711414003,Primary clear cell adenocarcinoma of lung
+71193007,Fibrosis of lung caused by radiation
+713244007,Drug induced pulmonary fibrosis
+713525001,Recurrent bacterial pneumonia
+713526000,Recurrent bacterial pneumonia co-occurrent with human immunodeficiency virus infection
+714203003,Acute bronchitis co-occurrent with bronchiectasis
+716088000,Follicular hamartoma with alopecia and cystic fibrosis syndrome
+716198008,Growth delay with hydrocephalus and lung hypoplasia syndrome
+718200007,Primary pulmonary lymphoma
+719218000,Cryptogenic organizing pneumonia
+720401009,Cystic fibrosis with gastritis and megaloblastic anemia syndrome
+721076000,Siegler Brewer Carey syndrome
+721095007,"Diaphragmatic defect, limb deficiency, skull defect syndrome"
+721560002,Primary adenocarcinoma of nasal cavity
+721605003,Primary squamous cell carcinoma of overlapping sites of accessory sinuses
+721606002,Primary adenocarcinoma of overlapping sites of accessory sinuses
+721607006,Primary undifferentiated carcinoma of oropharynx
+721977007,"Lung fibrosis, immunodeficiency, 46,XX gonadal dysgenesis syndrome"
+722425009,Reactive oxygen species 1 positive non-small cell lung cancer
+722510006,Primary rhabdomyosarcoma of pharynx
+722511005,Primary rhabdomyosarcoma of respiratory organ
+722527003,Primary malignant neuroendocrine neoplasm of bronchus
+722528008,Primary malignant neuroendocrine neoplasm of lung
+722529000,Primary malignant epithelial neoplasm of nasopharynx
+722530005,Primary squamous cell carcinoma of pharyngeal tonsil
+722672002,Primary squamous cell carcinoma of base of tongue
+722673007,Primary squamous cell carcinoma of lingual tonsil
+72270005,Collagenous pneumoconiosis
+722827008,Primary synovial sarcoma of respiratory organ
+722912007,Congenital pulmonary hypoplasia due to prolonged premature rupture of membranes
+722913002,Congenital pulmonary hypoplasia due to lung space occupying lesion
+723182009,Primary squamous cell carcinoma of nasal cavity
+723301009,Squamous non-small cell lung cancer
+723829000,"Pulmonary fibrosis, hepatic hyperplasia, bone marrow hypoplasia syndrome"
+724056005,Malignant neoplasm of lower lobe of right lung
+724058006,Malignant neoplasm of upper lobe of left lung
+724059003,Malignant neoplasm of lower lobe of left lung
+724060008,Malignant neoplasm of right upper lobe of lung
+724500003,Idiopathic chronic eosinophilic pneumonia
+725052002,Fetal cystic fibrosis
+725415009,House allergic alveolitis
+726653000,Malignant carcinoid tumor of bronchus
+73144008,Pneumoconiosis caused by talc
+733144006,Malignant epithelial neoplasm of bronchus
+733171006,Chronic pulmonary aspergillosis
+733345003,Primary squamous cell carcinoma of pharynx
+733358002,Primary squamous cell carcinoma of respiratory system
+733453005,"Congenital nephrotic syndrome, interstitial lung disease, epidermolysis bullosa syndrome"
+733497009,Chronic suppuration of bronchus
+7343008,Liparitosis
+73448002,Fish-meal workers' lung
+735450006,Primary malignant neuroepitheliomatous neoplasm of nasal cavity
+7361000175106,Acute-on-chronic hypercapnic respiratory failure
+737180005,Chronic bronchiolitis
+737181009,Interstitial lung disease due to systemic disease
+737182002,Interstitial lung disease due to granulomatous disease
+737183007,Interstitial lung disease due to metabolic disease
+737184001,Interstitial lung disease co-occurrent and due to systemic vasculitis
+737281001,Artificial larynx in situ
+7391000119103,Primary adenoid cystic carcinoma of nasopharynx
+7436001,Alveolar pneumopathy
+74387008,Tuberculosis of hilar lymph nodes
+74417001,Mucopurulent chronic bronchitis
+7548000,Rheumatic pneumonia
+75547007,Stenosis of larynx
+76157009,Bituminosis
+762269004,Classical cystic fibrosis
+762270003,Atypical cystic fibrosis
+762271004,Subclinical cystic fibrosis
+762618008,Bronchiolitis obliterans syndrome due to and after lung transplantation
+770674007,Tubercular lesion of lung
+770760006,16q24.1 microdeletion syndrome
+771306007,"Hereditary fibrosing poikiloderma, tendon contractures, myopathy, pulmonary fibrosis syndrome"
+77593006,Congenital bronchiectasis
+77690003,Interstitial emphysema of lung
+783182004,Chronic respiratory distress with surfactant metabolism deficiency
+784266000,History of heart-lung transplant recipient
+785345002,Pneumoconiosis caused by sisal dust
+785736001,Chronic bronchitis co-occurrent with wheeze
+78723001,Cannabinosis
+789574002,Acute exacerbation of idiopathic pulmonary fibrosis
+79031000119101,Dependence on respirator
+793197981000119106,Malignant carcinoid tumor of right lung
+79877004,Stenosis of bronchus
+805002,Pneumoconiosis caused by silica
+805261000000101,Bronchiolitis obliterans syndrome after lung transplantation
+80602006,Nodular tuberculosis of lung
+80614003,Prolonged pulmonary alveolitis
+80825009,Congenital hypoplasia of lung
+81423003,Cystic fibrosis without meconium ileus
+81554001,Tuberculosis of lung with involvement of bronchus
+820361000000105,Allotransplantation of lobe of lung from live donor
+822969007,Acinar cell cystadenocarcinoma of lung
+8247009,Berylliosis
+829972004,Diffuse hemorrhage of pulmonary alveolar
+830055006,Anaplastic lymphoma kinase fusion oncogene negative non-small cell lung cancer
+830060005,Reactive oxygen species 1 negative non-small cell lung cancer
+830151004,Anaplastic lymphoma kinase fusion oncogene positive non-small cell lung cancer
+83457000,Cylindrical bronchiectasis
+836477007,Chronic emphysema caused by vapor
+840350008,Chronic obliterative bronchiolitis caused by chemical fumes
+840351007,Chronic obliterative bronchiolitis caused by vapor
+84409004,Fetid chronic bronchitis
+846634000,Chronic respiratory condition caused by fumes
+846635004,Chronic respiratory condition caused by vapors
+846636003,Chronic respiratory condition caused by chemical fumes
+846637007,Chronic pulmonary fibrosis caused by chemical vapors
+847091000000104,Acute non-infective exacerbation of chronic obstructive pulmonary disease
+85438006,Diatomaceous earth disease
+8549006,Desquamative interstitial pneumonia
+85761009,Byssinosis
+859041000000103,Exacerbation of cystic fibrosis
+860890006,Fetal interstitial neoplasm of lung
+86092005,Cystic fibrosis with meconium ileus
+86263001,Cobaltosis
+86555001,Cystic fibrosis of the lung
+866103007,Interstitial lung disease due to juvenile polymyositis
+86638007,Maple-bark strippers' lung
+870327007,Papillary squamous cell carcinoma of nasopharynx
+870573008,Interstitial pneumonia with autoimmune features
+87119009,Congenital cystic lung
+87153008,Pulmonary alveolar microlithiasis
+87433001,Pulmonary emphysema
+87909002,Hard metal pneumoconiosis
+879963005,Exacerbation of bronchiectasis caused by infection
+88039007,Transplant of lung
+88687001,Manganese pneumonitis
+890354000,Congenital subglottic stenosis Cotton-Myer grade 3
+890355004,Congenital subglottic stenosis Cotton-Myer grade 4
+890386005,Congenital subglottic stenosis Cotton-Myer grade 1
+890387001,Congenital subglottic stenosis Cotton-Myer grade 2
+890428007,Primary congenital hypoplasia of bilateral lungs
+890528009,Primary malignant neoplasm of left lung
+890529001,Primary malignant neoplasm of right lung
+890534002,Primary malignant neoplasm of bilateral lungs
+89099002,Chronic allergic bronchitis
+89201000119106,Dependence on supplemental oxygen when ambulating
+89241000119108,Dependence on nocturnal oxygen therapy
+90117007,Tuberculous fibrosis of lung
+90610005,Interstitial pulmonary fibrosis of prematurity
+90623003,Aluminosis of lung
+91191000119108,Metastatic adenocarcinoma to pleura
+91211000119109,Metastatic small cell carcinoma to pleura
+91221000119102,Metastatic malignant melanoma to pleura
+92552003,Carcinoma in situ of bronchus of left lower lobe
+92553008,Carcinoma in situ of bronchus of left upper lobe
+92554002,Carcinoma in situ of bronchus of right lower lobe
+92555001,Carcinoma in situ of bronchus of right middle lobe
+92556000,Carcinoma in situ of bronchus of right upper lobe
+92609009,Carcinoma in situ of hilus of lung
+92639004,Carcinoma in situ of left lower lobe of lung
+92640002,Carcinoma in situ of left upper lobe of lung
+92649001,Carcinoma in situ of lung
+92701002,Carcinoma in situ of right lower lobe of lung
+92702009,Carcinoma in situ of right middle lobe of lung
+92703004,Carcinoma in situ of right upper lobe of lung
+931000119107,Dependence on supplemental oxygen
+93659005,Primary malignant neoplasm of accessory sinus
+93662008,Primary malignant neoplasm of adenoid
+93670003,Primary malignant neoplasm of anterior aspect of epiglottis
+93674007,Primary malignant neoplasm of anterior wall of nasopharynx
+93687001,Primary malignant neoplasm of base of tongue
+93729006,Primary malignant neoplasm of bronchus of left lower lobe
+93730001,Primary malignant neoplasm of bronchus of left upper lobe
+93731002,Primary malignant neoplasm of bronchus of right lower lobe
+93732009,Primary malignant neoplasm of bronchus of right middle lobe
+93733004,Primary malignant neoplasm of bronchus of right upper lobe
+93734005,Primary malignant neoplasm of bronchus
+93739000,Primary malignant neoplasm of carina
+93772000,Primary malignant neoplasm of diaphragm
+93784003,Primary malignant neoplasm of epiglottis
+93787005,Primary malignant neoplasm of ethmoidal sinus
+93808006,Primary malignant neoplasm of frontal sinus
+93816002,Primary malignant neoplasm of glottis
+93827000,Primary malignant neoplasm of hilus of lung
+93829002,Primary malignant neoplasm of hypopharyngeal aspect of aryepiglottic fold
+93830007,Primary malignant neoplasm of hypopharyngeal aspect of interarytenoid fold
+93831006,Primary malignant neoplasm of hypopharynx
+93848003,Primary malignant neoplasm of junctional zone of tongue
+93857009,Primary malignant neoplasm of laryngeal commissure
+93858004,Primary malignant neoplasm of laryngeal surface of epiglottis
+93861003,Primary malignant neoplasm of lateral wall of nasopharynx
+93862005,Primary malignant neoplasm of lateral wall of oropharynx
+93864006,Primary malignant neoplasm of lower lobe of left lung
+93865007,Primary malignant neoplasm of upper lobe of left lung
+93868009,Primary malignant neoplasm of lingual tonsil
+93880001,Primary malignant neoplasm of lung
+93882009,Primary malignant neoplasm of main bronchus
+93889000,Primary malignant neoplasm of maxillary sinus
+93917007,Primary malignant neoplasm of nasal cavity
+93918002,Primary malignant neoplasm of nasal concha
+93933005,Primary malignant neoplasm of oropharynx
+93948004,Primary malignant neoplasm of parietal pleura
+93961004,Primary malignant neoplasm of pharynx
+93966009,Primary malignant neoplasm of pleura
+93967000,Primary malignant neoplasm of postcricoid region
+93968005,Primary malignant neoplasm of posterior hypopharyngeal wall
+93970001,Primary malignant neoplasm of posterior wall of nasopharynx
+93971002,Primary malignant neoplasm of posterior wall of oropharynx
+93978008,Primary malignant neoplasm of pyriform sinus
+93986008,Primary malignant neoplasm of respiratory tract
+93991009,Primary malignant neoplasm of right lower lobe of lung
+93992002,Primary malignant neoplasm of right middle lobe of lung
+93993007,Primary malignant neoplasm of upper lobe of right lung
+94002000,Primary malignant neoplasm of septum of nose
+94067008,Primary malignant neoplasm of sphenoidal sinus
+94075002,Primary malignant neoplasm of subglottis
+94078000,Primary malignant neoplasm of superior wall of nasopharynx
+94080006,Primary malignant neoplasm of supraglottis
+94102002,Primary malignant neoplasm of tonsillar fossa
+94103007,Primary malignant neoplasm of tonsillar pillar
+94104001,Primary malignant neoplasm of trachea
+94118008,Primary malignant neoplasm of upper respiratory tract
+94132005,Primary malignant neoplasm of vallecula
+94139001,Primary malignant neoplasm of vestibule of nose
+94140004,Primary malignant neoplasm of visceral pleura
+94142007,Primary malignant neoplasm of vomer
+94144008,Primary malignant neoplasm of Waldeyer's ring
+94155008,Metastatic malignant neoplasm to accessory sinus
+94158005,Metastatic malignant neoplasm to adenoid
+94166001,Metastatic malignant neoplasm to anterior aspect of epiglottis
+94170009,Metastatic malignant neoplasm to anterior wall of nasopharynx
+94184004,Metastatic malignant neoplasm to base of tongue
+94227002,Metastatic malignant neoplasm to bronchopulmonary lymph nodes
+94228007,Metastatic malignant neoplasm to bronchus of left lower lobe
+94229004,Metastatic malignant neoplasm to bronchus of left upper lobe
+94230009,Metastatic malignant neoplasm to bronchus of right lower lobe
+94231008,Metastatic malignant neoplasm to bronchus of right middle lobe
+94232001,Metastatic malignant neoplasm to bronchus of right upper lobe
+94233006,Metastatic malignant neoplasm to bronchus
+94238002,Metastatic malignant neoplasm to carina
+94272005,Metastatic malignant neoplasm to diaphragm
+94284007,Metastatic malignant neoplasm to epiglottis
+94288005,Metastatic malignant neoplasm to ethmoidal sinus
+94296000,Metastatic malignant neoplasm to false vocal cord
+94310008,Metastatic malignant neoplasm to frontal sinus
+94318001,Metastatic malignant neoplasm to glottis
+94329002,Metastatic malignant neoplasm to hilus of lung
+94332004,Metastatic malignant neoplasm to hypopharyngeal aspect of aryepiglottic fold
+94333009,Metastatic malignant neoplasm to hypopharyngeal aspect of interarytenoid fold
+94334003,Metastatic malignant neoplasm to hypopharynx
+94358004,Metastatic malignant neoplasm to junctional region of epiglottis
+94359007,Metastatic malignant neoplasm to junctional zone of tongue
+94366008,Metastatic malignant neoplasm to laryngeal aspect of aryepiglottic fold
+94367004,Metastatic malignant neoplasm to laryngeal aspect of interarytenoid fold
+94368009,Metastatic malignant neoplasm to laryngeal commissure
+94369001,Metastatic malignant neoplasm to laryngeal surface of epiglottis
+94370000,Metastatic malignant neoplasm to larynx
+94372008,Metastatic malignant neoplasm to lateral wall of nasopharynx
+94373003,Metastatic malignant neoplasm to lateral wall of oropharynx
+94375005,Metastatic malignant neoplasm to left lower lobe of lung
+94376006,Metastatic malignant neoplasm to left upper lobe of lung
+94379004,Metastatic malignant neoplasm to lingual tonsil
+94391008,Metastatic malignant neoplasm to lung
+94399005,Metastatic malignant neoplasm to main bronchus
+94406009,Metastatic malignant neoplasm to maxillary sinus
+94436000,Metastatic malignant neoplasm to nasal cavity
+94437009,Metastatic malignant neoplasm to nasal concha
+94454001,Metastatic malignant neoplasm to oropharynx
+94458003,Metastatic malignant neoplasm to tonsil
+94473002,Metastatic malignant neoplasm to parietal pleura
+94488007,Metastatic malignant neoplasm to pharynx
+94493005,Metastatic malignant neoplasm to pleura
+94495003,Metastatic malignant neoplasm to postcricoid region
+94496002,Metastatic malignant neoplasm to posterior hypopharyngeal wall
+94498001,Metastatic malignant neoplasm to posterior wall of nasopharynx
+94499009,Metastatic malignant neoplasm to posterior wall of oropharynx
+94507002,Metastatic malignant neoplasm to pyriform sinus
+94515004,Metastatic malignant neoplasm to respiratory tract
+94522007,Metastatic malignant neoplasm to right lower lobe of lung
+94523002,Metastatic malignant neoplasm to right middle lobe of lung
+94524008,Metastatic malignant neoplasm to right upper lobe of lung
+94534004,Metastatic malignant neoplasm to septum of nose
+94599006,Metastatic malignant neoplasm to sphenoidal sinus
+94607007,Metastatic malignant neoplasm to subglottis
+94613003,Metastatic malignant neoplasm to superior wall of nasopharynx
+94616006,Metastatic malignant neoplasm to supraglottis
+94639000,Metastatic malignant neoplasm to tonsillar fossa
+94640003,Metastatic malignant neoplasm to tonsillar pillar
+94641004,Metastatic malignant neoplasm to trachea
+94656008,Metastatic malignant neoplasm to upper respiratory tract
+94670008,Metastatic malignant neoplasm to vallecula
+94677006,Metastatic malignant neoplasm to vestibule of nose
+94678001,Metastatic malignant neoplasm to visceral pleura
+94679009,Metastatic malignant neoplasm to vocal cord
+94680007,Metastatic malignant neoplasm to vomer
+94682004,Metastatic malignant neoplasm to Waldeyer's ring
+9660004,Congenital stenosis of trachea
+971918681000119107,Chronic respiratory failure due to obstructive sleep apnea
